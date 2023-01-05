@@ -57,10 +57,16 @@ export const usersRepository = {
         const result =  await usersCollection.findOne(
             {$or: [{email: loginOrEmail}, {login: loginOrEmail}]}
         )
+        if(!result) {
+            return null
+        }
         return getOutputUserHash(result)
     },
     async findUserByConfirmationCode(code: string) {
         const result =  await usersCollection.findOne({code: code})
+        if(!result) {
+            return null
+        }
         return getOutputUserForConfirmationCode(result)
     },
     async updateConfirmationCode(code: string) {
@@ -70,6 +76,9 @@ export const usersRepository = {
     },
     async findUserByEmail(email: string) {
         const result =  await usersCollection.findOne({email: email})
+        if(!result) {
+            return null
+        }
         return getOutputUser(result)
     }
 }

@@ -12,3 +12,7 @@ export type LoginTypeForAuth = {
 export type RegistrationConfirmationType = {
     code: string
 }
+
+export type RegistrationResendType = {
+    email: string
+}

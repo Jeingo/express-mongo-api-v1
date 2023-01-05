@@ -35,6 +35,17 @@ const checkCode = async (code: string) => {
     return true
 }
 
+const checkEmailResending = async (email: string) => {
+    const foundUser = await usersRepository.findUserByEmail(email)
+    if(!foundUser) {
+        throw new Error('This email is wrong')
+    }
+    if(foundUser.emailConfirmation.isConfirmed) {
+        throw new Error('Account is already confirmed')
+    }
+    return true
+}
+
 export const loginOrEmailValidation = body('loginOrEmail').trim()
     .notEmpty().withMessage(`Shouldn't be empty`)
     .isString().withMessage('Should be string type')
@@ -65,3 +76,9 @@ export const codeValidation = body('code').trim()
     .notEmpty().withMessage(`Shouldn't be empty`)
     .isString().withMessage('Should be string type')
     .custom(checkCode)
+
+export const emailResendValidation = body('email').trim()
+    .notEmpty().withMessage(`Shouldn't be empty`)
+    .isString().withMessage('Should be string type')
+    .matches(patternEmail).withMessage('Should be correct email')
+    .custom(checkEmailResending).withMessage('The user with this email is already confirmed')

@@ -1,4 +1,9 @@
-import {UsersConfirmationCodeType, UsersHashType, UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
+import {
+    UsersConfirmationCodeType,
+    UsersHashType,
+    UsersTypeOutput,
+    UsersTypeToDB
+} from "../models/users-models";
 import {usersCollection} from "./db";
 import {ObjectId} from "mongodb";
 
@@ -12,6 +17,20 @@ const getOutputUserHash = (user: any): UsersHashType => {
 const getOutputUserForConfirmationCode = (user: any): UsersConfirmationCodeType => {
     return {
         id: user._id.toString(),
+        emailConfirmation: {
+            confirmationCode: user.emailConfirmation.confirmationCode,
+            expirationDate: user.emailConfirmation.expirationDate,
+            isConfirmed: user.emailConfirmation.isConfirmed
+        }
+    }
+}
+
+const getOutputUser = (user: any) => {
+    return {
+        login: user.login,
+        hash: user.hash,
+        email: user.email,
+        createdAt: user.createdAt,
         emailConfirmation: {
             confirmationCode: user.emailConfirmation.confirmationCode,
             expirationDate: user.emailConfirmation.expirationDate,
@@ -48,5 +67,9 @@ export const usersRepository = {
         const result = await usersCollection
             .updateOne({'emailConfirmation.confirmationCode': code}, {$set: {'emailConfirmation.isConfirmed': true}})
         return result.modifiedCount === 1
+    },
+    async findUserByEmail(email: string) {
+        const result =  await usersCollection.findOne({email: email})
+        return getOutputUser(result)
     }
 }

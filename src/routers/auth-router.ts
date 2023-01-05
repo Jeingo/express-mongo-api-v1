@@ -1,13 +1,13 @@
 import {Router, Response, Request} from "express";
 import {
     codeValidation,
-    emailRegistrationValidation,
+    emailRegistrationValidation, emailResendValidation,
     loginOrEmailValidation, loginRegistrationValidation,
     passwordFromAuthValidation, passwordRegistrationValidation
 } from "../middleware/input-auth-validation";
 import {inputValidation} from "../middleware/input-validation";
 import {RequestWithBody} from "../models/types";
-import {LoginTypeInput, RegistrationConfirmationType} from "../models/auth-models";
+import {LoginTypeInput, RegistrationConfirmationType, RegistrationResendType} from "../models/auth-models";
 import {HTTP_STATUSES} from "../constats/status";
 import {authService} from "../domain/auth-service";
 import {jwtService} from "../application/jwt-service";
@@ -52,5 +52,13 @@ authRouter.post('/registration-confirmation',
     inputValidation,
     async (req: RequestWithBody<RegistrationConfirmationType>, res: Response) => {
         await authService.confirmEmail(req.body.code)
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    })
+
+authRouter.post('/registration-email-resending',
+    emailResendValidation,
+    inputValidation,
+    async (req: RequestWithBody<RegistrationResendType>, res: Response) => {
+        await authService.resendEmail(req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     })

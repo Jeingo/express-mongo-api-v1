@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import {usersRepository} from "../repositories/users-repository";
 import {v4} from "uuid";
 import add from "date-fns/add";
+import {emailManager} from "../managers/email-manager";
 
 export const authService = {
     async checkCredentials(loginOrEmail: string, password: string) {
@@ -30,7 +31,7 @@ export const authService = {
             }
         }
         const result = await usersRepository.createUser(createdUser)
-        // await emailManager.sendEmailConfirmation(createdUser)
+        await emailManager.sendEmailConfirmation(createdUser)
         return result
     }
 }

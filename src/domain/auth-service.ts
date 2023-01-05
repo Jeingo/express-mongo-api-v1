@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import {authRepository} from "../repositories/auth-repository";
+import {usersRepository} from "../repositories/users-repository";
 
 export const authService = {
     async checkCredentials(loginOrEmail: string, password: string) {
-        const user = await authRepository.findByLoginOrEmail(loginOrEmail)
+        const user = await usersRepository.findUserHashByLoginOrEmail(loginOrEmail)
         if(!user) return false
         const res = await bcrypt.compare(password,user.hash)
         if(!res) {

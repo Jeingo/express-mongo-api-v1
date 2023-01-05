@@ -20,8 +20,9 @@ export type UsersTypeToDB = {
     createdAt: string
 }
 
-export type UsersIdInDB = {
-    _id: ObjectId
+export type UsersHashType = {
+    id: string
+    hash: string
 }
 
 export type UsersIdParams = {

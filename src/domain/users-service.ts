@@ -4,6 +4,8 @@ import bcrypt from "bcrypt"
 import {usersCollection} from "../repositories/db";
 import {ObjectId} from "mongodb";
 import {LoginTypeForAuth} from "../models/auth-models";
+import {v4} from "uuid";
+import add from "date-fns/add";
 
 const getOutputUser = (user: any): LoginTypeForAuth => {
     return {
@@ -30,7 +32,14 @@ export const usersService = {
             login: login,
             hash: passwordHash,
             email: email,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            emailConfirmation: {
+                confirmationCode: v4(),
+                expirationDate: add(new Date(), {
+                    hours: 1
+                }),
+                isConfirmed: true
+            }
         }
         return await usersRepository.createUser(createdUser)
     },

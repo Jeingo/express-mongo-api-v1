@@ -1,4 +1,3 @@
-import {ObjectId} from "mongodb";
 
 export type UsersTypeOutput = {
     id: string
@@ -18,6 +17,11 @@ export type UsersTypeToDB = {
     hash: string
     email: string
     createdAt: string
+    emailConfirmation: {
+        confirmationCode: string
+        expirationDate: Date
+        isConfirmed: boolean
+    }
 }
 
 export type UsersHashType = {

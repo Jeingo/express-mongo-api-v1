@@ -29,6 +29,9 @@ const checkCode = async (code: string) => {
     if(foundUser.emailConfirmation.confirmationCode !== code) {
         throw new Error('This code is wrong')
     }
+    if(foundUser.emailConfirmation.isConfirmed) {
+        throw new Error('Account is already confirmed')
+    }
     if(foundUser.emailConfirmation.expirationDate < new Date()) {
         throw new Error('This code is expired')
     }

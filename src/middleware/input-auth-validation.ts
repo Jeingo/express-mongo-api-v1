@@ -1,5 +1,6 @@
 import {body} from "express-validator"
 import {usersCollection} from "../repositories/db";
+import {usersRepository} from "../repositories/users-repository";
 
 const patternLogin = /^[a-zA-Z0-9_-]*$/
 const patternEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
@@ -16,6 +17,20 @@ const checkLogin = async (login: string ) => {
     const foundUser = await usersCollection.findOne({login: login})
     if(foundUser) {
         throw new Error('Email is already exist')
+    }
+    return true
+}
+
+const checkCode = async (code: string) => {
+    const foundUser = await usersRepository.findUserByConfirmationCode(code)
+    if(!foundUser) {
+        throw new Error('This code is wrong')
+    }
+    if(foundUser.emailConfirmation.confirmationCode !== code) {
+        throw new Error('This code is wrong')
+    }
+    if(foundUser.emailConfirmation.expirationDate < new Date()) {
+        throw new Error('This code is expired')
     }
     return true
 }
@@ -45,3 +60,8 @@ export const emailRegistrationValidation = body('email').trim()
     .isString().withMessage('Should be string type')
     .matches(patternEmail).withMessage('Should be correct email')
     .custom(checkEmail).withMessage('The user with this email is already exist')
+
+export const codeValidation = body('code').trim()
+    .notEmpty().withMessage(`Shouldn't be empty`)
+    .isString().withMessage('Should be string type')
+    .custom(checkCode)

@@ -29,6 +29,15 @@ export type UsersHashType = {
     hash: string
 }
 
+export type UsersConfirmationCodeType = {
+    id: string
+    emailConfirmation: {
+        confirmationCode: string
+        expirationDate: Date
+        isConfirmed: boolean
+    }
+}
+
 export type UsersIdParams = {
     id: string
 }

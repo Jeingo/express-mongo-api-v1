@@ -8,3 +8,7 @@ export type LoginTypeForAuth = {
     login: string
     userId: string
 }
+
+export type RegistrationConfirmationType = {
+    code: string
+}

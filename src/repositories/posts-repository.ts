@@ -22,16 +22,6 @@ export const postsRepository = {
         }
             return null
     },
-    async getPostsById(id: string) {
-        if(!ObjectId.isValid(id)) {
-            return null
-        }
-        const res = await postsCollection.find({blogId: id}).toArray()
-        if(res) {
-            return res.map(getOutputPost)
-        }
-        return null
-    },
     async createPost(createdPost: PostsTypeToDB): Promise<PostsTypeOutput> {
             const res = await postsCollection.insertOne(createdPost)
             return {

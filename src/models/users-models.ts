@@ -38,13 +38,6 @@ export type UsersConfirmationCodeType = {
     }
 }
 
-export type UsersConfirmationType = {
-    id: string
-    emailConfirmation: {
-        isConfirmed: boolean
-    }
-}
-
 export type UsersIdParams = {
     id: string
 }

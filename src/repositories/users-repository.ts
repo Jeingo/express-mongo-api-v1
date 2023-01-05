@@ -25,7 +25,7 @@ const getOutputUserForConfirmationCode = (user: any): UsersConfirmationCodeType 
     }
 }
 
-const getOutputUser = (user: any) => {
+const getOutputUser = (user: any): UsersTypeToDB => {
     return {
         login: user.login,
         hash: user.hash,
@@ -63,13 +63,13 @@ export const usersRepository = {
         return getOutputUserHash(result)
     },
     async findUserByConfirmationCode(code: string) {
-        const result =  await usersCollection.findOne({code: code})
+        const result =  await usersCollection.findOne({'emailConfirmation.confirmationCode': code})
         if(!result) {
             return null
         }
         return getOutputUserForConfirmationCode(result)
     },
-    async updateConfirmationCode(code: string) {
+    async updateConfirmationStatus(code: string) {
         const result = await usersCollection
             .updateOne({'emailConfirmation.confirmationCode': code}, {$set: {'emailConfirmation.isConfirmed': true}})
         return result.modifiedCount === 1
@@ -80,5 +80,10 @@ export const usersRepository = {
             return null
         }
         return getOutputUser(result)
+    },
+    async updateConfirmationCode(user: UsersTypeToDB, code: string) {
+        const result = await usersCollection
+            .updateOne({login: user.login}, {$set: {'emailConfirmation.confirmationCode':code}})
+        return result.modifiedCount === 1
     }
 }

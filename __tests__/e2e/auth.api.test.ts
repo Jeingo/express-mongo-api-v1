@@ -1,4 +1,4 @@
-import request from "supertest"
+ import request from "supertest"
 import {app} from "../../src/app"
 import {HTTP_STATUSES} from '../../src/constats/status'
 
@@ -8,6 +8,12 @@ const correctUser = {
     email: 'email@gmail.com'
 }
 
+ const correctUser2 = {
+     login: 'login2',
+     password: 'password2',
+     email: 'email2@gmail.com'
+ }
+
 const correctLogin = {
     loginOrEmail: 'login',
     password: 'password'
@@ -15,13 +21,21 @@ const correctLogin = {
 
 const correctBadLogin = {
     loginOrEmail: 'login',
-    password: 'passwor'
+    password: 'bad-password'
 }
 
 const incorrectLogin = {
     login: '',
     password: ''
 }
+
+const incorrectCodeConfirmation = {
+    code: '123'
+}
+
+ const incorrectEmailForResending = {
+     email: 'bad-email@gmail.com'
+ }
 
 const errorsMessage = {
     "errorsMessages": [
@@ -35,6 +49,38 @@ const errorsMessage = {
         }
     ]
 }
+
+ const errorsMessageForRegistration = {
+     "errorsMessages": [
+         {
+             "message": "The user with this login is already exist",
+             "field": "login"
+         },
+         {
+             "message": "The user with this email is already exist",
+             "field": "email"
+         }
+     ]
+ }
+
+ const errorsMessageForConfirmation = {
+     "errorsMessages": [
+         {
+             "message": "This code is wrong",
+             "field": "code"
+         }
+     ]
+ }
+
+ const errorsMessageForEmailResending = {
+     "errorsMessages": [
+         {
+             "message": "This email is wrong",
+             "field": "email"
+         }
+     ]
+ }
+
 let createdUser: any = null
 describe('/auth/login', () => {
     beforeAll(async () => {
@@ -87,5 +133,35 @@ describe('/auth/login', () => {
             login: createdUser.login,
             userId: createdUser.id
         })
+    })
+    it('POST /auth/registration: should return 400 with invalid data', async () => {
+        const createdResponse = await request(app)
+            .post('/auth/registration')
+            .send(correctUser)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
+        expect(createdResponse.body).toEqual(errorsMessageForRegistration)
+    })
+    it('POST /auth/registration: should return 204 with correct data', async () => {
+        await request(app)
+            .post('/auth/registration')
+            .send(correctUser2)
+            .expect(HTTP_STATUSES.NO_CONTENT_204)
+    })
+    it('POST /auth/registration-confirmation: should return 400 with invalid data', async () => {
+        const createdResponse = await request(app)
+            .post('/auth/registration-confirmation')
+            .send(incorrectCodeConfirmation)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
+        expect(createdResponse.body).toEqual(errorsMessageForConfirmation)
+    })
+    it('POST /auth/registration-confirmation: should return 204 with correct code (Try it yourself)', async () => {
+        expect(1).toBe(1)
+    })
+    it('POST /auth/registration-email-resending: should return 400 with invalid data', async () => {
+        const createdResponse = await request(app)
+            .post('/auth/registration-email-resending')
+            .send(incorrectEmailForResending)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
+        expect(createdResponse.body).toEqual(errorsMessageForEmailResending)
     })
 })

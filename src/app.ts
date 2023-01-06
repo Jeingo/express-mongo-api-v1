@@ -1,10 +1,10 @@
 import express from 'express'
-import {blogsRouter} from "./routers/blogs-router"
-import {postsRouter} from "./routers/posts-router"
-import {testRouter} from "./routers/test-router"
-import {usersRouter} from "./routers/users-router"
-import {authRouter} from "./routers/auth-router"
-import {commentsRouter} from "./routers/comments-router";
+import { blogsRouter } from './routers/blogs-router'
+import { postsRouter } from './routers/posts-router'
+import { testRouter } from './routers/test-router'
+import { usersRouter } from './routers/users-router'
+import { authRouter } from './routers/auth-router'
+import { commentsRouter } from './routers/comments-router'
 
 export const app = express()
 

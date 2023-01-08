@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { ObjectId } from 'mongodb'
+import {tokenRepository} from "../repositories/token-repository";
 
 export const jwtService = {
   async createJWT(user: any) {
@@ -15,6 +16,7 @@ export const jwtService = {
     const token = jwt.sign({ userId: user.id }, settings.JWT_REFRESH_SECRET, {
       expiresIn: '30d',
     })
+    await tokenRepository.save(user.id, token)
     return {
       refreshToken: token,
     }

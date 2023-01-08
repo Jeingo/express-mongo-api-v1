@@ -44,21 +44,34 @@ authRouter.post(
 
 authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const gotRefreshToken = req.cookies.refreshToken
-  const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
-  if (!user) {
-    res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
-    return
-  }
-  const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
-  if (!foundRefreshToken) {
-    res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
-    return
-  }
+    const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
+    const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
+
+    if (!user || !foundRefreshToken) {
+        res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+        return
+    }
   const accessToken = await jwtService.createJWT(user.toString())
   const refreshToken = await jwtService.createRefreshJWT(user.toString())
   res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: false })
   res.status(HTTP_STATUSES.OK_200).json(accessToken)
 })
+
+authRouter.post(
+    '/logout',
+    async (req: Request, res: Response) => {
+        const gotRefreshToken = req.cookies.refreshToken
+        const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
+        const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
+
+        if (!user || !foundRefreshToken) {
+            res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+            return
+        }
+        res.clearCookie('refreshToken')
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    }
+)
 
 authRouter.get('/me', bearerAuth, async (req: Request, res: Response) => {
   res.status(HTTP_STATUSES.OK_200).json(req.user)

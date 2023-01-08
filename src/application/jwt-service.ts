@@ -6,7 +6,7 @@ import { tokenRepository } from '../repositories/token-repository'
 export const jwtService = {
   async createJWT(userId: string) {
     const token = jwt.sign({ userId: userId }, settings.JWT_SECRET, {
-      expiresIn: '10m',
+      expiresIn: '10s',
     })
     return {
       accessToken: token,

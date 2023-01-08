@@ -3,7 +3,7 @@ import {
   commentsCollection,
   postsCollection,
   tokensCollection,
-  usersCollection
+  usersCollection,
 } from './db'
 
 export const testRepository = {

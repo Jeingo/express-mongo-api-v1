@@ -6,7 +6,7 @@ export const tokenRepository = {
   },
   async findAndDeleteRefreshToken(refreshToken: string) {
     const foundRefreshToken = await tokensCollection.findOne({ refreshToken: refreshToken })
-    if(!foundRefreshToken) {
+    if (!foundRefreshToken) {
       return null
     }
     const result = await tokensCollection.deleteOne({ refreshToken: refreshToken })

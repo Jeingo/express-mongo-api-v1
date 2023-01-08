@@ -17,5 +17,6 @@ export const bearerAuth = async (req: Request, res: Response, next: NextFunction
     return
   }
   req.user = await usersService.getUserById(userId)
+  console.log(userId)
   next()
 }

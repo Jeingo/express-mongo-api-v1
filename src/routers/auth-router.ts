@@ -47,7 +47,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
   const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
 
-  if (!user || !foundRefreshToken) {
+  if (!user && !foundRefreshToken) {
     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     return
   }

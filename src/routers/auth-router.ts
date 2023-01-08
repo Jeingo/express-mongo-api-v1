@@ -21,6 +21,7 @@ import { jwtService } from '../application/jwt-service'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { UsersTypeInput } from '../models/users-models'
 import { tokenRepository } from '../repositories/token-repository'
+import {tokensCollection} from "../repositories/db";
 
 export const authRouter = Router({})
 
@@ -36,6 +37,7 @@ authRouter.post(
       return
     }
     const accessToken = await jwtService.createJWT(user.id)
+      await tokensCollection.deleteOne({userId: user.id})
     const refreshToken = await jwtService.createRefreshJWT(user.id)
     res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: true })
     res.status(HTTP_STATUSES.OK_200).json(accessToken)
@@ -44,15 +46,15 @@ authRouter.post(
 
 authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const gotRefreshToken = req.cookies.refreshToken
-  const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
+  const userId = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
   const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
 
-  if (!user && !foundRefreshToken) {
+  if (!userId || !foundRefreshToken) {
     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     return
   }
-  const accessToken = await jwtService.createJWT(user.toString())
-  const refreshToken = await jwtService.createRefreshJWT(user.toString())
+  const accessToken = await jwtService.createJWT(userId.toString())
+  const refreshToken = await jwtService.createRefreshJWT(userId.toString())
   res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: true })
   res.status(HTTP_STATUSES.OK_200).json(accessToken)
 })

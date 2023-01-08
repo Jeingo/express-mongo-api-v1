@@ -20,6 +20,7 @@ import { authService } from '../domain/auth-service'
 import { jwtService } from '../application/jwt-service'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { UsersTypeInput } from '../models/users-models'
+import { tokenRepository } from '../repositories/token-repository'
 
 export const authRouter = Router({})
 
@@ -30,16 +31,34 @@ authRouter.post(
   inputValidation,
   async (req: RequestWithBody<LoginTypeInput>, res: Response) => {
     const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
-    if (user) {
-      const accessToken = await jwtService.createJWT(user)
-      const refreshToken = await jwtService.createRefreshJWT(user)
-      res.cookie('refreshToken', refreshToken.refreshToken, {httpOnly: true, secure: false})
-      res.status(HTTP_STATUSES.OK_200).json(accessToken)
+    if (!user) {
+      res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
       return
     }
-    res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+    const accessToken = await jwtService.createJWT(user.id)
+    const refreshToken = await jwtService.createRefreshJWT(user.id)
+    res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: false })
+    res.status(HTTP_STATUSES.OK_200).json(accessToken)
   }
 )
+
+authRouter.post('/refresh-token', async (req: Request, res: Response) => {
+  const gotRefreshToken = req.cookies.refreshToken
+  const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
+  if (!user) {
+    res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+    return
+  }
+  const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
+  if (!foundRefreshToken) {
+    res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+    return
+  }
+  const accessToken = await jwtService.createJWT(user.toString())
+  const refreshToken = await jwtService.createRefreshJWT(user.toString())
+  res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: false })
+  res.status(HTTP_STATUSES.OK_200).json(accessToken)
+})
 
 authRouter.get('/me', bearerAuth, async (req: Request, res: Response) => {
   res.status(HTTP_STATUSES.OK_200).json(req.user)

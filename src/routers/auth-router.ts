@@ -33,6 +33,7 @@ authRouter.post(
   async (req: RequestWithBody<LoginTypeInput>, res: Response) => {
     const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
     if (!user) {
+        res.clearCookie('refreshToken')
       res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
       return
     }
@@ -50,6 +51,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
 
   if (!userId || !foundRefreshToken) {
+      res.clearCookie('refreshToken')
     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     return
   }

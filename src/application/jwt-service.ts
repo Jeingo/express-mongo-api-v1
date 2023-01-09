@@ -12,11 +12,11 @@ export const jwtService = {
       accessToken: token,
     }
   },
-  async createRefreshJWT(userId: string) {
+  async createAndSaveRefreshJWT(userId: string) {
     const token = jwt.sign({ userId: userId }, settings.JWT_REFRESH_SECRET, {
       expiresIn: '20s',
     })
-    await tokenRepository.save(userId, token)
+    await tokenRepository.saveRefreshToken(userId, token)
     return {
       refreshToken: token,
     }

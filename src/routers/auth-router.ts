@@ -49,7 +49,10 @@ authRouter.post(
 authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const gotRefreshToken = req.cookies.refreshToken
   const userId = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
-  const foundRefreshToken = tokenRepository.findUserIdByRefreshToken(gotRefreshToken)
+  const foundRefreshToken = await tokenRepository.findUserIdByRefreshToken(gotRefreshToken)
+
+    console.log(userId)
+    console.log(foundRefreshToken)
 
   if (!userId || !foundRefreshToken) {
     res.clearCookie('refreshToken')
@@ -67,7 +70,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 authRouter.post('/logout', async (req: Request, res: Response) => {
   const gotRefreshToken = req.cookies.refreshToken
   const userId = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
-  const foundRefreshToken = tokenRepository.findUserIdByRefreshToken(gotRefreshToken)
+  const foundRefreshToken = await tokenRepository.findUserIdByRefreshToken(gotRefreshToken)
 
   if (!userId || !foundRefreshToken) {
     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)

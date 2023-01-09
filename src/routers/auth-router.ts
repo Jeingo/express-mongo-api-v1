@@ -41,7 +41,10 @@ authRouter.post(
     await tokenRepository.deleteRefreshTokenByUserId(user.id)
     const accessToken = await jwtService.createJWT(user.id)
     const refreshToken = await jwtService.createAndSaveRefreshJWT(user.id)
-    res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: true, maxAge: 1000*20 })
+    res.cookie('refreshToken', refreshToken.refreshToken, {
+      httpOnly: true,
+      secure: false,
+    })
     res.status(HTTP_STATUSES.OK_200).json(accessToken)
   }
 )
@@ -50,9 +53,6 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const gotRefreshToken = req.cookies.refreshToken
   const userId = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
   const foundRefreshToken = await tokenRepository.findUserIdByRefreshToken(gotRefreshToken)
-
-    console.log(userId)
-    console.log(foundRefreshToken)
 
   if (!userId || !foundRefreshToken) {
     res.clearCookie('refreshToken')
@@ -63,7 +63,10 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   await tokenRepository.deleteRefreshTokenByUserId(userId.toString())
   const accessToken = await jwtService.createJWT(userId.toString())
   const refreshToken = await jwtService.createAndSaveRefreshJWT(userId.toString())
-  res.cookie('refreshToken', refreshToken.refreshToken, { httpOnly: true, secure: true, maxAge: 1000*20 })
+  res.cookie('refreshToken', refreshToken.refreshToken, {
+    httpOnly: true,
+    secure: false,
+  })
   res.status(HTTP_STATUSES.OK_200).json(accessToken)
 })
 

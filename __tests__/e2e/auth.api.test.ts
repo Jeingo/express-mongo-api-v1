@@ -106,12 +106,14 @@ describe('/auth/login', () => {
             .expect(HTTP_STATUSES.UNAUTHORIZED_401)
     })
     let createdToken: any = null
+    let createdRefreshToken: any = null
     it('POST /auth/login: should return 200 if the password or login is correct', async () => {
         const createdResponse = await request(app)
             .post('/auth/login')
             .send(correctLogin)
             .expect(HTTP_STATUSES.OK_200)
         createdToken = createdResponse.body
+        createdRefreshToken = createdResponse.headers['set-cookie'][0].split(';')[0]
         expect(createdToken).toEqual({
             accessToken: expect.any(String)
         })
@@ -163,5 +165,33 @@ describe('/auth/login', () => {
             .send(incorrectEmailForResending)
             .expect(HTTP_STATUSES.BAD_REQUEST_400)
         expect(createdResponse.body).toEqual(errorsMessageForEmailResending)
+    })
+    it('POST /auth/refresh-token: should return 401 if refresh-token is wrong', async () => {
+        await request(app)
+            .post('/auth/refresh-token')
+            .set('Cookie', createdRefreshToken + '!')
+            .expect(HTTP_STATUSES.UNAUTHORIZED_401)
+    })
+    let createdRefreshToken2: any = null
+    it('POST /auth/refresh-token: should return 200 with correct refresh token', async () => {
+        const createdResponse = await request(app)
+            .post('/auth/refresh-token')
+            .set('Cookie', createdRefreshToken)
+            .expect(HTTP_STATUSES.OK_200)
+        const token = createdResponse.body
+        createdRefreshToken2 = createdResponse.headers['set-cookie'][0].split(';')[0]
+        expect(token).toEqual({accessToken: expect.any(String) })
+    })
+    it('POST /auth/logout: should return 401 if refresh-token is wrong', async () => {
+        await request(app)
+            .post('/auth/logout')
+            .set('Cookie', createdRefreshToken + '!')
+            .expect(HTTP_STATUSES.UNAUTHORIZED_401)
+    })
+    it('POST /auth/logout: should return 200 with correct refresh token', async () => {
+        await request(app)
+            .post('/auth/logout')
+            .set('Cookie', createdRefreshToken2)
+            .expect(HTTP_STATUSES.NO_CONTENT_204)
     })
 })

@@ -21,6 +21,9 @@ export const jwtService = {
       refreshToken: token,
     }
   },
+  async deleteRefreshJWT(userId: string) {
+    return await tokenRepository.deleteRefreshTokenByUserId(userId)
+  },
   async getUserIdByToken(token: string) {
     try {
       const result: any = jwt.verify(token, settings.JWT_SECRET)

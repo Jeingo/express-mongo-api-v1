@@ -66,13 +66,14 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
 authRouter.post('/logout', async (req: Request, res: Response) => {
   const gotRefreshToken = req.cookies.refreshToken
-  const user = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
-  const foundRefreshToken = tokenRepository.findAndDeleteRefreshToken(gotRefreshToken)
+  const userId = await jwtService.getUserIdByTokenRefresh(gotRefreshToken)
+  const foundRefreshToken = tokenRepository.findUserIdByRefreshToken(gotRefreshToken)
 
-  if (!user || !foundRefreshToken) {
+  if (!userId || !foundRefreshToken) {
     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
     return
   }
+  await tokenRepository.deleteRefreshTokenByUserId(userId.toString())
   res.clearCookie('refreshToken')
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

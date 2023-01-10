@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb'
 import { tokenRepository } from '../repositories/token-repository'
 
 export const jwtService = {
-  async createJWT(userId: string) {
+  createJWT(userId: string) {
     const token = jwt.sign({ userId: userId }, settings.JWT_SECRET, {
       expiresIn: '10s',
     })

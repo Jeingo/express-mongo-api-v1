@@ -28,7 +28,6 @@ export const tokenRepository = {
     },
     async deleteSession(issueAt: string) {
         const result = await sessionCollection.deleteOne({ issueAt: issueAt })
-        console.log(issueAt)
         return result.deletedCount === 1
     },
 }

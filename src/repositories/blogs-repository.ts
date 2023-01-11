@@ -8,7 +8,7 @@ const getOutputBlog = (blog: any): BlogsTypeOutput => {
         name: blog.name,
         description: blog.description,
         websiteUrl: blog.websiteUrl,
-        createdAt: blog.createdAt,
+        createdAt: blog.createdAt
     }
 }
 
@@ -28,7 +28,7 @@ export const blogsRepository = {
             name: createdBlog.name,
             description: createdBlog.description,
             websiteUrl: createdBlog.websiteUrl,
-            createdAt: createdBlog.createdAt,
+            createdAt: createdBlog.createdAt
         }
     },
     async updateBlog(id: string, name: string, desc: string, url: string): Promise<boolean> {
@@ -41,5 +41,5 @@ export const blogsRepository = {
     async deleteBlog(id: string): Promise<boolean> {
         const result = await blogsCollection.deleteOne({ _id: new ObjectId(id) })
         return result.deletedCount === 1
-    },
+    }
 }

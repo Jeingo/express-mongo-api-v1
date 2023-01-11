@@ -8,15 +8,15 @@ export const emailAdapter = {
             service: 'gmail',
             auth: {
                 user: settings.EMAIL_LOGIN,
-                pass: settings.EMAIL_PASSWORD,
-            },
+                pass: settings.EMAIL_PASSWORD
+            }
         })
 
         await transporter.sendMail({
             from: form.from,
             to: form.to,
             subject: form.subject,
-            html: form.html,
+            html: form.html
         })
-    },
+    }
 }

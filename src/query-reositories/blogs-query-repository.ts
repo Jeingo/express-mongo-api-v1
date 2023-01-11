@@ -10,7 +10,7 @@ const getOutputBlog = (blog: any): BlogsTypeOutput => {
         name: blog.name,
         description: blog.description,
         websiteUrl: blog.websiteUrl,
-        createdAt: blog.createdAt,
+        createdAt: blog.createdAt
     }
 }
 
@@ -21,7 +21,7 @@ export const blogsQueryRepository = {
             sortBy = 'createdAt',
             sortDirection = 'desc',
             pageNumber = 1,
-            pageSize = 10,
+            pageSize = 10
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
@@ -37,5 +37,5 @@ export const blogsQueryRepository = {
             .limit(+pageSize)
             .toArray()
         return getPaginatedType(res.map(getOutputBlog), +pageSize, +pageNumber, countAllDocuments)
-    },
+    }
 }

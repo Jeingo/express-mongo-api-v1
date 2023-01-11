@@ -6,7 +6,7 @@ import { testRouter } from './routers/test-router'
 import { usersRouter } from './routers/users-router'
 import { authRouter } from './routers/auth-router'
 import { commentsRouter } from './routers/comments-router'
-import { securityRouter } from "./routers/security-router"
+import { securityRouter } from './routers/security-router'
 
 export const app = express()
 

@@ -8,13 +8,13 @@ export const jwtService = {
     createJWT(userId: string) {
         return jwt.sign({ userId: userId }, settings.JWT_SECRET, {
             //expiresIn: '10s' for deploy
-            expiresIn: '1m',
+            expiresIn: '1m'
         })
     },
     createRefreshJWT(userId: string, deviceId: string) {
         return jwt.sign({ userId: userId, deviceId: deviceId }, settings.JWT_REFRESH_SECRET, {
             // expiresIn: '20s' for deploy
-            expiresIn: '5m',
+            expiresIn: '5m'
         })
     },
     checkExpirationAndGetPayload(token: string) {
@@ -37,7 +37,7 @@ export const jwtService = {
             deviceName: deviceName,
             ip: ip,
             userId: userId,
-            expireAt: expireAt,
+            expireAt: expireAt
         }
         await tokenRepository.saveSession(session)
     },
@@ -66,5 +66,5 @@ export const jwtService = {
         } catch (err) {
             return null
         }
-    },
+    }
 }

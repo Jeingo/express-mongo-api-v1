@@ -13,7 +13,7 @@ const getOutputPost = (post: any): PostsTypeOutput => {
         content: post.content,
         blogId: post.blogId,
         blogName: post.blogName,
-        createdAt: post.createdAt,
+        createdAt: post.createdAt
     }
 }
 
@@ -24,7 +24,7 @@ export const postsQueryRepository = {
             sortBy = 'createdAt',
             sortDirection = 'desc',
             pageNumber = 1,
-            pageSize = 10,
+            pageSize = 10
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
@@ -45,13 +45,13 @@ export const postsQueryRepository = {
             return null
         }
         const countAllDocuments = await postsCollection.countDocuments({
-            blogId: id,
+            blogId: id
         })
         const {
             sortBy = 'createdAt',
             sortDirection = 'desc',
             pageNumber = 1,
-            pageSize = 10,
+            pageSize = 10
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
@@ -63,5 +63,5 @@ export const postsQueryRepository = {
             .toArray()
 
         return getPaginatedType(res.map(getOutputPost), +pageSize, +pageNumber, countAllDocuments)
-    },
+    }
 }

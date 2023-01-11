@@ -10,7 +10,7 @@ export const blogsService = {
             name: name,
             description: desc,
             websiteUrl: url,
-            createdAt: new Date().toISOString(),
+            createdAt: new Date().toISOString()
         }
         return await blogsRepository.createBlog(createdBlog)
     },
@@ -19,5 +19,5 @@ export const blogsService = {
     },
     async deleteBlog(id: string): Promise<boolean> {
         return await blogsRepository.deleteBlog(id)
-    },
+    }
 }

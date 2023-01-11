@@ -2,7 +2,7 @@ import {
     UsersConfirmationCodeType,
     UsersHashType,
     UsersTypeOutput,
-    UsersTypeToDB,
+    UsersTypeToDB
 } from '../models/users-models'
 import { usersCollection } from './db'
 import { ObjectId } from 'mongodb'
@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb'
 const getOutputUserHash = (user: any): UsersHashType => {
     return {
         id: user._id.toString(),
-        hash: user.hash,
+        hash: user.hash
     }
 }
 
@@ -20,8 +20,8 @@ const getOutputUserForConfirmationCode = (user: any): UsersConfirmationCodeType 
         emailConfirmation: {
             confirmationCode: user.emailConfirmation.confirmationCode,
             expirationDate: user.emailConfirmation.expirationDate,
-            isConfirmed: user.emailConfirmation.isConfirmed,
-        },
+            isConfirmed: user.emailConfirmation.isConfirmed
+        }
     }
 }
 
@@ -34,8 +34,8 @@ const getOutputUser = (user: any): UsersTypeToDB => {
         emailConfirmation: {
             confirmationCode: user.emailConfirmation.confirmationCode,
             expirationDate: user.emailConfirmation.expirationDate,
-            isConfirmed: user.emailConfirmation.isConfirmed,
-        },
+            isConfirmed: user.emailConfirmation.isConfirmed
+        }
     }
 }
 
@@ -46,7 +46,7 @@ export const usersRepository = {
             id: result.insertedId.toString(),
             login: createdUser.login,
             email: createdUser.email,
-            createdAt: createdUser.createdAt,
+            createdAt: createdUser.createdAt
         }
     },
     async deleteUser(id: string): Promise<boolean> {
@@ -55,7 +55,7 @@ export const usersRepository = {
     },
     async findUserHashByLoginOrEmail(loginOrEmail: string) {
         const result = await usersCollection.findOne({
-            $or: [{ email: loginOrEmail }, { login: loginOrEmail }],
+            $or: [{ email: loginOrEmail }, { login: loginOrEmail }]
         })
         if (!result) {
             return null
@@ -64,7 +64,7 @@ export const usersRepository = {
     },
     async findUserByConfirmationCode(code: string) {
         const result = await usersCollection.findOne({
-            'emailConfirmation.confirmationCode': code,
+            'emailConfirmation.confirmationCode': code
         })
         if (!result) {
             return null
@@ -91,5 +91,5 @@ export const usersRepository = {
             { $set: { 'emailConfirmation.confirmationCode': code } }
         )
         return result.modifiedCount === 1
-    },
+    }
 }

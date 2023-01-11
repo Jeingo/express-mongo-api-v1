@@ -10,7 +10,7 @@ import { usersQueryRepository } from '../query-reositories/users-query-repositor
 import {
     emailValidation,
     loginValidation,
-    passwordValidation,
+    passwordValidation
 } from '../middleware/input-users-validation'
 import { usersService } from '../domain/users-service'
 

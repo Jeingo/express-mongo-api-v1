@@ -22,7 +22,7 @@ export const postsService = {
             content: content,
             blogId: blogId,
             blogName: foundBlog.name,
-            createdAt: new Date().toISOString(),
+            createdAt: new Date().toISOString()
         }
         return await postsRepository.createPost(createdPost)
     },
@@ -48,5 +48,5 @@ export const postsService = {
     },
     async deletePost(id: string): Promise<boolean> {
         return await postsRepository.deletePost(id)
-    },
+    }
 }

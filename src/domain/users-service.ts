@@ -11,7 +11,7 @@ const getOutputUser = (user: any): LoginTypeForAuth => {
     return {
         email: user.email,
         login: user.login,
-        userId: user._id.toString(),
+        userId: user._id.toString()
     }
 }
 
@@ -36,14 +36,14 @@ export const usersService = {
             emailConfirmation: {
                 confirmationCode: v4(),
                 expirationDate: add(new Date(), {
-                    hours: 1,
+                    hours: 1
                 }),
-                isConfirmed: true,
-            },
+                isConfirmed: true
+            }
         }
         return await usersRepository.createUser(createdUser)
     },
     async deleteUser(id: string): Promise<boolean> {
         return await usersRepository.deleteUser(id)
-    },
+    }
 }

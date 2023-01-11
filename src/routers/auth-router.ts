@@ -6,14 +6,14 @@ import {
     loginOrEmailValidation,
     loginRegistrationValidation,
     passwordFromAuthValidation,
-    passwordRegistrationValidation,
+    passwordRegistrationValidation
 } from '../middleware/input-auth-validation'
 import { inputValidation } from '../middleware/input-validation'
 import { RequestWithBody } from '../models/types'
 import {
     LoginTypeInput,
     RegistrationConfirmationType,
-    RegistrationResendType,
+    RegistrationResendType
 } from '../models/auth-models'
 import { HTTP_STATUSES } from '../constats/status'
 import { authService } from '../domain/auth-service'
@@ -49,7 +49,7 @@ authRouter.post(
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: SECURE_COOKIE_MODE,
+            secure: SECURE_COOKIE_MODE
         })
         res.status(HTTP_STATUSES.OK_200).json({ accessToken: accessToken })
     }
@@ -78,7 +78,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: SECURE_COOKIE_MODE,
+        secure: SECURE_COOKIE_MODE
     })
     res.status(HTTP_STATUSES.OK_200).json({ accessToken: accessToken })
 })

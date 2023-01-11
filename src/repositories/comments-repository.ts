@@ -8,7 +8,7 @@ const getOutputComment = (comment: any): CommentsTypeOutput => {
         content: comment.content,
         userId: comment.userId,
         userLogin: comment.userLogin,
-        createdAt: comment.createdAt,
+        createdAt: comment.createdAt
     }
 }
 
@@ -20,7 +20,7 @@ export const commentsRepository = {
             content: createdComment.content,
             userId: createdComment.userId,
             userLogin: createdComment.userLogin,
-            createdAt: createdComment.createdAt,
+            createdAt: createdComment.createdAt
         }
     },
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
@@ -42,5 +42,5 @@ export const commentsRepository = {
     async deleteComment(id: string): Promise<boolean> {
         const result = await commentsCollection.deleteOne({ _id: new ObjectId(id) })
         return result.deletedCount === 1
-    },
+    }
 }

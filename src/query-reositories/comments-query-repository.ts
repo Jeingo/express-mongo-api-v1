@@ -11,7 +11,7 @@ const getOutputComment = (comment: any): CommentsTypeOutput => {
         content: comment.content,
         userId: comment.userId,
         userLogin: comment.userLogin,
-        createdAt: comment.createdAt,
+        createdAt: comment.createdAt
     }
 }
 
@@ -26,13 +26,13 @@ export const commentsQueryRepository = {
             return null
         }
         const countAllDocuments = await commentsCollection.countDocuments({
-            postId: id,
+            postId: id
         })
         const {
             sortBy = 'createdAt',
             sortDirection = 'desc',
             pageNumber = 1,
-            pageSize = 10,
+            pageSize = 10
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
@@ -49,5 +49,5 @@ export const commentsQueryRepository = {
             +pageNumber,
             countAllDocuments
         )
-    },
+    }
 }

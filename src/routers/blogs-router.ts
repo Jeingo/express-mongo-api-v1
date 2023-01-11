@@ -5,7 +5,7 @@ import { idValidation, inputValidation, queryValidation } from '../middleware/in
 import {
     descriptionValidation,
     nameValidation,
-    websiteUrlValidation,
+    websiteUrlValidation
 } from '../middleware/input-blogs-vallidation'
 import { auth } from '../authorization/basic-auth'
 import {
@@ -13,13 +13,13 @@ import {
     RequestWithParams,
     RequestWithParamsAndBody,
     RequestWithParamsAndQuery,
-    RequestWithQuery,
+    RequestWithQuery
 } from '../models/types'
 import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-models'
 import {
     contentValidation,
     shortDescriptionValidation,
-    titleValidation,
+    titleValidation
 } from '../middleware/input-posts-validation'
 import { PostsIdParams, PostsTypeInputInBlog, PostsTypeOutput } from '../models/posts-models'
 import { postsService } from '../domain/posts-service'

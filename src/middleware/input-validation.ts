@@ -7,9 +7,9 @@ const baseValidationResult = validationResult.withDefaults({
     formatter: (error) => {
         return {
             message: error.msg,
-            field: error.param,
+            field: error.param
         }
-    },
+    }
 })
 
 export const inputValidation = (req: Request, res: Response, next: NextFunction) => {

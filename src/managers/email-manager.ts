@@ -16,8 +16,8 @@ export const emailManager = {
             from: '"Backend-09" <backend.jeingo@gmail.com>',
             to: user.email,
             subject: 'Registration confirmation',
-            html: confirmationMessage(user.emailConfirmation.confirmationCode),
+            html: confirmationMessage(user.emailConfirmation.confirmationCode)
         }
         await emailAdapter.sendEmail(emailForm)
-    },
+    }
 }

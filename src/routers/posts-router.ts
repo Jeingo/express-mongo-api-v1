@@ -6,7 +6,7 @@ import {
     blogIdValidation,
     contentValidation,
     shortDescriptionValidation,
-    titleValidation,
+    titleValidation
 } from '../middleware/input-posts-validation'
 import { auth } from '../authorization/basic-auth'
 import { PostsIdParams, PostsTypeInput, PostsTypeOutput } from '../models/posts-models'
@@ -15,7 +15,7 @@ import {
     RequestWithParams,
     RequestWithParamsAndBody,
     RequestWithParamsAndQuery,
-    RequestWithQuery,
+    RequestWithQuery
 } from '../models/types'
 import { postsQueryRepository } from '../query-reositories/posts-query-repository'
 import { QueryComments, QueryPosts } from '../models/query-models'
@@ -24,7 +24,7 @@ import { bearerAuth } from '../authorization/bearer-auth'
 import {
     CommentsIdParams,
     CommentsTypeInputInPost,
-    CommentsTypeOutput,
+    CommentsTypeOutput
 } from '../models/comments-models'
 import { contentInCommentValidation } from '../middleware/input-comments-validation'
 import { commentsService } from '../domain/comments-service'

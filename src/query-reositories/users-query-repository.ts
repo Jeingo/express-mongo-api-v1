@@ -9,7 +9,7 @@ const getOutputUser = (user: any): UsersTypeOutput => {
         id: user._id.toString(),
         login: user.login,
         email: user.email,
-        createdAt: user.createdAt,
+        createdAt: user.createdAt
     }
 }
 
@@ -21,7 +21,7 @@ export const usersQueryRepository = {
             sortBy = 'createdAt',
             sortDirection = 'desc',
             pageNumber = 1,
-            pageSize = 10,
+            pageSize = 10
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
@@ -43,5 +43,5 @@ export const usersQueryRepository = {
             .limit(+pageSize)
             .toArray()
         return getPaginatedType(res.map(getOutputUser), +pageSize, +pageNumber, countAllDocuments)
-    },
+    }
 }

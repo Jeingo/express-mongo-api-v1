@@ -10,7 +10,7 @@ const getOutputPost = (post: any): PostsTypeOutput => {
         content: post.content,
         blogId: post.blogId,
         blogName: post.blogName,
-        createdAt: post.createdAt,
+        createdAt: post.createdAt
     }
 }
 
@@ -31,7 +31,7 @@ export const postsRepository = {
             content: createdPost.content,
             blogId: createdPost.blogId,
             blogName: createdPost.blogName,
-            createdAt: createdPost.createdAt,
+            createdAt: createdPost.createdAt
         }
     },
     async updatePost(
@@ -53,8 +53,8 @@ export const postsRepository = {
                     shortDescription: desc,
                     content: content,
                     blogId: blogId,
-                    blogName: blogName,
-                },
+                    blogName: blogName
+                }
             }
         )
         return updatePost.matchedCount === 1
@@ -62,5 +62,5 @@ export const postsRepository = {
     async deletePost(id: string): Promise<boolean> {
         const result = await postsCollection.deleteOne({ _id: new ObjectId(id) })
         return result.deletedCount === 1
-    },
+    }
 }

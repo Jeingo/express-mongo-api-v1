@@ -16,7 +16,7 @@ export const tokenRepository = {
             deviceName: result.deviceName,
             ip: result.ip,
             userId: result.userId,
-            expireAt: result.expireAt,
+            expireAt: result.expireAt
         }
     },
     async updateSession(issueAt: string, expireAt: string, deviceId: string) {
@@ -29,5 +29,5 @@ export const tokenRepository = {
     async deleteSession(issueAt: string) {
         const result = await sessionCollection.deleteOne({ issueAt: issueAt })
         return result.deletedCount === 1
-    },
+    }
 }

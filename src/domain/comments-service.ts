@@ -19,7 +19,7 @@ export const commentsService = {
             userId: user.userId,
             userLogin: user.login,
             createdAt: new Date().toISOString(),
-            postId: postId,
+            postId: postId
         }
         return await commentsRepository.createComment(createdComment)
     },
@@ -55,5 +55,5 @@ export const commentsService = {
         }
 
         return await commentsRepository.deleteComment(id)
-    },
+    }
 }

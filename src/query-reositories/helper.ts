@@ -11,7 +11,7 @@ export const getPaginatedType = <T>(
         page: pageNumber,
         pageSize: pageSize,
         totalCount: countDoc,
-        items: items,
+        items: items
     }
 }
 

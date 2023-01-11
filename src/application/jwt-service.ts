@@ -12,11 +12,10 @@ export const jwtService = {
         })
     },
     createRefreshJWT(userId: string, deviceId: string) {
-        return jwt.sign(
-            { userId: userId, deviceId: deviceId }, settings.JWT_REFRESH_SECRET, {
-                // expiresIn: '20s' for deploy
-                expiresIn: '5m',
-            })
+        return jwt.sign({ userId: userId, deviceId: deviceId }, settings.JWT_REFRESH_SECRET, {
+            // expiresIn: '20s' for deploy
+            expiresIn: '5m',
+        })
     },
     checkExpirationAndGetPayload(token: string) {
         try {
@@ -25,7 +24,7 @@ export const jwtService = {
             return null
         }
     },
-    async saveSession(token: string, ip :string, deviceName: string ) {
+    async saveSession(token: string, ip: string, deviceName: string) {
         const result = jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
         const issueAt = new Date(result.iat * 1000).toISOString()
         const expireAt = new Date(result.exp * 1000).toISOString()
@@ -54,7 +53,7 @@ export const jwtService = {
         if (!result) {
             return false
         }
-        return result.deviceId === deviceId;
+        return result.deviceId === deviceId
     },
     async deleteSession(iat: number) {
         const issueAt = new Date(iat * 1000).toISOString()
@@ -67,5 +66,5 @@ export const jwtService = {
         } catch (err) {
             return null
         }
-    }
+    },
 }

@@ -20,7 +20,7 @@ import { authService } from '../domain/auth-service'
 import { jwtService } from '../application/jwt-service'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { UsersTypeInput } from '../models/users-models'
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from 'uuid'
 
 export const authRouter = Router({})
 
@@ -39,7 +39,7 @@ authRouter.post(
             res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
             return
         }
-        const deviceName = req.headers["user-agent"]
+        const deviceName = req.headers['user-agent']
         const ipAddress = req.ip
         const accessToken = jwtService.createJWT(user.id)
         const deviceId = uuidv4()
@@ -51,7 +51,7 @@ authRouter.post(
             httpOnly: true,
             secure: SECURE_COOKIE_MODE,
         })
-        res.status(HTTP_STATUSES.OK_200).json({accessToken: accessToken})
+        res.status(HTTP_STATUSES.OK_200).json({ accessToken: accessToken })
     }
 )
 
@@ -80,7 +80,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         httpOnly: true,
         secure: SECURE_COOKIE_MODE,
     })
-    res.status(HTTP_STATUSES.OK_200).json({accessToken: accessToken})
+    res.status(HTTP_STATUSES.OK_200).json({ accessToken: accessToken })
 })
 
 authRouter.post('/logout', async (req: Request, res: Response) => {

@@ -6,8 +6,8 @@ export const tokenRepository = {
         await sessionCollection.insertOne(session)
     },
     async findSession(iat: string) {
-        const result = await sessionCollection.findOne({issueAt: iat})
-        if(!result) {
+        const result = await sessionCollection.findOne({ issueAt: iat })
+        if (!result) {
             return null
         }
         return {
@@ -20,7 +20,10 @@ export const tokenRepository = {
         }
     },
     async updateSession(issueAt: string, expireAt: string, deviceId: string) {
-        const result = await sessionCollection.updateOne({deviceId: deviceId}, {$set: {issueAt: issueAt, expireAt: expireAt}})
+        const result = await sessionCollection.updateOne(
+            { deviceId: deviceId },
+            { $set: { issueAt: issueAt, expireAt: expireAt } }
+        )
         return result.matchedCount === 1
     },
     async deleteSession(issueAt: string) {

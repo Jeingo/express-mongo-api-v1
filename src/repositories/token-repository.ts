@@ -5,15 +5,27 @@ export const tokenRepository = {
     async saveSession(session: SessionType) {
         await sessionCollection.insertOne(session)
     },
-    async findUserIdByRefreshToken(refreshToken: string): Promise<string | null> {
-        const result = await sessionCollection.findOne({ refreshToken: refreshToken })
-        if (!result) {
+    async findSession(iat: string) {
+        const result = await sessionCollection.findOne({issueAt: iat})
+        if(!result) {
             return null
         }
-        return result.userId
+        return {
+            issueAt: result.issueAt,
+            deviceId: result.deviceId,
+            deviceName: result.deviceName,
+            ip: result.ip,
+            userId: result.userId,
+            expireAt: result.expireAt,
+        }
     },
-    async deleteRefreshTokenByUserId(userId: string) {
-        const result = await sessionCollection.deleteOne({ userId: userId })
+    async updateSession(issueAt: string, expireAt: string, deviceId: string) {
+        const result = await sessionCollection.updateOne({deviceId: deviceId}, {$set: {issueAt: issueAt, expireAt: expireAt}})
+        return result.matchedCount === 1
+    },
+    async deleteSession(issueAt: string) {
+        const result = await sessionCollection.deleteOne({ issueAt: issueAt })
+        console.log(issueAt)
         return result.deletedCount === 1
     },
 }

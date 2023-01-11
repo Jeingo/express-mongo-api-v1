@@ -3,7 +3,6 @@ import { settings } from '../settings/settings'
 import { ObjectId } from 'mongodb'
 import { tokenRepository } from '../repositories/token-repository'
 import { SessionType, TokenPayloadType } from '../models/token-models'
-import { v4 as uuidv4 } from 'uuid'
 
 export const jwtService = {
     createJWT(userId: string) {
@@ -12,13 +11,19 @@ export const jwtService = {
             expiresIn: '1m',
         })
     },
-    createRefreshJWT(userId: string) {
-        const deviceId = uuidv4()
+    createRefreshJWT(userId: string, deviceId: string) {
         return jwt.sign(
             { userId: userId, deviceId: deviceId }, settings.JWT_REFRESH_SECRET, {
                 // expiresIn: '20s' for deploy
-                expiresIn: '1s',
+                expiresIn: '5m',
             })
+    },
+    checkExpirationAndGetPayload(token: string) {
+        try {
+            return jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
+        } catch (err) {
+            return null
+        }
     },
     async saveSession(token: string, ip :string, deviceName: string ) {
         const result = jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
@@ -37,8 +42,23 @@ export const jwtService = {
         }
         await tokenRepository.saveSession(session)
     },
-    async deleteRefreshJWT(userId: string) {
-        return await tokenRepository.deleteRefreshTokenByUserId(userId)
+    async updateSession(token: string) {
+        const result = jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
+        const issueAt = new Date(result.iat * 1000).toISOString()
+        const expireAt = new Date(result.exp * 1000).toISOString()
+        const deviceId = result.deviceId
+        await tokenRepository.updateSession(issueAt, expireAt, deviceId)
+    },
+    async isActiveSession(deviceId: string, iat: string) {
+        const result = await tokenRepository.findSession(iat)
+        if (!result) {
+            return false
+        }
+        return result.deviceId === deviceId;
+    },
+    async deleteSession(iat: number) {
+        const issueAt = new Date(iat * 1000).toISOString()
+        return await tokenRepository.deleteSession(issueAt)
     },
     async getUserIdByToken(token: string) {
         try {
@@ -47,13 +67,5 @@ export const jwtService = {
         } catch (err) {
             return null
         }
-    },
-    async getUserIdByTokenRefresh(token: string) {
-        try {
-            const result: any = jwt.verify(token, settings.JWT_REFRESH_SECRET)
-            return new ObjectId(result.userId)
-        } catch (err) {
-            return null
-        }
-    },
+    }
 }

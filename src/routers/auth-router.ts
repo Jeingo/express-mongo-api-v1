@@ -24,6 +24,8 @@ import { tokenRepository } from '../repositories/token-repository'
 
 export const authRouter = Router({})
 
+const SECURE_COOKIE_MODE = false // true for deploy
+
 authRouter.post(
   '/login',
   loginOrEmailValidation,
@@ -43,7 +45,7 @@ authRouter.post(
     const refreshToken = await jwtService.createAndSaveRefreshJWT(user.id)
     res.cookie('refreshToken', refreshToken.refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: SECURE_COOKIE_MODE,
     })
     res.status(HTTP_STATUSES.OK_200).json(accessToken)
   }
@@ -65,7 +67,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
   const refreshToken = await jwtService.createAndSaveRefreshJWT(userId.toString())
   res.cookie('refreshToken', refreshToken.refreshToken, {
     httpOnly: true,
-    secure: false,
+    secure: SECURE_COOKIE_MODE,
   })
   res.status(HTTP_STATUSES.OK_200).json(accessToken)
 })

@@ -6,7 +6,8 @@ import { tokenRepository } from '../repositories/token-repository'
 export const jwtService = {
   createJWT(userId: string) {
     const token = jwt.sign({ userId: userId }, settings.JWT_SECRET, {
-      expiresIn: '10s',
+      //expiresIn: '10s' for deploy
+      expiresIn: '1m',
     })
     return {
       accessToken: token,
@@ -14,7 +15,8 @@ export const jwtService = {
   },
   async createAndSaveRefreshJWT(userId: string) {
     const token = jwt.sign({ userId: userId }, settings.JWT_REFRESH_SECRET, {
-      expiresIn: '20s',
+      //expiresIn: '20s' for deploy
+      expiresIn: '5m',
     })
     await tokenRepository.saveRefreshToken(userId, token)
     return {

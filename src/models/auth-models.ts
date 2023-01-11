@@ -1,18 +1,18 @@
 export type LoginTypeInput = {
-  loginOrEmail: string
-  password: string
+    loginOrEmail: string
+    password: string
 }
 
 export type LoginTypeForAuth = {
-  email: string
-  login: string
-  userId: string
+    email: string
+    login: string
+    userId: string
 }
 
 export type RegistrationConfirmationType = {
-  code: string
+    code: string
 }
 
 export type RegistrationResendType = {
-  email: string
+    email: string
 }

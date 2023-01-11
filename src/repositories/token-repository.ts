@@ -1,10 +1,29 @@
 import { sessionCollection } from './db'
 import { SessionType } from '../models/token-models'
+import {sessionsService} from "../domain/sessions-service";
+
+const getOutputSession = (session: any) => {
+    return {
+        ip: session.ip,
+        title: session.deviceName,
+        lastActiveDate: session.issueAt,
+        deviceId: session.deviceId
+    }
+}
 
 export const tokenRepository = {
     async saveSession(session: SessionType) {
         await sessionCollection.insertOne(session)
     },
+    async findAllActiveSession(userId: string) {
+        const result = await sessionCollection.find({userId: userId}).toArray() //
+
+        if (!result) {
+            return null
+        }
+        return result.map(getOutputSession)
+    }
+    ,
     async findSession(iat: string) {
         const result = await sessionCollection.findOne({ issueAt: iat })
         if (!result) {

@@ -4,6 +4,9 @@ import {SessionType, TokenPayloadType} from "../models/token-models";
 import {tokenRepository} from "../repositories/token-repository";
 
 export const sessionsService = {
+    async findAllActiveSession(userId: string) {
+        return await tokenRepository.findAllActiveSession(userId)
+    },
     async saveSession(token: string, ip: string, deviceName: string) {
         const result = jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
         const issueAt = new Date(result.iat * 1000).toISOString()

@@ -21,6 +21,7 @@ import { jwtService } from '../application/jwt-service'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { UsersTypeInput } from '../models/users-models'
 import { v4 as uuidv4 } from 'uuid'
+import {sessionsService} from "../domain/sessions-service";
 
 export const authRouter = Router({})
 
@@ -45,7 +46,7 @@ authRouter.post(
         const deviceId = uuidv4()
         const refreshToken = jwtService.createRefreshJWT(user.id, deviceId)
 
-        await jwtService.saveSession(refreshToken, ipAddress, deviceName!)
+        await sessionsService.saveSession(refreshToken, ipAddress, deviceName!)
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -65,7 +66,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         return
     }
 
-    const statusSession = await jwtService.isActiveSession(payload.deviceId, payload.iat.toString())
+    const statusSession = await sessionsService.isActiveSession(payload.deviceId, payload.iat.toString())
     if (statusSession) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
@@ -74,7 +75,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
     const accessToken = jwtService.createJWT(payload.userId)
     const refreshToken = jwtService.createRefreshJWT(payload.userId, payload.deviceId)
-    await jwtService.updateSession(refreshToken)
+    await sessionsService.updateSession(refreshToken)
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -93,14 +94,14 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
         return
     }
 
-    const statusSession = await jwtService.isActiveSession(payload.deviceId, payload.iat.toString())
+    const statusSession = await sessionsService.isActiveSession(payload.deviceId, payload.iat.toString())
     if (statusSession) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
 
-    await jwtService.deleteSession(payload.iat)
+    await sessionsService.deleteSession(payload.iat)
     res.clearCookie('refreshToken')
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

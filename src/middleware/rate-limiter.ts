@@ -21,7 +21,6 @@ export const rateLimiterMiddleware = async (req: Request, res: Response, next: N
         return
     }
     if (ipBase!.date + timeInterval < currentDate) {
-
         await rateLimiterRepository.toDefaultBase(ipBase, currentDate)
         next()
         return

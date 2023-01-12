@@ -3,7 +3,7 @@ import { RateLimiterType } from '../models/auth-models'
 
 export const rateLimiterRepository = {
     async findIpBase(ip: string, endpoint: string) {
-        const result = await rateLimiterCollection.findOne({ ip: ip , endpoint: endpoint})
+        const result = await rateLimiterCollection.findOne({ ip: ip, endpoint: endpoint })
         if (!result) {
             return null
         }
@@ -16,7 +16,12 @@ export const rateLimiterRepository = {
         }
     },
     async createIpBase(ip: string, endpoint: string, dateNow: number) {
-        await rateLimiterCollection.insertOne({ ip: ip, endpoint: endpoint, date: dateNow, count: 1 })
+        await rateLimiterCollection.insertOne({
+            ip: ip,
+            endpoint: endpoint,
+            date: dateNow,
+            count: 1
+        })
     },
     async incrementCountInIpBase(base: RateLimiterType) {
         const newCount = base.count + 1

@@ -1,7 +1,8 @@
 import {
     blogsCollection,
     commentsCollection,
-    postsCollection, rateLimiterCollection,
+    postsCollection,
+    rateLimiterCollection,
     sessionCollection,
     usersCollection
 } from './db'

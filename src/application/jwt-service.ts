@@ -5,7 +5,6 @@ import { TokenPayloadType } from '../models/token-models'
 
 export const jwtService = {
     createJWT(userId: string) {
-        console.log(settings.EXPIRE_JWT)
         return jwt.sign({ userId: userId }, settings.JWT_SECRET, {
             expiresIn: settings.EXPIRE_JWT
         })

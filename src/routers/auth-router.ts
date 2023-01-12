@@ -23,7 +23,7 @@ import { UsersTypeInput } from '../models/users-models'
 import { v4 as uuidv4 } from 'uuid'
 import { sessionsService } from '../domain/sessions-service'
 import { rateLimiterMiddleware } from '../middleware/rate-limiter'
-import {settings} from "../settings/settings";
+import { settings } from '../settings/settings'
 
 export const authRouter = Router({})
 

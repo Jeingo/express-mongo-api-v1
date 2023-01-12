@@ -5,15 +5,14 @@ import { TokenPayloadType } from '../models/token-models'
 
 export const jwtService = {
     createJWT(userId: string) {
+        console.log(settings.EXPIRE_JWT)
         return jwt.sign({ userId: userId }, settings.JWT_SECRET, {
-            //expiresIn: '10s' for deploy
-            expiresIn: '10s'
+            expiresIn: settings.EXPIRE_JWT
         })
     },
     createRefreshJWT(userId: string, deviceId: string) {
         return jwt.sign({ userId: userId, deviceId: deviceId }, settings.JWT_REFRESH_SECRET, {
-            // expiresIn: '20s' for deploy
-            expiresIn: '20s'
+            expiresIn: settings.EXPIRE_REFRESH_JWT
         })
     },
     checkExpirationAndGetPayload(token: string) {

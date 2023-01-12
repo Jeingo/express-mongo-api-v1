@@ -7,5 +7,8 @@ export const settings = {
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || '456',
     PORT: process.env.PORT || 5000,
     EMAIL_LOGIN: process.env.EMAIL_LOGIN,
-    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    SECURE_COOKIE_MODE: process.env.SECURE_COOKIE_MODE,
+    EXPIRE_JWT: process.env.EXPIRE_JWT,
+    EXPIRE_REFRESH_JWT: process.env.EXPIRE_REFRESH_JWT
 }

@@ -23,10 +23,11 @@ import { UsersTypeInput } from '../models/users-models'
 import { v4 as uuidv4 } from 'uuid'
 import { sessionsService } from '../domain/sessions-service'
 import { rateLimiterMiddleware } from '../middleware/rate-limiter'
+import {settings} from "../settings/settings";
 
 export const authRouter = Router({})
 
-const SECURE_COOKIE_MODE = true // true for deploy
+const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
 authRouter.post(
     '/login',
@@ -49,7 +50,6 @@ authRouter.post(
         const refreshToken = jwtService.createRefreshJWT(user.id, deviceId)
 
         await sessionsService.saveSession(refreshToken, ipAddress, deviceName!)
-
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: SECURE_COOKIE_MODE

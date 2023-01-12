@@ -23,7 +23,6 @@ export const rateLimiterRepository = {
             { _id: base.id },
             { $set: { count: newCount } }
         )
-        console.log(newCount)
         return result.matchedCount === 1
     },
     async toDefaultBase(base: RateLimiterType, dateNow: number) {

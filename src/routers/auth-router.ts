@@ -22,6 +22,7 @@ import { bearerAuth } from '../authorization/bearer-auth'
 import { UsersTypeInput } from '../models/users-models'
 import { v4 as uuidv4 } from 'uuid'
 import { sessionsService } from '../domain/sessions-service'
+import {rateLimiterMiddleware} from "../middleware/rate-limiter";
 
 export const authRouter = Router({})
 
@@ -29,6 +30,7 @@ const SECURE_COOKIE_MODE = false // true for deploy
 
 authRouter.post(
     '/login',
+    rateLimiterMiddleware,
     loginOrEmailValidation,
     passwordFromAuthValidation,
     inputValidation,
@@ -118,6 +120,7 @@ authRouter.get('/me', bearerAuth, async (req: Request, res: Response) => {
 
 authRouter.post(
     '/registration',
+    rateLimiterMiddleware,
     loginRegistrationValidation,
     passwordRegistrationValidation,
     emailRegistrationValidation,
@@ -130,6 +133,7 @@ authRouter.post(
 
 authRouter.post(
     '/registration-confirmation',
+    rateLimiterMiddleware,
     codeValidation,
     inputValidation,
     async (req: RequestWithBody<RegistrationConfirmationType>, res: Response) => {
@@ -140,6 +144,7 @@ authRouter.post(
 
 authRouter.post(
     '/registration-email-resending',
+    rateLimiterMiddleware,
     emailResendValidation,
     inputValidation,
     async (req: RequestWithBody<RegistrationResendType>, res: Response) => {

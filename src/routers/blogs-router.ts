@@ -27,12 +27,14 @@ import { blogsQueryRepository } from '../query-reositories/blogs-query-repositor
 import { postsQueryRepository } from '../query-reositories/posts-query-repository'
 import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
+import {rateLimiterMiddleware} from "../middleware/rate-limiter";
 
 export const blogsRouter = Router({})
 
 blogsRouter.get(
     '/',
     queryValidation,
+    rateLimiterMiddleware,
     async (req: RequestWithQuery<QueryBlogs>, res: Response<PaginatedType<BlogsTypeOutput>>) => {
         const allBlogs = await blogsQueryRepository.getAllBlogs(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allBlogs)

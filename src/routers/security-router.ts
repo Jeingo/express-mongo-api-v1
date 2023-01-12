@@ -2,8 +2,8 @@ import { Router, Request, Response } from 'express'
 import { jwtService } from '../application/jwt-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { sessionsService } from '../domain/sessions-service'
-import {RequestWithParams} from "../models/types";
-import {DeviceIdParams} from "../models/auth-models";
+import { RequestWithParams } from '../models/types'
+import { DeviceIdParams } from '../models/auth-models'
 
 export const securityRouter = Router({})
 
@@ -53,7 +53,8 @@ securityRouter.delete('/devices', async (req: Request, res: Response) => {
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
-securityRouter.delete('/devices/:id',
+securityRouter.delete(
+    '/devices/:id',
     async (req: RequestWithParams<DeviceIdParams>, res: Response) => {
         const gotRefreshToken = req.cookies.refreshToken
 
@@ -74,7 +75,10 @@ securityRouter.delete('/devices/:id',
             return
         }
 
-        const deletedDevice = await sessionsService.deleteSessionByDeviceId(req.params.id, payload.userId)
+        const deletedDevice = await sessionsService.deleteSessionByDeviceId(
+            req.params.id,
+            payload.userId
+        )
         if (deletedDevice === HTTP_STATUSES.NOT_FOUND_404) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return
@@ -86,4 +90,5 @@ securityRouter.delete('/devices/:id',
         }
 
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-})
+    }
+)

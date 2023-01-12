@@ -1,7 +1,7 @@
 import {
     blogsCollection,
     commentsCollection,
-    postsCollection,
+    postsCollection, rateLimiterCollection,
     sessionCollection,
     usersCollection
 } from './db'
@@ -13,5 +13,6 @@ export const testRepository = {
         await usersCollection.deleteMany({})
         await commentsCollection.deleteMany({})
         await sessionCollection.deleteMany({})
+        await rateLimiterCollection.deleteMany({})
     }
 }

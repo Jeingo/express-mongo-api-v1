@@ -69,7 +69,10 @@ export const tokenRepository = {
         return result.deletedCount === 1
     },
     async deleteSessionsWithoutCurrent(userId: string, issueAt: string) {
-        const result = await sessionCollection.deleteMany({ userId: userId, issueAt: {$ne: issueAt}})
+        const result = await sessionCollection.deleteMany({
+            userId: userId,
+            issueAt: { $ne: issueAt }
+        })
         return result.deletedCount === 1
     }
 }

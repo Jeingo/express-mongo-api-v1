@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb'
+
 export type LoginTypeInput = {
     loginOrEmail: string
     password: string
@@ -19,4 +21,11 @@ export type RegistrationResendType = {
 
 export type DeviceIdParams = {
     id: string
+}
+
+export type RateLimiterType = {
+    id: ObjectId
+    ip: string
+    date: number
+    count: number
 }

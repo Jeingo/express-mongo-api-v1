@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { SessionType, TokenPayloadType } from '../models/token-models'
 import { tokenRepository } from '../repositories/token-repository'
-import {HTTP_STATUSES} from "../constats/status";
+import { HTTP_STATUSES } from '../constats/status'
 
 export const sessionsService = {
     async findAllActiveSession(userId: string) {

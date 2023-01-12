@@ -26,7 +26,7 @@ import { rateLimiterMiddleware } from '../middleware/rate-limiter'
 
 export const authRouter = Router({})
 
-const SECURE_COOKIE_MODE = false // true for deploy
+const SECURE_COOKIE_MODE = true // true for deploy
 
 authRouter.post(
     '/login',

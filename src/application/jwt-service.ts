@@ -7,13 +7,13 @@ export const jwtService = {
     createJWT(userId: string) {
         return jwt.sign({ userId: userId }, settings.JWT_SECRET, {
             //expiresIn: '10s' for deploy
-            expiresIn: '1m'
+            expiresIn: '10s'
         })
     },
     createRefreshJWT(userId: string, deviceId: string) {
         return jwt.sign({ userId: userId, deviceId: deviceId }, settings.JWT_REFRESH_SECRET, {
             // expiresIn: '20s' for deploy
-            expiresIn: '5m'
+            expiresIn: '20s'
         })
     },
     checkExpirationAndGetPayload(token: string) {

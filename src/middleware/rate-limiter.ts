@@ -6,13 +6,13 @@ const maxRequest = 5
 const timeInterval = 10000 // 10s
 
 export const rateLimiterMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-
+    const currentEndpoint = req.originalUrl
     const currentDate = Date.now()
     const currentIp = req.ip
-    const ipBase = await rateLimiterRepository.findIpBase(currentIp)
+    const ipBase = await rateLimiterRepository.findIpBase(currentIp, currentEndpoint)
 
     if (!ipBase) {
-        await rateLimiterRepository.createIpBase(currentIp, currentDate)
+        await rateLimiterRepository.createIpBase(currentIp, currentEndpoint, currentDate)
         next()
         return
     }

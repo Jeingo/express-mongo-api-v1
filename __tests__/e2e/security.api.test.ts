@@ -90,7 +90,7 @@ describe('/security/devices', () => {
     let createdUser2: any = null
     let createdToken2: any = null
     let createdRefreshToken2: any = null
-    
+
     it('DELETE /security/devices/id: should return 403 with other user', async () => {
         const createdResponse = await request(app)
             .post('/users')

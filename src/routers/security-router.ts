@@ -16,22 +16,7 @@ securityRouter.get('/devices', async (req: Request, res: Response) => {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
-    // const payload = jwtService.checkExpirationAndGetPayload(gotRefreshToken)
-    // if (!payload) {
-    //     res.clearCookie('refreshToken')
-    //     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
-    //     return
-    // }
-    //
-    // const statusSession = await sessionsService.isActiveSession(
-    //     payload.deviceId,
-    //     payload.iat.toString()
-    // )
-    // if (statusSession) {
-    //     res.clearCookie('refreshToken')
-    //     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
-    //     return
-    // }
+
     const allSession = await sessionsService.findAllActiveSession(payload.userId)
     res.json(allSession)
 })

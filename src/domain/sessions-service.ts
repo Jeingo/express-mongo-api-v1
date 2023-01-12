@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import {settings} from "../settings/settings";
-import {SessionType, TokenPayloadType} from "../models/token-models";
-import {tokenRepository} from "../repositories/token-repository";
+import jwt from 'jsonwebtoken'
+import { settings } from '../settings/settings'
+import { SessionType, TokenPayloadType } from '../models/token-models'
+import { tokenRepository } from '../repositories/token-repository'
 
 export const sessionsService = {
     async findAllActiveSession(userId: string) {
@@ -41,5 +41,9 @@ export const sessionsService = {
     async deleteSession(iat: number) {
         const issueAt = new Date(iat * 1000).toISOString()
         return await tokenRepository.deleteSession(issueAt)
+    },
+    async deleteActiveSessionWithoutCurrent(userId: string, iat: number) {
+        const issueAt = new Date(iat * 1000).toISOString()
+        await tokenRepository.deleteSessionsWithoutCurrent(userId, issueAt)
     }
 }

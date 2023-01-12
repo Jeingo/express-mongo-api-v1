@@ -1,6 +1,6 @@
 import { sessionCollection } from './db'
 import { SessionType } from '../models/token-models'
-import {sessionsService} from "../domain/sessions-service";
+import { sessionsService } from '../domain/sessions-service'
 
 const getOutputSession = (session: any) => {
     return {
@@ -16,14 +16,16 @@ export const tokenRepository = {
         await sessionCollection.insertOne(session)
     },
     async findAllActiveSession(userId: string) {
-        const result = await sessionCollection.find({userId: userId}).toArray() //
+        const currentDate = new Date().toISOString()
+        const result = await sessionCollection
+            .find({ userId: userId, expireAt: { $gt: currentDate } })
+            .toArray()
 
         if (!result) {
             return null
         }
         return result.map(getOutputSession)
-    }
-    ,
+    },
     async findSession(iat: string) {
         const result = await sessionCollection.findOne({ issueAt: iat })
         if (!result) {
@@ -47,6 +49,10 @@ export const tokenRepository = {
     },
     async deleteSession(issueAt: string) {
         const result = await sessionCollection.deleteOne({ issueAt: issueAt })
+        return result.deletedCount === 1
+    },
+    async deleteSessionsWithoutCurrent(userId: string, issueAt: string) {
+        const result = await sessionCollection.deleteMany({ userId: userId, issueAt: {$ne: issueAt}})
         return result.deletedCount === 1
     }
 }

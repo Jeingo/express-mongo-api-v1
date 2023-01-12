@@ -21,7 +21,7 @@ import { jwtService } from '../application/jwt-service'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { UsersTypeInput } from '../models/users-models'
 import { v4 as uuidv4 } from 'uuid'
-import {sessionsService} from "../domain/sessions-service";
+import { sessionsService } from '../domain/sessions-service'
 
 export const authRouter = Router({})
 
@@ -66,7 +66,10 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         return
     }
 
-    const statusSession = await sessionsService.isActiveSession(payload.deviceId, payload.iat.toString())
+    const statusSession = await sessionsService.isActiveSession(
+        payload.deviceId,
+        payload.iat.toString()
+    )
     if (statusSession) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
@@ -94,7 +97,10 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
         return
     }
 
-    const statusSession = await sessionsService.isActiveSession(payload.deviceId, payload.iat.toString())
+    const statusSession = await sessionsService.isActiveSession(
+        payload.deviceId,
+        payload.iat.toString()
+    )
     if (statusSession) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)

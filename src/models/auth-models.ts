@@ -16,3 +16,7 @@ export type RegistrationConfirmationType = {
 export type RegistrationResendType = {
     email: string
 }
+
+export type DeviceIdParams = {
+    id: string
+}

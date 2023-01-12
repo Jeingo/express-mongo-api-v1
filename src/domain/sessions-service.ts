@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { SessionType, TokenPayloadType } from '../models/token-models'
 import { tokenRepository } from '../repositories/token-repository'
+import {HTTP_STATUSES} from "../constats/status";
 
 export const sessionsService = {
     async findAllActiveSession(userId: string) {
@@ -41,6 +42,18 @@ export const sessionsService = {
     async deleteSession(iat: number) {
         const issueAt = new Date(iat * 1000).toISOString()
         return await tokenRepository.deleteSession(issueAt)
+    },
+    async deleteSessionByDeviceId(deviceId: string, userId: string) {
+        const device = await tokenRepository.findSessionByDeviceId(deviceId)
+
+        if (!device) {
+            return HTTP_STATUSES.NOT_FOUND_404
+        }
+
+        if (device.userId !== userId) {
+            return HTTP_STATUSES.FORBIDDEN_403
+        }
+        return await tokenRepository.deleteSessionByDeviceId(deviceId)
     },
     async deleteActiveSessionWithoutCurrent(userId: string, iat: number) {
         const issueAt = new Date(iat * 1000).toISOString()

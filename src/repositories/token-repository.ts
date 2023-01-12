@@ -1,6 +1,5 @@
 import { sessionCollection } from './db'
 import { SessionType } from '../models/token-models'
-import { sessionsService } from '../domain/sessions-service'
 
 const getOutputSession = (session: any) => {
     return {
@@ -40,6 +39,20 @@ export const tokenRepository = {
             expireAt: result.expireAt
         }
     },
+    async findSessionByDeviceId(deviceId: string) {
+        const result = await sessionCollection.findOne({ deviceId: deviceId })
+        if (!result) {
+            return null
+        }
+        return {
+            issueAt: result.issueAt,
+            deviceId: result.deviceId,
+            deviceName: result.deviceName,
+            ip: result.ip,
+            userId: result.userId,
+            expireAt: result.expireAt
+        }
+    },
     async updateSession(issueAt: string, expireAt: string, deviceId: string) {
         const result = await sessionCollection.updateOne(
             { deviceId: deviceId },
@@ -49,6 +62,10 @@ export const tokenRepository = {
     },
     async deleteSession(issueAt: string) {
         const result = await sessionCollection.deleteOne({ issueAt: issueAt })
+        return result.deletedCount === 1
+    },
+    async deleteSessionByDeviceId(deviceId: string) {
+        const result = await sessionCollection.deleteOne({ deviceId: deviceId })
         return result.deletedCount === 1
     },
     async deleteSessionsWithoutCurrent(userId: string, issueAt: string) {

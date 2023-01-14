@@ -3,9 +3,10 @@ import { usersRepository } from '../repositories/users-repository'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
 import { emailManager } from '../managers/email-manager'
+import { UsersHashType, UsersTypeOutput } from '../models/users-models'
 
 export const authService = {
-    async checkCredentials(loginOrEmail: string, password: string) {
+    async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
         const user = await usersRepository.findUserHashByLoginOrEmail(loginOrEmail)
         if (!user) return false
         const res = await bcrypt.compare(password, user.hash)
@@ -14,7 +15,7 @@ export const authService = {
         }
         return user
     },
-    async registerUser(login: string, password: string, email: string) {
+    async registerUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password, passwordSalt)
         const createdUser = {
@@ -34,10 +35,10 @@ export const authService = {
         await emailManager.sendEmailConfirmation(createdUser)
         return result
     },
-    async confirmEmail(code: string) {
+    async confirmEmail(code: string): Promise<void> {
         await usersRepository.updateConfirmationStatus(code)
     },
-    async resendEmail(email: string) {
+    async resendEmail(email: string): Promise<null | void> {
         const user = await usersRepository.findUserByEmail(email)
         if (!user) {
             return null

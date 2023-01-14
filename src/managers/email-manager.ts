@@ -1,7 +1,7 @@
 import { UsersTypeToDB } from '../models/users-models'
 import { emailAdapter } from '../adapters/email-adapter'
 
-const confirmationMessage = (code: string) => {
+const confirmationMessage = (code: string): string => {
     return `
         <h1>Thank for your registration</h1>
             <p>To finish registration please follow the link below:
@@ -11,7 +11,7 @@ const confirmationMessage = (code: string) => {
 }
 
 export const emailManager = {
-    async sendEmailConfirmation(user: UsersTypeToDB) {
+    async sendEmailConfirmation(user: UsersTypeToDB): Promise<void> {
         const emailForm = {
             from: '"Backend-09" <backend.jeingo@gmail.com>',
             to: user.email,

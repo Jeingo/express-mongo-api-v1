@@ -26,6 +26,7 @@ export type DeviceIdParams = {
 export type RateLimiterType = {
     id: ObjectId
     ip: string
+    endpoint: string
     date: number
     count: number
 }

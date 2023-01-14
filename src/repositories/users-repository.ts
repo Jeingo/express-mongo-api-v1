@@ -53,7 +53,7 @@ export const usersRepository = {
         const result = await usersCollection.deleteOne({ _id: new ObjectId(id) })
         return result.deletedCount === 1
     },
-    async findUserHashByLoginOrEmail(loginOrEmail: string) {
+    async findUserHashByLoginOrEmail(loginOrEmail: string): Promise<UsersHashType | null> {
         const result = await usersCollection.findOne({
             $or: [{ email: loginOrEmail }, { login: loginOrEmail }]
         })
@@ -62,7 +62,7 @@ export const usersRepository = {
         }
         return getOutputUserHash(result)
     },
-    async findUserByConfirmationCode(code: string) {
+    async findUserByConfirmationCode(code: string): Promise<UsersConfirmationCodeType | null> {
         const result = await usersCollection.findOne({
             'emailConfirmation.confirmationCode': code
         })
@@ -71,21 +71,21 @@ export const usersRepository = {
         }
         return getOutputUserForConfirmationCode(result)
     },
-    async updateConfirmationStatus(code: string) {
+    async updateConfirmationStatus(code: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { 'emailConfirmation.confirmationCode': code },
             { $set: { 'emailConfirmation.isConfirmed': true } }
         )
         return result.modifiedCount === 1
     },
-    async findUserByEmail(email: string) {
+    async findUserByEmail(email: string): Promise<UsersTypeToDB | null> {
         const result = await usersCollection.findOne({ email: email })
         if (!result) {
             return null
         }
         return getOutputUser(result)
     },
-    async updateConfirmationCode(user: UsersTypeToDB, code: string) {
+    async updateConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { login: user.login },
             { $set: { 'emailConfirmation.confirmationCode': code } }

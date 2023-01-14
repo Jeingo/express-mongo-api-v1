@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer'
 import { EmailForm } from '../models/email-models'
 
 export const emailAdapter = {
-    async sendEmail(form: EmailForm) {
+    async sendEmail(form: EmailForm): Promise<void> {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {

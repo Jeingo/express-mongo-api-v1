@@ -2,7 +2,7 @@ import { rateLimiterCollection } from './db'
 import { RateLimiterType } from '../models/auth-models'
 
 export const rateLimiterRepository = {
-    async findIpBase(ip: string, endpoint: string) {
+    async findIpBase(ip: string, endpoint: string): Promise<RateLimiterType | null> {
         const result = await rateLimiterCollection.findOne({ ip: ip, endpoint: endpoint })
         if (!result) {
             return null
@@ -15,7 +15,7 @@ export const rateLimiterRepository = {
             count: result.count
         }
     },
-    async createIpBase(ip: string, endpoint: string, dateNow: number) {
+    async createIpBase(ip: string, endpoint: string, dateNow: number): Promise<void> {
         await rateLimiterCollection.insertOne({
             ip: ip,
             endpoint: endpoint,
@@ -23,7 +23,7 @@ export const rateLimiterRepository = {
             count: 1
         })
     },
-    async incrementCountInIpBase(base: RateLimiterType) {
+    async incrementCountInIpBase(base: RateLimiterType): Promise<boolean> {
         const newCount = base.count + 1
         const result = await rateLimiterCollection.updateOne(
             { _id: base.id },
@@ -31,7 +31,7 @@ export const rateLimiterRepository = {
         )
         return result.matchedCount === 1
     },
-    async toDefaultBase(base: RateLimiterType, dateNow: number) {
+    async toDefaultBase(base: RateLimiterType, dateNow: number): Promise<boolean> {
         const result = await rateLimiterCollection.updateOne(
             { _id: base.id },
             { $set: { count: 1, date: dateNow } }

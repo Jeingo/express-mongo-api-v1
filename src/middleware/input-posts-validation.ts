@@ -2,7 +2,7 @@ import { body } from 'express-validator'
 import { blogsCollection } from '../repositories/db'
 import { ObjectId } from 'mongodb'
 
-const checkId = async (id: string) => {
+const checkId = async (id: string): Promise<true> => {
     if (!ObjectId.isValid(id)) {
         throw new Error('ID is bad')
     }

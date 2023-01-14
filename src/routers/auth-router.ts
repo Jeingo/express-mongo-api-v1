@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { sessionsService } from '../domain/sessions-service'
 import { rateLimiterMiddleware } from '../middleware/rate-limiter'
 import { settings } from '../settings/settings'
-import {checkAuthorizationAndGetPayload} from "./helper";
+import { checkAuthorizationAndGetPayload } from './helper'
 
 export const authRouter = Router({})
 
@@ -63,7 +63,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
     const gotRefreshToken = req.cookies.refreshToken
 
     const payload = await checkAuthorizationAndGetPayload(gotRefreshToken)
-    if(!payload) {
+    if (!payload) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
@@ -84,7 +84,7 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
     const gotRefreshToken = req.cookies.refreshToken
 
     const payload = await checkAuthorizationAndGetPayload(gotRefreshToken)
-    if(!payload) {
+    if (!payload) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return

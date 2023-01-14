@@ -3,7 +3,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { sessionsService } from '../domain/sessions-service'
 import { RequestWithParams } from '../models/types'
 import { DeviceIdParams } from '../models/auth-models'
-import {checkAuthorizationAndGetPayload} from "./helper";
+import { checkAuthorizationAndGetPayload } from './helper'
 
 export const securityRouter = Router({})
 
@@ -11,7 +11,7 @@ securityRouter.get('/devices', async (req: Request, res: Response) => {
     const gotRefreshToken = req.cookies.refreshToken
 
     const payload = await checkAuthorizationAndGetPayload(gotRefreshToken)
-    if(!payload) {
+    if (!payload) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
@@ -25,7 +25,7 @@ securityRouter.delete('/devices', async (req: Request, res: Response) => {
     const gotRefreshToken = req.cookies.refreshToken
 
     const payload = await checkAuthorizationAndGetPayload(gotRefreshToken)
-    if(!payload) {
+    if (!payload) {
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
@@ -40,7 +40,7 @@ securityRouter.delete(
         const gotRefreshToken = req.cookies.refreshToken
 
         const payload = await checkAuthorizationAndGetPayload(gotRefreshToken)
-        if(!payload) {
+        if (!payload) {
             res.clearCookie('refreshToken')
             res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
             return

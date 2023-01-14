@@ -194,4 +194,15 @@ describe('/auth/login', () => {
             .set('Cookie', createdRefreshToken2)
             .expect(HTTP_STATUSES.NO_CONTENT_204)
     })
+    it('POST /auth/login: should return 429 after 5 request in 10 seconds ', async() => {
+        for(let i = 0; i < 5; i++) {
+            await request(app)
+                .post('/auth/login')
+                .send(correctLogin)
+        }
+        await request(app)
+            .post('/auth/login')
+            .send(correctLogin)
+            .expect(HTTP_STATUSES.TOO_MANY_REQUESTS_429)
+    })
 })

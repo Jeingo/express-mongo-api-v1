@@ -41,6 +41,14 @@ export type UsersConfirmationCodeType = {
     }
 }
 
+export type UsersConfirmationCodePasswordRecoveryType = {
+    id: string
+    passwordRecoveryConfirmation: {
+        passwordRecoveryCode: string
+        expirationDate: Date
+    }
+}
+
 export type UsersIdParams = {
     id: string
 }

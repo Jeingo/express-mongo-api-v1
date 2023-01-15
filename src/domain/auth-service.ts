@@ -63,5 +63,10 @@ export const authService = {
         await usersRepository.updatePasswordRecoveryConfirmationCode(user, newPasswordRecoveryConfirmationCode)
         user.passwordRecoveryConfirmation.passwordRecoveryCode = newPasswordRecoveryConfirmationCode
         await emailManager.sendPasswordRecoveryEmailConfirmation(user)
+    },
+    async setNewPassword(recoveryCode: string, newPassword: string): Promise<void> {
+        const passwordSalt = await bcrypt.genSalt(10)
+        const passwordHash = await bcrypt.hash(newPassword, passwordSalt)
+        await usersRepository.updatePassword(recoveryCode, passwordHash)
     }
 }

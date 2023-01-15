@@ -37,22 +37,19 @@ const checkCode = async (code: string) => {
     return true
 }
 
-// const checkPasswordRecoveryCode = async (code: string) => {
-//     const foundUser = await usersRepository.findUserByConfirmationCodeRecoveryPassword(code)
-//     if (!foundUser) {
-//         throw new Error('This code is wrong')
-//     }
-//     if (foundUser.emailConfirmation.confirmationCode !== code) {
-//         throw new Error('This code is wrong')
-//     }
-//     if (foundUser.emailConfirmation.isConfirmed) {
-//         throw new Error('Account is already confirmed')
-//     }
-//     if (foundUser.emailConfirmation.expirationDate < new Date()) {
-//         throw new Error('This code is expired')
-//     }
-//     return true
-// }
+const checkPasswordRecoveryCode = async (code: string) => {
+    const foundUser = await usersRepository.findUserByConfirmationCodeRecoveryPassword(code)
+    if (!foundUser) {
+        throw new Error('This code is wrong')
+    }
+    if (foundUser.passwordRecoveryConfirmation.passwordRecoveryCode !== code) {
+        throw new Error('This code is wrong')
+    }
+    if (foundUser.passwordRecoveryConfirmation.expirationDate < new Date()) {
+        throw new Error('This code is expired')
+    }
+    return true
+}
 
 const checkEmailResending = async (email: string) => {
     const foundUser = await usersRepository.findUserByEmail(email)
@@ -139,13 +136,13 @@ export const emailPasswordRecoveryValidation = body('email')
     .matches(patternEmail)
     .withMessage('Should be correct email')
 
-// export const codePasswordRecoveryValidation = body('recoveryCode')
-//     .trim()
-//     .notEmpty()
-//     .withMessage(`Shouldn't be empty`)
-//     .isString()
-//     .withMessage('Should be string type')
-//     .custom(checkPasswordRecoveryCode)
+export const codePasswordRecoveryValidation = body('recoveryCode')
+    .trim()
+    .notEmpty()
+    .withMessage(`Shouldn't be empty`)
+    .isString()
+    .withMessage('Should be string type')
+    .custom(checkPasswordRecoveryCode)
 
 export const newPasswordRecoveryValidation = body('newPassword')
     .trim()

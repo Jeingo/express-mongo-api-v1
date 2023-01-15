@@ -1,4 +1,5 @@
 import {
+    UsersConfirmationCodePasswordRecoveryType,
     UsersConfirmationCodeType,
     UsersHashType,
     UsersTypeOutput,
@@ -21,6 +22,16 @@ const getOutputUserForConfirmationCode = (user: any): UsersConfirmationCodeType 
             confirmationCode: user.emailConfirmation.confirmationCode,
             expirationDate: user.emailConfirmation.expirationDate,
             isConfirmed: user.emailConfirmation.isConfirmed
+        }
+    }
+}
+
+const getOutputUserForPasswordRecoveryConfirmationCode = (user: any): UsersConfirmationCodePasswordRecoveryType => {
+    return {
+        id: user._id.toString(),
+        passwordRecoveryConfirmation: {
+            passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
+            expirationDate: user.passwordRecoveryConfirmation.expirationDate,
         }
     }
 }
@@ -75,14 +86,14 @@ export const usersRepository = {
         }
         return getOutputUserForConfirmationCode(result)
     },
-    async findUserByConfirmationCodeRecoveryPassword(code: string): Promise<UsersConfirmationCodeType | null> {
+    async findUserByConfirmationCodeRecoveryPassword(code: string): Promise<UsersConfirmationCodePasswordRecoveryType | null> {
         const result = await usersCollection.findOne({
-            passwordRecoveryCode: code
+            'passwordRecoveryConfirmation.passwordRecoveryCode': code
         })
         if (!result) {
             return null
         }
-        return getOutputUserForConfirmationCode(result)
+        return getOutputUserForPasswordRecoveryConfirmationCode(result)
     },
     async updateConfirmationStatus(code: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
@@ -116,6 +127,13 @@ export const usersRepository = {
         const result = await usersCollection.updateOne(
             { login: user.login },
             { $set: { 'passwordRecoveryConfirmation.passwordRecoveryCode': code } }
+        )
+        return result.modifiedCount === 1
+    },
+    async updatePassword(recoveryCode: string, newHash: string): Promise<boolean> {
+        const result = await usersCollection.updateOne(
+            { 'passwordRecoveryConfirmation.passwordRecoveryCode': recoveryCode },
+            { $set: { hash: newHash } }
         )
         return result.modifiedCount === 1
     }

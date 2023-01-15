@@ -1,5 +1,6 @@
 import { Router, Response, Request } from 'express'
 import {
+    codePasswordRecoveryValidation,
     codeValidation, emailPasswordRecoveryValidation,
     emailRegistrationValidation,
     emailResendValidation,
@@ -145,10 +146,10 @@ authRouter.post('/password-recovery',
 
 authRouter.post('/new-password',
     rateLimiterMiddleware,
-    // codePasswordRecoveryValidation,
+    codePasswordRecoveryValidation,
     newPasswordRecoveryValidation,
     inputValidation,
     async (req: RequestWithBody<NewPasswordType>, res:Response) => {
-
+        await authService.setNewPassword(req.body.recoveryCode, req.body.newPassword)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     })

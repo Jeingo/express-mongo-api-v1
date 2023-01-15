@@ -31,6 +31,7 @@ const getOutputUser = (user: any): UsersTypeToDB => {
         hash: user.hash,
         email: user.email,
         createdAt: user.createdAt,
+        passwordRecoveryCode: user.passwordRecoveryCode,
         emailConfirmation: {
             confirmationCode: user.emailConfirmation.confirmationCode,
             expirationDate: user.emailConfirmation.expirationDate,
@@ -96,6 +97,13 @@ export const usersRepository = {
         const result = await usersCollection.updateOne(
             { login: user.login },
             { $set: { 'emailConfirmation.confirmationCode': code } }
+        )
+        return result.modifiedCount === 1
+    },
+    async updatePasswordRecoveryConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
+        const result = await usersCollection.updateOne(
+            { login: user.login },
+            { $set: { passwordRecoveryCode: code } }
         )
         return result.modifiedCount === 1
     }

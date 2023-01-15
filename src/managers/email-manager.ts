@@ -34,7 +34,7 @@ export const emailManager = {
             from: '"Backend-09" <backend.jeingo@gmail.com>',
             to: user.email,
             subject: 'Password recovery confirmation',
-            html: passwordRecoveryConfirmationMessage(user.emailConfirmation.confirmationCode)
+            html: passwordRecoveryConfirmationMessage(user.passwordRecoveryCode)
         }
         await emailAdapter.sendEmail(emailForm)
     }

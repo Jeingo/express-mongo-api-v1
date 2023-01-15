@@ -142,3 +142,11 @@ authRouter.post('/password-recovery',
         await authService.recoveryPassword(req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
+
+// authRouter.post('/new-password',
+//     rateLimiterMiddleware,
+//
+//     async (req: RequestWithBody<NewPasswordType>, res:Response) => {
+//
+//         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+//     })

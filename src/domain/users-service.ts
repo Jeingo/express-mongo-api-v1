@@ -33,6 +33,7 @@ export const usersService = {
             hash: passwordHash,
             email: email,
             createdAt: new Date().toISOString(),
+            passwordRecoveryCode: v4(),
             emailConfirmation: {
                 confirmationCode: v4(),
                 expirationDate: add(new Date(), {

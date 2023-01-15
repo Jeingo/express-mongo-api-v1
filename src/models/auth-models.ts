@@ -23,6 +23,11 @@ export type PasswordRecoveryType = {
     email: string
 }
 
+export type NewPasswordType = {
+    newPassword: string
+    recoveryCode: string
+}
+
 export type DeviceIdParams = {
     id: string
 }

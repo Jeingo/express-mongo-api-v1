@@ -27,7 +27,8 @@ export const authService = {
                 passwordRecoveryCode: v4(),
                 expirationDate: add(new Date(), {
                     hours: 1
-                })
+                }),
+                isConfirmed: true
             },
             emailConfirmation: {
                 confirmationCode: v4(),
@@ -60,7 +61,10 @@ export const authService = {
             return null
         }
         const newPasswordRecoveryConfirmationCode = v4()
-        await usersRepository.updatePasswordRecoveryConfirmationCode(user, newPasswordRecoveryConfirmationCode)
+        await usersRepository.updatePasswordRecoveryConfirmationCode(
+            user,
+            newPasswordRecoveryConfirmationCode
+        )
         user.passwordRecoveryConfirmation.passwordRecoveryCode = newPasswordRecoveryConfirmationCode
         await emailManager.sendPasswordRecoveryEmailConfirmation(user)
     },

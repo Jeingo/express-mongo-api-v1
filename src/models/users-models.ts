@@ -19,6 +19,7 @@ export type UsersTypeToDB = {
     passwordRecoveryConfirmation: {
         passwordRecoveryCode: string
         expirationDate: Date
+        isConfirmed: boolean
     }
     emailConfirmation: {
         confirmationCode: string
@@ -46,6 +47,7 @@ export type UsersConfirmationCodePasswordRecoveryType = {
     passwordRecoveryConfirmation: {
         passwordRecoveryCode: string
         expirationDate: Date
+        isConfirmed: boolean
     }
 }
 

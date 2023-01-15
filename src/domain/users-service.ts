@@ -37,7 +37,8 @@ export const usersService = {
                 passwordRecoveryCode: v4(),
                 expirationDate: add(new Date(), {
                     hours: 1
-                })
+                }),
+                isConfirmed: true
             },
             emailConfirmation: {
                 confirmationCode: v4(),

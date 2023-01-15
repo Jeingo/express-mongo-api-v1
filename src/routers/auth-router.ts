@@ -1,18 +1,22 @@
 import { Router, Response, Request } from 'express'
 import {
     codePasswordRecoveryValidation,
-    codeValidation, emailPasswordRecoveryValidation,
+    codeValidation,
+    emailPasswordRecoveryValidation,
     emailRegistrationValidation,
     emailResendValidation,
     loginOrEmailValidation,
-    loginRegistrationValidation, newPasswordRecoveryValidation,
+    loginRegistrationValidation,
     passwordFromAuthValidation,
+    passwordRecoveryValidation,
     passwordRegistrationValidation
 } from '../middleware/input-auth-validation'
 import { inputValidation } from '../middleware/input-validation'
 import { RequestWithBody } from '../models/types'
 import {
-    LoginTypeInput, NewPasswordType, PasswordRecoveryType,
+    LoginTypeInput,
+    NewPasswordType,
+    PasswordRecoveryType,
     RegistrationConfirmationType,
     RegistrationResendType
 } from '../models/auth-models'
@@ -135,21 +139,25 @@ authRouter.post(
     }
 )
 
-authRouter.post('/password-recovery',
+authRouter.post(
+    '/password-recovery',
     rateLimiterMiddleware,
     emailPasswordRecoveryValidation,
     inputValidation,
-    async (req: RequestWithBody<PasswordRecoveryType>, res:Response) => {
+    async (req: RequestWithBody<PasswordRecoveryType>, res: Response) => {
         await authService.recoveryPassword(req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-})
+    }
+)
 
-authRouter.post('/new-password',
+authRouter.post(
+    '/new-password',
     rateLimiterMiddleware,
     codePasswordRecoveryValidation,
-    newPasswordRecoveryValidation,
+    passwordRecoveryValidation,
     inputValidation,
-    async (req: RequestWithBody<NewPasswordType>, res:Response) => {
+    async (req: RequestWithBody<NewPasswordType>, res: Response) => {
         await authService.setNewPassword(req.body.recoveryCode, req.body.newPassword)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-    })
+    }
+)

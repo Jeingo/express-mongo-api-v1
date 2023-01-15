@@ -7,6 +7,7 @@ import {
 } from '../models/users-models'
 import { usersCollection } from './db'
 import { ObjectId } from 'mongodb'
+import add from 'date-fns/add'
 
 const getOutputUserHash = (user: any): UsersHashType => {
     return {
@@ -26,12 +27,15 @@ const getOutputUserForConfirmationCode = (user: any): UsersConfirmationCodeType 
     }
 }
 
-const getOutputUserForPasswordRecoveryConfirmationCode = (user: any): UsersConfirmationCodePasswordRecoveryType => {
+const getOutputUserForPasswordRecoveryConfirmationCode = (
+    user: any
+): UsersConfirmationCodePasswordRecoveryType => {
     return {
         id: user._id.toString(),
         passwordRecoveryConfirmation: {
             passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
             expirationDate: user.passwordRecoveryConfirmation.expirationDate,
+            isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
         }
     }
 }
@@ -44,7 +48,8 @@ const getOutputUser = (user: any): UsersTypeToDB => {
         createdAt: user.createdAt,
         passwordRecoveryConfirmation: {
             passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
-            expirationDate: user.passwordRecoveryConfirmation.expirationDate
+            expirationDate: user.passwordRecoveryConfirmation.expirationDate,
+            isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
         },
         emailConfirmation: {
             confirmationCode: user.emailConfirmation.confirmationCode,
@@ -86,7 +91,9 @@ export const usersRepository = {
         }
         return getOutputUserForConfirmationCode(result)
     },
-    async findUserByConfirmationCodeRecoveryPassword(code: string): Promise<UsersConfirmationCodePasswordRecoveryType | null> {
+    async findUserByConfirmationCodeRecoveryPassword(
+        code: string
+    ): Promise<UsersConfirmationCodePasswordRecoveryType | null> {
         const result = await usersCollection.findOne({
             'passwordRecoveryConfirmation.passwordRecoveryCode': code
         })
@@ -123,17 +130,26 @@ export const usersRepository = {
         )
         return result.modifiedCount === 1
     },
-    async updatePasswordRecoveryConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
+    async updatePasswordRecoveryConfirmationCode(
+        user: UsersTypeToDB,
+        code: string
+    ): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { login: user.login },
-            { $set: { 'passwordRecoveryConfirmation.passwordRecoveryCode': code } }
+            {
+                $set: {
+                    'passwordRecoveryConfirmation.passwordRecoveryCode': code,
+                    'passwordRecoveryConfirmation.isConfirmed': false,
+                    'passwordRecoveryConfirmation.expirationDate': add(new Date(), { hours: 1 })
+                }
+            }
         )
         return result.modifiedCount === 1
     },
     async updatePassword(recoveryCode: string, newHash: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { 'passwordRecoveryConfirmation.passwordRecoveryCode': recoveryCode },
-            { $set: { hash: newHash } }
+            { $set: { hash: newHash, 'passwordRecoveryConfirmation.isConfirmed': true } }
         )
         return result.modifiedCount === 1
     }

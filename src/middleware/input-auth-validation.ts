@@ -45,6 +45,9 @@ const checkPasswordRecoveryCode = async (code: string) => {
     if (foundUser.passwordRecoveryConfirmation.passwordRecoveryCode !== code) {
         throw new Error('This code is wrong')
     }
+    if (foundUser.passwordRecoveryConfirmation.isConfirmed) {
+        throw new Error('Password is already changed')
+    }
     if (foundUser.passwordRecoveryConfirmation.expirationDate < new Date()) {
         throw new Error('This code is expired')
     }
@@ -144,7 +147,7 @@ export const codePasswordRecoveryValidation = body('recoveryCode')
     .withMessage('Should be string type')
     .custom(checkPasswordRecoveryCode)
 
-export const newPasswordRecoveryValidation = body('newPassword')
+export const passwordRecoveryValidation = body('newPassword')
     .trim()
     .notEmpty()
     .withMessage(`Shouldn't be empty`)

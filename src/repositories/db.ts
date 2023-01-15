@@ -1,24 +1,36 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient } from 'mongodb' // to delete
+import mongoose from "mongoose"
 import { settings } from '../settings/settings'
+import {BlogsSchema} from "./schemas";
 
 const mongoUrl = settings.MONGO_URL
+const dbName = settings.DB_NAME
 
-export const client = new MongoClient(mongoUrl)
+export const client = new MongoClient(mongoUrl) // to delete
 
 export const runDb = async () => {
     try {
-        await client.connect()
+        await client.connect() // to delete
+        await mongoose.connect(mongoUrl, {dbName: dbName});
         console.log('Connected successfully to mongo db')
     } catch (err) {
         console.log(`Can't connect to mongo db: ` + err)
-        await client.close()
+        await client.close() // to delete
+        await mongoose.disconnect()
     }
 }
 
-const db = client.db('service')
-export const blogsCollection = db.collection('blogs')
-export const postsCollection = db.collection('posts')
-export const usersCollection = db.collection('users')
-export const commentsCollection = db.collection('comments')
-export const sessionCollection = db.collection('session')
-export const rateLimiterCollection = db.collection('limiter')
+const db = client.db(dbName) // to delete
+export const blogsCollection = db.collection('blogs') // to delete
+export const postsCollection = db.collection('posts') // to delete
+export const usersCollection = db.collection('users') // to delete
+export const commentsCollection = db.collection('comments') // to delete
+export const sessionCollection = db.collection('sessions') // to delete
+export const rateLimiterCollection = db.collection('limiter') // to delete
+
+export const BlogsModel = mongoose.model('blogs', BlogsSchema)
+// export const PostsModel = mongoose.model('posts',)
+// export const UsersModel = mongoose.model('users',)
+// export const CommentsModel = mongoose.model('comments',)
+// export const SessionModel = mongoose.model('sessions',)
+// export const RateLimiterModel = mongoose.model('limiter',)

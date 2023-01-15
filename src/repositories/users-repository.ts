@@ -31,7 +31,10 @@ const getOutputUser = (user: any): UsersTypeToDB => {
         hash: user.hash,
         email: user.email,
         createdAt: user.createdAt,
-        passwordRecoveryCode: user.passwordRecoveryCode,
+        passwordRecoveryConfirmation: {
+            passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
+            expirationDate: user.passwordRecoveryConfirmation.expirationDate
+        },
         emailConfirmation: {
             confirmationCode: user.emailConfirmation.confirmationCode,
             expirationDate: user.emailConfirmation.expirationDate,
@@ -72,6 +75,15 @@ export const usersRepository = {
         }
         return getOutputUserForConfirmationCode(result)
     },
+    async findUserByConfirmationCodeRecoveryPassword(code: string): Promise<UsersConfirmationCodeType | null> {
+        const result = await usersCollection.findOne({
+            passwordRecoveryCode: code
+        })
+        if (!result) {
+            return null
+        }
+        return getOutputUserForConfirmationCode(result)
+    },
     async updateConfirmationStatus(code: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { 'emailConfirmation.confirmationCode': code },
@@ -103,7 +115,7 @@ export const usersRepository = {
     async updatePasswordRecoveryConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { login: user.login },
-            { $set: { passwordRecoveryCode: code } }
+            { $set: { 'passwordRecoveryConfirmation.passwordRecoveryCode': code } }
         )
         return result.modifiedCount === 1
     }

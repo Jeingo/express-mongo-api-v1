@@ -4,14 +4,14 @@ import {
     emailRegistrationValidation,
     emailResendValidation,
     loginOrEmailValidation,
-    loginRegistrationValidation,
+    loginRegistrationValidation, newPasswordRecoveryValidation,
     passwordFromAuthValidation,
     passwordRegistrationValidation
 } from '../middleware/input-auth-validation'
 import { inputValidation } from '../middleware/input-validation'
 import { RequestWithBody } from '../models/types'
 import {
-    LoginTypeInput, PasswordRecoveryType,
+    LoginTypeInput, NewPasswordType, PasswordRecoveryType,
     RegistrationConfirmationType,
     RegistrationResendType
 } from '../models/auth-models'
@@ -143,10 +143,12 @@ authRouter.post('/password-recovery',
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })
 
-// authRouter.post('/new-password',
-//     rateLimiterMiddleware,
-//
-//     async (req: RequestWithBody<NewPasswordType>, res:Response) => {
-//
-//         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-//     })
+authRouter.post('/new-password',
+    rateLimiterMiddleware,
+    // codePasswordRecoveryValidation,
+    newPasswordRecoveryValidation,
+    inputValidation,
+    async (req: RequestWithBody<NewPasswordType>, res:Response) => {
+
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    })

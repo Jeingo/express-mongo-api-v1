@@ -16,7 +16,10 @@ export type UsersTypeToDB = {
     hash: string
     email: string
     createdAt: string
-    passwordRecoveryCode: string
+    passwordRecoveryConfirmation: {
+        passwordRecoveryCode: string
+        expirationDate: Date
+    }
     emailConfirmation: {
         confirmationCode: string
         expirationDate: Date

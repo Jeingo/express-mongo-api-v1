@@ -1,12 +1,11 @@
 import { body } from 'express-validator'
-import { usersCollection } from '../repositories/db'
 import { usersRepository } from '../repositories/users-repository'
 
 const patternLogin = /^[a-zA-Z0-9_-]*$/
 const patternEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
 
 const checkEmail = async (email: string) => {
-    const foundUser = await usersCollection.findOne({ email: email })
+    const foundUser = await usersRepository.findUserByEmail(email)
     if (foundUser) {
         throw new Error('Email is already exist')
     }
@@ -14,7 +13,7 @@ const checkEmail = async (email: string) => {
 }
 
 const checkLogin = async (login: string) => {
-    const foundUser = await usersCollection.findOne({ login: login })
+    const foundUser = await usersRepository.findUserByLogin(login)
     if (foundUser) {
         throw new Error('Email is already exist')
     }

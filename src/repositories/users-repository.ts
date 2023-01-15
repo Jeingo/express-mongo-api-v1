@@ -85,6 +85,13 @@ export const usersRepository = {
         }
         return getOutputUser(result)
     },
+    async findUserByLogin(login: string): Promise<UsersTypeToDB | null> {
+        const result = await usersCollection.findOne({ login: login })
+        if (!result) {
+            return null
+        }
+        return getOutputUser(result)
+    },
     async updateConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
         const result = await usersCollection.updateOne(
             { login: user.login },

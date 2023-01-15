@@ -1,12 +1,12 @@
 import { body } from 'express-validator'
-import { blogsCollection } from '../repositories/db'
 import { ObjectId } from 'mongodb'
+import {blogsRepository} from "../repositories/blogs-repository";
 
 const checkId = async (id: string): Promise<true> => {
     if (!ObjectId.isValid(id)) {
         throw new Error('ID is bad')
     }
-    const foundBlog = await blogsCollection.findOne({ _id: new ObjectId(id) })
+    const foundBlog = await blogsRepository.getBlogById(id)
     if (foundBlog) {
         return true
     } else {

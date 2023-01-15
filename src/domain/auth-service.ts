@@ -32,7 +32,7 @@ export const authService = {
             }
         }
         const result = await usersRepository.createUser(createdUser)
-        await emailManager.sendEmailConfirmation(createdUser)
+        await emailManager.sendRegistrationEmailConfirmation(createdUser)
         return result
     },
     async confirmEmail(code: string): Promise<void> {
@@ -46,6 +46,16 @@ export const authService = {
         const newConfirmationCode = v4()
         await usersRepository.updateConfirmationCode(user, newConfirmationCode)
         user.emailConfirmation.confirmationCode = newConfirmationCode
-        await emailManager.sendEmailConfirmation(user)
+        await emailManager.sendRegistrationEmailConfirmation(user)
+    },
+    async recoveryPassword(email: string): Promise<null | void> {
+        const user = await usersRepository.findUserByEmail(email)
+        if (!user) {
+            return null
+        }
+        const newConfirmationCode = v4()
+        await usersRepository.updateConfirmationCode(user, newConfirmationCode)
+        user.emailConfirmation.confirmationCode = newConfirmationCode
+        await emailManager.sendPasswordRecoveryEmailConfirmation(user)
     }
 }

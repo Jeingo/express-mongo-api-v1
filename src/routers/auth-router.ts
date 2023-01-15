@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express'
 import {
-    codeValidation,
+    codeValidation, emailPasswordRecoveryValidation,
     emailRegistrationValidation,
     emailResendValidation,
     loginOrEmailValidation,
@@ -11,7 +11,7 @@ import {
 import { inputValidation } from '../middleware/input-validation'
 import { RequestWithBody } from '../models/types'
 import {
-    LoginTypeInput,
+    LoginTypeInput, PasswordRecoveryType,
     RegistrationConfirmationType,
     RegistrationResendType
 } from '../models/auth-models'
@@ -133,3 +133,12 @@ authRouter.post(
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 )
+
+authRouter.post('/password-recovery',
+    rateLimiterMiddleware,
+    emailPasswordRecoveryValidation,
+    inputValidation,
+    async (req: RequestWithBody<PasswordRecoveryType>, res:Response) => {
+        await authService.recoveryPassword(req.body.email)
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+})

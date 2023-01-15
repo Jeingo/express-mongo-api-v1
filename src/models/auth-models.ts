@@ -19,6 +19,10 @@ export type RegistrationResendType = {
     email: string
 }
 
+export type PasswordRecoveryType = {
+    email: string
+}
+
 export type DeviceIdParams = {
     id: string
 }

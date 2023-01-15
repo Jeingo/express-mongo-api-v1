@@ -11,6 +11,7 @@ export const client = new MongoClient(mongoUrl) // to delete
 export const runDb = async () => {
     try {
         await client.connect() // to delete
+        mongoose.set('strictQuery', false)
         await mongoose.connect(mongoUrl, {dbName: dbName});
         console.log('Connected successfully to mongo db')
     } catch (err) {

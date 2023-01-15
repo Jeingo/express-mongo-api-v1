@@ -1,4 +1,4 @@
-import { blogsCollection } from './db'
+import {blogsCollection, BlogsModel} from './db'
 import { ObjectId } from 'mongodb'
 import { BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
 
@@ -30,6 +30,16 @@ export const blogsRepository = {
             websiteUrl: createdBlog.websiteUrl,
             createdAt: createdBlog.createdAt
         }
+
+        // const res = new BlogsModel(createdBlog)
+        // await res.save(err => console.log(err))
+        // return {
+        //     id: res._id.toString(),
+        //     name: createdBlog.name,
+        //     description: createdBlog.description,
+        //     websiteUrl: createdBlog.websiteUrl,
+        //     createdAt: createdBlog.createdAt
+        // }
     },
     async updateBlog(id: string, name: string, desc: string, url: string): Promise<boolean> {
         const result = await blogsCollection.updateOne(

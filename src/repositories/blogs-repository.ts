@@ -19,8 +19,7 @@ export const blogsRepository = {
         return getOutputBlog(result)
     },
     async createBlog(createdBlog: BlogsTypeToDB): Promise<BlogsTypeOutput> {
-        const result = new BlogsModel(createdBlog)
-        await result.save()
+        const result = await BlogsModel.create(createdBlog)
         return getOutputBlog(result)
     },
     async updateBlog(id: string, updatedBlog: BlogsTypeInput): Promise<boolean> {

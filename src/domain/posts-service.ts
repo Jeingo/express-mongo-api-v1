@@ -13,9 +13,7 @@ export const postsService = {
         blogId: string
     ): Promise<PostsTypeOutput | null> {
         const foundBlog = await blogsRepository.getBlogById(blogId)
-        if (!foundBlog) {
-            return null
-        }
+        if (!foundBlog) return null
         const createdPost = {
             title: title,
             shortDescription: desc,
@@ -34,17 +32,15 @@ export const postsService = {
         blogId: string
     ): Promise<boolean | null> {
         const foundBlog = await blogsRepository.getBlogById(blogId)
-        if (foundBlog) {
-            return await postsRepository.updatePost(
-                id,
-                title,
-                desc,
-                content,
-                blogId,
-                foundBlog.name
-            )
+        if (!foundBlog) return null
+        const updatedPost = {
+            title: title,
+            shortDescription: desc,
+            content: content,
+            blogId: blogId,
+            blogName: foundBlog.name
         }
-        return null
+        return await postsRepository.updatePost(id, updatedPost)
     },
     async deletePost(id: string): Promise<boolean> {
         return await postsRepository.deletePost(id)

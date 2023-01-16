@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb' // to delete
 import mongoose from "mongoose"
 import { settings } from '../settings/settings'
-import {BlogsSchema} from "./schemas";
+import {BlogsSchema, PostsSchema} from "./schemas";
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME
@@ -30,7 +30,7 @@ export const sessionCollection = db.collection('sessions') // to delete
 export const rateLimiterCollection = db.collection('limiter') // to delete
 
 export const BlogsModel = mongoose.model('blogs', BlogsSchema)
-// export const PostsModel = mongoose.model('posts',)
+export const PostsModel = mongoose.model('posts', PostsSchema)
 // export const UsersModel = mongoose.model('users',)
 // export const CommentsModel = mongoose.model('comments',)
 // export const SessionModel = mongoose.model('sessions',)

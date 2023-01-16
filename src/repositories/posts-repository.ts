@@ -1,6 +1,6 @@
-import { postsCollection } from './db'
+import { PostsModel} from './db'
 import { ObjectId } from 'mongodb'
-import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
+import {PostsTypeOutput, PostsTypeToDB, PostsUpdateType} from '../models/posts-models'
 
 const getOutputPost = (post: any): PostsTypeOutput => {
     return {
@@ -16,51 +16,22 @@ const getOutputPost = (post: any): PostsTypeOutput => {
 
 export const postsRepository = {
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
-        const res = await postsCollection.findOne({ _id: new ObjectId(id) })
-        if (res) {
-            return getOutputPost(res)
-        }
-        return null
+        const result = await PostsModel.findById(new ObjectId(id))
+        if (!result) return null
+        return getOutputPost(result)
     },
     async createPost(createdPost: PostsTypeToDB): Promise<PostsTypeOutput> {
-        const res = await postsCollection.insertOne(createdPost)
-        return {
-            id: res.insertedId.toString(),
-            title: createdPost.title,
-            shortDescription: createdPost.shortDescription,
-            content: createdPost.content,
-            blogId: createdPost.blogId,
-            blogName: createdPost.blogName,
-            createdAt: createdPost.createdAt
-        }
+        const result = await PostsModel.create(createdPost)
+        return getOutputPost(result)
     },
-    async updatePost(
-        id: string,
-        title: string,
-        desc: string,
-        content: string,
-        blogId: string,
-        blogName: string
-    ): Promise<boolean | null> {
-        if (!ObjectId.isValid(blogId)) {
-            return null
-        }
-        const updatePost = await postsCollection.updateOne(
-            { _id: new ObjectId(id) },
-            {
-                $set: {
-                    title: title,
-                    shortDescription: desc,
-                    content: content,
-                    blogId: blogId,
-                    blogName: blogName
-                }
-            }
-        )
-        return updatePost.matchedCount === 1
+    async updatePost(id: string, updatedPost: PostsUpdateType): Promise<boolean> {
+        const result = await PostsModel.findByIdAndUpdate(new ObjectId(id), updatedPost)
+        if(!result) return false
+        return true
     },
     async deletePost(id: string): Promise<boolean> {
-        const result = await postsCollection.deleteOne({ _id: new ObjectId(id) })
-        return result.deletedCount === 1
+        const result = await PostsModel.findByIdAndDelete(new ObjectId(id))
+        if(!result) return false
+        return true
     }
 }

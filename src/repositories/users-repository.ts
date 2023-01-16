@@ -8,6 +8,15 @@ import {
 import { UsersModel } from './db'
 import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'
+import {LoginTypeForAuth} from "../models/auth-models";
+
+const getOutputUserForAuth = (user: any): LoginTypeForAuth => {
+    return {
+        email: user.email,
+        login: user.login,
+        userId: user._id.toString()
+    }
+}
 
 const getOutputUserHash = (user: any): UsersHashType => {
     return {
@@ -69,6 +78,11 @@ const getShortOutputUser = (user: any): UsersTypeOutput => {
 }
 
 export const usersRepository = {
+    async findUserById(id: ObjectId): Promise<LoginTypeForAuth | null> {
+        const result = await UsersModel.findById(id)
+        if(!result) return null
+        return getOutputUserForAuth(result)
+    },
     async createUser(createdUser: UsersTypeToDB): Promise<UsersTypeOutput> {
         const result = await UsersModel.create(createdUser)
         return getShortOutputUser(result)

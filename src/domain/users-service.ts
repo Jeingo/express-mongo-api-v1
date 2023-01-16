@@ -1,28 +1,14 @@
 import { usersRepository } from '../repositories/users-repository'
 import { UsersTypeOutput } from '../models/users-models'
 import bcrypt from 'bcrypt'
-import { usersCollection } from '../repositories/db'
 import { ObjectId } from 'mongodb'
 import { LoginTypeForAuth } from '../models/auth-models'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
 
-const getOutputUser = (user: any): LoginTypeForAuth => {
-    return {
-        email: user.email,
-        login: user.login,
-        userId: user._id.toString()
-    }
-}
-
 export const usersService = {
     async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
-        const res = await usersCollection.findOne({ _id })
-
-        if (res) {
-            return getOutputUser(res)
-        }
-        return null
+        return await usersRepository.findUserById(_id)
     },
 
     async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {

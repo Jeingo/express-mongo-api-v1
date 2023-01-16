@@ -33,8 +33,6 @@ export const blogsCollection = db.collection('blogs') // to delete
 export const postsCollection = db.collection('posts') // to delete
 export const usersCollection = db.collection('users') // to delete
 export const commentsCollection = db.collection('comments') // to delete
-export const sessionCollection = db.collection('sessions') // to delete
-export const rateLimiterCollection = db.collection('limiters') // to delete
 
 export const BlogsModel = mongoose.model('blogs', BlogsSchema)
 export const PostsModel = mongoose.model('posts', PostsSchema)

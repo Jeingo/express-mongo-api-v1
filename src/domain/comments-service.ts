@@ -40,8 +40,8 @@ export const commentsService = {
         if (comment.userId !== user.userId) {
             return HTTP_STATUSES.FORBIDDEN_403
         }
-
-        return await commentsRepository.updateComment(id, content)
+        const updatedComment = { content: content }
+        return await commentsRepository.updateComment(id, updatedComment)
     },
     async deleteComment(id: string, user: LoginTypeForAuth): Promise<boolean | number> {
         const comment = await commentsRepository.getCommentById(id)

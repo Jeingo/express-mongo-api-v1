@@ -1,5 +1,5 @@
 import { PostsTypeOutput } from '../models/posts-models'
-import { blogsCollection, postsCollection } from '../repositories/db'
+import { BlogsModel, PostsModel} from '../repositories/db'
 import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
@@ -19,7 +19,7 @@ const getOutputPost = (post: any): PostsTypeOutput => {
 
 export const postsQueryRepository = {
     async getAllPost(query: QueryPosts): Promise<PaginatedType<PostsTypeOutput>> {
-        const countAllDocuments = await postsCollection.countDocuments()
+        const countAllDocuments = await PostsModel.countDocuments()
         const {
             sortBy = 'createdAt',
             sortDirection = 'desc',
@@ -28,23 +28,20 @@ export const postsQueryRepository = {
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
-        const res = await postsCollection
+        const res = await PostsModel
             .find()
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-            .toArray()
         return getPaginatedType(res.map(getOutputPost), +pageSize, +pageNumber, countAllDocuments)
     },
     async getPostsById(
         id: string,
         query: QueryPosts
     ): Promise<PaginatedType<PostsTypeOutput> | null> {
-        const foundBlogs = await blogsCollection.findOne({ _id: new ObjectId(id) })
-        if (!foundBlogs) {
-            return null
-        }
-        const countAllDocuments = await postsCollection.countDocuments({
+        const foundBlogs = await BlogsModel.findById(new ObjectId(id))
+        if (!foundBlogs) return null
+        const countAllDocuments = await PostsModel.countDocuments({
             blogId: id
         })
         const {
@@ -55,12 +52,11 @@ export const postsQueryRepository = {
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
-        const res = await postsCollection
+        const res = await PostsModel
             .find({ blogId: id })
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-            .toArray()
 
         return getPaginatedType(res.map(getOutputPost), +pageSize, +pageNumber, countAllDocuments)
     }

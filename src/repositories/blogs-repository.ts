@@ -1,6 +1,6 @@
 import { BlogsModel} from './db'
 import { ObjectId } from 'mongodb'
-import { BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
+import {BlogsTypeInput, BlogsTypeOutput, BlogsTypeToDB} from '../models/blogs-models'
 
 const getOutputBlog = (blog: any): BlogsTypeOutput => {
     return {
@@ -14,7 +14,7 @@ const getOutputBlog = (blog: any): BlogsTypeOutput => {
 
 export const blogsRepository = {
     async getBlogById(id: string): Promise<BlogsTypeOutput | null> {
-        const result = await BlogsModel.findOne({ _id: new ObjectId(id) })
+        const result = await BlogsModel.findById(new ObjectId(id))
         if (!result) return null
         return getOutputBlog(result)
     },
@@ -23,19 +23,14 @@ export const blogsRepository = {
         await result.save()
         return getOutputBlog(result)
     },
-    async updateBlog(id: string, name: string, description: string, url: string): Promise<boolean> {
-        const result = await BlogsModel.findOne({ _id: new ObjectId(id) })
+    async updateBlog(id: string, updatedBlog: BlogsTypeInput): Promise<boolean> {
+        const result = await BlogsModel.findByIdAndUpdate(new ObjectId(id), updatedBlog)
         if(!result) return false
-        result.name = name
-        result.description = description
-        result.websiteUrl = url
-        await result.save()
         return true
     },
     async deleteBlog(id: string): Promise<boolean> {
-        const result = await BlogsModel.findOne({ _id: new ObjectId(id) })
+        const result = await BlogsModel.findByIdAndDelete(new ObjectId(id))
         if(!result) return false
-        await result.delete()
         return true
     }
 }

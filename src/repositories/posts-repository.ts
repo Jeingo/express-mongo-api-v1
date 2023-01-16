@@ -1,6 +1,6 @@
-import { PostsModel} from './db'
+import { PostsModel } from './db'
 import { ObjectId } from 'mongodb'
-import {PostsTypeOutput, PostsTypeToDB, PostsUpdateType} from '../models/posts-models'
+import { PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
 
 const getOutputPost = (post: any): PostsTypeOutput => {
     return {
@@ -26,12 +26,10 @@ export const postsRepository = {
     },
     async updatePost(id: string, updatedPost: PostsUpdateType): Promise<boolean> {
         const result = await PostsModel.findByIdAndUpdate(new ObjectId(id), updatedPost)
-        if(!result) return false
-        return true
+        return !!result
     },
     async deletePost(id: string): Promise<boolean> {
         const result = await PostsModel.findByIdAndDelete(new ObjectId(id))
-        if(!result) return false
-        return true
+        return !!result
     }
 }

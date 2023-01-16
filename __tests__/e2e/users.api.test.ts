@@ -58,7 +58,7 @@ const errorsMessage = {
     ]
 }
 
-describe('/blogs', () => {
+describe('/users', () => {
     beforeAll(async () => {
         mongoose.set('strictQuery', false)
         await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})

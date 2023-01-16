@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb' // to delete
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 import { settings } from '../settings/settings'
-import {BlogsSchema, PostsSchema} from "./schemas";
+import { BlogsSchema, PostsSchema, UsersSchema } from './schemas'
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME
@@ -12,7 +12,7 @@ export const runDb = async () => {
     try {
         await client.connect() // to delete
         mongoose.set('strictQuery', false)
-        await mongoose.connect(mongoUrl, {dbName: dbName});
+        await mongoose.connect(mongoUrl, { dbName: dbName })
         console.log('Connected successfully to mongo db')
     } catch (err) {
         console.log(`Can't connect to mongo db: ` + err)
@@ -31,7 +31,7 @@ export const rateLimiterCollection = db.collection('limiter') // to delete
 
 export const BlogsModel = mongoose.model('blogs', BlogsSchema)
 export const PostsModel = mongoose.model('posts', PostsSchema)
-// export const UsersModel = mongoose.model('users',)
+export const UsersModel = mongoose.model('users', UsersSchema)
 // export const CommentsModel = mongoose.model('comments',)
 // export const SessionModel = mongoose.model('sessions',)
 // export const RateLimiterModel = mongoose.model('limiter',)

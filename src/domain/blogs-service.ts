@@ -18,7 +18,7 @@ export const blogsService = {
         const updatedBlog = {
             name: name,
             description: desc,
-            websiteUrl: url,
+            websiteUrl: url
         }
         return await blogsRepository.updateBlog(id, updatedBlog)
     },

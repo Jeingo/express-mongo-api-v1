@@ -1,6 +1,6 @@
-import { BlogsModel} from './db'
+import { BlogsModel } from './db'
 import { ObjectId } from 'mongodb'
-import {BlogsTypeInput, BlogsTypeOutput, BlogsTypeToDB} from '../models/blogs-models'
+import { BlogsTypeInput, BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
 
 const getOutputBlog = (blog: any): BlogsTypeOutput => {
     return {
@@ -24,12 +24,10 @@ export const blogsRepository = {
     },
     async updateBlog(id: string, updatedBlog: BlogsTypeInput): Promise<boolean> {
         const result = await BlogsModel.findByIdAndUpdate(new ObjectId(id), updatedBlog)
-        if(!result) return false
-        return true
+        return !!result
     },
     async deleteBlog(id: string): Promise<boolean> {
         const result = await BlogsModel.findByIdAndDelete(new ObjectId(id))
-        if(!result) return false
-        return true
+        return !!result
     }
 }

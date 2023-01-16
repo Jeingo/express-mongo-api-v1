@@ -1,5 +1,5 @@
-import { SessionsModel} from './db'
-import {SessionInputType, SessionOutputType, SessionTypeToDB} from '../models/session-models'
+import { SessionsModel } from './db'
+import { SessionInputType, SessionOutputType, SessionTypeToDB } from '../models/session-models'
 
 const getOutputSession = (session: any) => {
     return {
@@ -42,7 +42,10 @@ export const sessionsRepository = {
         await SessionsModel.create(session)
     },
     async updateSession(issueAt: string, expireAt: string, deviceId: string): Promise<boolean> {
-        const result = await SessionsModel.findOneAndUpdate({ deviceId: deviceId }, { issueAt: issueAt, expireAt: expireAt })
+        const result = await SessionsModel.findOneAndUpdate(
+            { deviceId: deviceId },
+            { issueAt: issueAt, expireAt: expireAt }
+        )
         return !!result
     },
     async deleteSession(issueAt: string): Promise<boolean> {
@@ -54,7 +57,9 @@ export const sessionsRepository = {
         return !!result
     },
     async deleteSessionsWithoutCurrent(userId: string, issueAt: string): Promise<boolean> {
-        const result = await SessionsModel.deleteMany({userId: userId}).where('issueAt').ne(issueAt)
+        const result = await SessionsModel.deleteMany({ userId: userId })
+            .where('issueAt')
+            .ne(issueAt)
         return !!result
     }
 }

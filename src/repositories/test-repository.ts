@@ -1,19 +1,19 @@
 import {
-    blogsCollection,
-    commentsCollection,
-    postsCollection,
-    rateLimiterCollection,
-    sessionCollection,
-    usersCollection
+    BlogsModel,
+    CommentsModel,
+    PostsModel,
+    RateLimiterModel,
+    SessionsModel,
+    UsersModel
 } from './db'
 
 export const testRepository = {
     async deleteAllDB(): Promise<void> {
-        await blogsCollection.deleteMany({})
-        await postsCollection.deleteMany({})
-        await usersCollection.deleteMany({})
-        await commentsCollection.deleteMany({})
-        await sessionCollection.deleteMany({})
-        await rateLimiterCollection.deleteMany({})
+        await BlogsModel.deleteMany({})
+        await PostsModel.deleteMany({})
+        await UsersModel.deleteMany({})
+        await CommentsModel.deleteMany({})
+        await SessionsModel.deleteMany({})
+        await RateLimiterModel.deleteMany({})
     }
 }

@@ -1,5 +1,5 @@
-import {CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB} from '../models/comments-models'
-import { CommentsModel} from './db'
+import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
+import { CommentsModel } from './db'
 import { ObjectId } from 'mongodb'
 
 const getOutputComment = (comment: any): CommentsTypeOutput => {

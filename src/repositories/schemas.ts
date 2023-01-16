@@ -2,9 +2,9 @@ import mongoose from 'mongoose'
 import { BlogsTypeToDB } from '../models/blogs-models'
 import { PostsTypeToDB } from '../models/posts-models'
 import { UsersTypeToDB } from '../models/users-models'
-import {CommentsTypeToDB} from "../models/comments-models";
-import {SessionTypeToDB} from "../models/session-models";
-import {RateLimiterTypeToDB} from "../models/auth-models";
+import { CommentsTypeToDB } from '../models/comments-models'
+import { SessionTypeToDB } from '../models/session-models'
+import { RateLimiterTypeToDB } from '../models/auth-models'
 
 export const BlogsSchema = new mongoose.Schema<BlogsTypeToDB>({
     name: { type: String, required: true, maxlength: 15 },

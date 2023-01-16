@@ -1,6 +1,6 @@
-import { RateLimiterModel} from './db'
+import { RateLimiterModel } from './db'
 import { RateLimiterType } from '../models/auth-models'
-import {ObjectId} from "mongodb";
+import { ObjectId } from 'mongodb'
 
 const getOutputIPBase = (base: any) => {
     return {
@@ -28,11 +28,16 @@ export const rateLimiterRepository = {
     },
     async incrementCountInIpBase(base: RateLimiterType): Promise<boolean> {
         const newCount = base.count + 1
-        const result = await RateLimiterModel.findByIdAndUpdate(new ObjectId(base.id), { count: newCount })
+        const result = await RateLimiterModel.findByIdAndUpdate(new ObjectId(base.id), {
+            count: newCount
+        })
         return !!result
     },
     async toDefaultBase(base: RateLimiterType, dateNow: number): Promise<boolean> {
-        const result = await RateLimiterModel.findByIdAndUpdate(new ObjectId(base.id), { count: 1, date: dateNow })
+        const result = await RateLimiterModel.findByIdAndUpdate(new ObjectId(base.id), {
+            count: 1,
+            date: dateNow
+        })
         return !!result
     }
 }

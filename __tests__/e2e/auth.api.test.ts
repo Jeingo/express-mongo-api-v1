@@ -1,6 +1,8 @@
  import request from "supertest"
 import {app} from "../../src/app"
 import {HTTP_STATUSES} from '../../src/constats/status'
+ import mongoose from "mongoose";
+ import {settings} from "../../src/settings/settings";
 
 const correctUser = {
     login: 'login',
@@ -84,6 +86,8 @@ const errorsMessage = {
 let createdUser: any = null
 describe('/auth/login', () => {
     beforeAll(async () => {
+        mongoose.set('strictQuery', false)
+        await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})
         await request(app).delete('/testing/all-data')
         const createdResponse = await request(app)
             .post('/users')
@@ -91,6 +95,9 @@ describe('/auth/login', () => {
             .send(correctUser)
             .expect(HTTP_STATUSES.CREATED_201)
         createdUser = createdResponse.body
+    })
+    afterAll(async () => {
+        await mongoose.connection.close()
     })
     it('POST /auth/login: should return 400 with incorrect data', async () => {
         const errMes = await request(app)

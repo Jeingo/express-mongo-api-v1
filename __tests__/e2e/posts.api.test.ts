@@ -5,6 +5,8 @@ import {PostsTypeInput, PostsTypeOutput} from "../../src/models/posts-models"
 import {BlogsTypeInput} from "../../src/models/blogs-models"
 import {PaginatedType} from "../../src/models/main-models";
 import {CommentsTypeInput} from "../../src/models/comments-models";
+import mongoose from "mongoose";
+import {settings} from "../../src/settings/settings";
 
 const correctBlog: BlogsTypeInput = {
     name: 'Name',
@@ -89,6 +91,8 @@ let createdToken: any = null
 
 describe('/posts', () => {
     beforeAll(async () => {
+        mongoose.set('strictQuery', false)
+        await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})
         await request(app).delete('/testing/all-data')
         const createdResponse = await request(app)
             .post('/blogs')
@@ -110,7 +114,9 @@ describe('/posts', () => {
             .expect(HTTP_STATUSES.OK_200)
         createdToken = createdResponseToken.body
     })
-
+    afterAll(async () => {
+        await mongoose.connection.close()
+    })
     it('GET /posts: should return 200 and empty array', async () => {
         await request(app)
             .get('/posts')

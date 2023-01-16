@@ -5,6 +5,8 @@ import {CommentsTypeInput, CommentsTypeOutput} from "../../src/models/comments-m
 import {PostsTypeInput} from "../../src/models/posts-models";
 import {BlogsTypeInput} from "../../src/models/blogs-models";
 import {PaginatedType} from "../../src/models/main-models";
+import mongoose from "mongoose";
+import {settings} from "../../src/settings/settings";
 
 const correctBlog: BlogsTypeInput = {
     name: 'Name',
@@ -68,6 +70,8 @@ let createdToken: any = null
 let createdPost: any = null
 describe('/comments', () => {
     beforeAll(async () => {
+        mongoose.set('strictQuery', false)
+        await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})
         await request(app).delete('/testing/all-data')
         const createdResponseBlog = await request(app)
             .post('/blogs')
@@ -99,6 +103,9 @@ describe('/comments', () => {
             .send(correctComment)
             .expect(HTTP_STATUSES.CREATED_201)
         createdComment = createdResponseComment.body
+    })
+    afterAll(async () => {
+        await mongoose.connection.close()
     })
     it('GET /comments/bad-id: should return 404 for not existing comments', async () => {
         await request(app)

@@ -1,6 +1,8 @@
 import request from "supertest";
 import {app} from "../../src/app";
 import {HTTP_STATUSES} from "../../src/constats/status";
+import mongoose from "mongoose";
+import {settings} from "../../src/settings/settings";
 
 const correctUser = {
     login: 'login',
@@ -29,6 +31,8 @@ let createdToken: any = null
 let createdRefreshToken: any = null
 describe('/security/devices', () => {
     beforeAll(async () => {
+        mongoose.set('strictQuery', false)
+        await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})
         await request(app).delete('/testing/all-data')
         const createdResponse = await request(app)
             .post('/users')
@@ -45,6 +49,9 @@ describe('/security/devices', () => {
         expect(createdToken).toEqual({
             accessToken: expect.any(String)
         })
+    })
+    afterAll(async () => {
+        await mongoose.connection.close()
     })
     it('GET /security/devices: should return 401 with incorrect cookie', async () => {
         await request(app)

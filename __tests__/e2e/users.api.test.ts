@@ -3,6 +3,8 @@ import {app} from '../../src/app'
 import {HTTP_STATUSES} from '../../src/constats/status'
 import {PaginatedType} from "../../src/models/main-models";
 import {UsersTypeInput} from "../../src/models/users-models";
+import mongoose from "mongoose";
+import {settings} from "../../src/settings/settings";
 
 const correctUser = {
     login: 'login',
@@ -58,7 +60,12 @@ const errorsMessage = {
 
 describe('/blogs', () => {
     beforeAll(async () => {
+        mongoose.set('strictQuery', false)
+        await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})
         await request(app).delete('/testing/all-data')
+    })
+    afterAll(async () => {
+        await mongoose.connection.close()
     })
     it('GET /users: should return 200 and empty array', async () => {
         await request(app)

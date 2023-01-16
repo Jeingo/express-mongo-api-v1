@@ -4,6 +4,8 @@ import {HTTP_STATUSES} from '../../src/constats/status'
 import {BlogsTypeInput, BlogsTypeOutput} from "../../src/models/blogs-models"
 import {PostsTypeInputInBlog, PostsTypeOutput} from "../../src/models/posts-models";
 import {PaginatedType} from "../../src/models/main-models";
+import mongoose from "mongoose";
+import {settings} from "../../src/settings/settings";
 
 
 const correctBlog: BlogsTypeInput = {
@@ -91,7 +93,12 @@ const errorsMessagePost = {
 
 describe('/blogs', () => {
     beforeAll(async () => {
+        mongoose.set('strictQuery', false)
+        await mongoose.connect(settings.MONGO_URL, {dbName: settings.DB_NAME})
         await request(app).delete('/testing/all-data')
+    })
+    afterAll(async () => {
+        await mongoose.connection.close()
     })
     it('GET /blogs: should return 200 and empty array', async () => {
         await request(app)

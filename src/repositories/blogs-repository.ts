@@ -22,24 +22,24 @@ export const blogsRepository = {
         return getOutputBlog(res)
     },
     async createBlog(createdBlog: BlogsTypeToDB): Promise<BlogsTypeOutput> {
-        const res = await blogsCollection.insertOne(createdBlog)
-        return {
-            id: res.insertedId.toString(),
-            name: createdBlog.name,
-            description: createdBlog.description,
-            websiteUrl: createdBlog.websiteUrl,
-            createdAt: createdBlog.createdAt
-        }
-
-        // const res = new BlogsModel(createdBlog)
-        // await res.save(err => console.log(err))
+        // const res = await blogsCollection.insertOne(createdBlog)
         // return {
-        //     id: res._id.toString(),
+        //     id: res.insertedId.toString(),
         //     name: createdBlog.name,
         //     description: createdBlog.description,
         //     websiteUrl: createdBlog.websiteUrl,
         //     createdAt: createdBlog.createdAt
         // }
+
+        const res = new BlogsModel(createdBlog)
+        await res.save()
+        return {
+            id: res._id.toString(),
+            name: createdBlog.name,
+            description: createdBlog.description,
+            websiteUrl: createdBlog.websiteUrl,
+            createdAt: createdBlog.createdAt
+        }
     },
     async updateBlog(id: string, name: string, desc: string, url: string): Promise<boolean> {
         const result = await blogsCollection.updateOne(

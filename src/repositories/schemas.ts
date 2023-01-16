@@ -4,6 +4,7 @@ import { PostsTypeToDB } from '../models/posts-models'
 import { UsersTypeToDB } from '../models/users-models'
 import {CommentsTypeToDB} from "../models/comments-models";
 import {SessionTypeToDB} from "../models/session-models";
+import {RateLimiterTypeToDB} from "../models/auth-models";
 
 export const BlogsSchema = new mongoose.Schema<BlogsTypeToDB>({
     name: { type: String, required: true, maxlength: 15 },
@@ -53,4 +54,11 @@ export const SessionsSchema = new mongoose.Schema<SessionTypeToDB>({
     ip: { type: String, required: true },
     userId: { type: String, required: true },
     expireAt: { type: String, required: true }
+})
+
+export const RateLimiterSchema = new mongoose.Schema<RateLimiterTypeToDB>({
+    ip: { type: String, required: true },
+    endpoint: { type: String, required: true },
+    date: { type: Number, required: true },
+    count: { type: Number, required: true }
 })

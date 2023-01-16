@@ -39,3 +39,10 @@ export type RateLimiterType = {
     date: number
     count: number
 }
+
+export type RateLimiterTypeToDB = {
+    ip: string
+    endpoint: string
+    date: number
+    count: number
+}

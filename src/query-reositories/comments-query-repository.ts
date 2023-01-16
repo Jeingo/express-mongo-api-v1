@@ -1,7 +1,7 @@
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsTypeOutput } from '../models/comments-models'
-import { CommentsModel, PostsModel} from '../repositories/db'
+import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 
@@ -33,8 +33,7 @@ export const commentsQueryRepository = {
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
-        const res = await CommentsModel
-            .find({ postId: id })
+        const res = await CommentsModel.find({ postId: id })
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)

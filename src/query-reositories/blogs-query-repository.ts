@@ -1,5 +1,5 @@
 import { BlogsTypeOutput } from '../models/blogs-models'
-import { BlogsModel} from '../repositories/db'
+import { BlogsModel } from '../repositories/db'
 import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
@@ -30,8 +30,7 @@ export const blogsQueryRepository = {
             filter = { name: { $regex: new RegExp(searchNameTerm, 'gi') } }
         }
         const countAllDocuments = await BlogsModel.countDocuments(filter)
-        const res = await BlogsModel
-            .find(filter)
+        const res = await BlogsModel.find(filter)
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)

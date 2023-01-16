@@ -1,5 +1,5 @@
 import { PostsTypeOutput } from '../models/posts-models'
-import { BlogsModel, PostsModel} from '../repositories/db'
+import { BlogsModel, PostsModel } from '../repositories/db'
 import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
@@ -28,8 +28,7 @@ export const postsQueryRepository = {
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
-        const res = await PostsModel
-            .find()
+        const res = await PostsModel.find()
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
@@ -52,8 +51,7 @@ export const postsQueryRepository = {
         } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
-        const res = await PostsModel
-            .find({ blogId: id })
+        const res = await PostsModel.find({ blogId: id })
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)

@@ -8,7 +8,7 @@ import {
 import { UsersModel } from './db'
 import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'
-import {LoginTypeForAuth} from "../models/auth-models";
+import { LoginTypeForAuth } from '../models/auth-models'
 
 const getOutputUserForAuth = (user: any): LoginTypeForAuth => {
     return {
@@ -80,7 +80,7 @@ const getShortOutputUser = (user: any): UsersTypeOutput => {
 export const usersRepository = {
     async findUserById(id: ObjectId): Promise<LoginTypeForAuth | null> {
         const result = await UsersModel.findById(id)
-        if(!result) return null
+        if (!result) return null
         return getOutputUserForAuth(result)
     },
     async createUser(createdUser: UsersTypeToDB): Promise<UsersTypeOutput> {

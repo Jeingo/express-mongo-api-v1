@@ -2,7 +2,7 @@ import { QueryUsers } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { UsersTypeOutput } from '../models/users-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
-import { UsersModel} from '../repositories/db'
+import { UsersModel } from '../repositories/db'
 
 const getOutputUser = (user: any): UsersTypeOutput => {
     return {
@@ -36,8 +36,7 @@ export const usersQueryRepository = {
         const filterMain = filter(loginFilter, emailFilter)
 
         const countAllDocuments = await UsersModel.countDocuments(filterMain)
-        const res = await UsersModel
-            .find(filterMain)
+        const res = await UsersModel.find(filterMain)
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)

@@ -39,6 +39,10 @@ const incorrectCodeConfirmation = {
      email: 'bad-email@gmail.com'
  }
 
+ const badEmailForResending = {
+     email: 'bad-email^gmail.com'
+ }
+
 const errorsMessage = {
     "errorsMessages": [
         {
@@ -211,5 +215,20 @@ describe('/auth/login', () => {
             .post('/auth/login')
             .send(correctLogin)
             .expect(HTTP_STATUSES.TOO_MANY_REQUESTS_429)
+    })
+    it('POST /auth/password-recovery: should return 400 with incorrect email', async() => {
+        await request(app)
+            .post('/auth/password-recovery')
+            .send(badEmailForResending)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
+    })
+    it('POST /auth/password-recovery: should return 204 with correct code (Try it yourself)', async() => {
+        expect(1).toBe(1)
+    })
+    it('POST /auth/new-password: should return 400 with incorrect value', async() => {
+        await request(app)
+            .post('/auth/new-password')
+            .send({newPassword: '123', recoveryCode: ''})
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
     })
 })

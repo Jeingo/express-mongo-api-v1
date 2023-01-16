@@ -67,7 +67,7 @@ describe('/security/devices', () => {
         createdSession = createdResponse.body
         expect(createdSession).toEqual([{
             ip: expect.any(String),
-            title: null,
+            title: 'some device',
             lastActiveDate: expect.any(String),
             deviceId: expect.any(String)
         }])

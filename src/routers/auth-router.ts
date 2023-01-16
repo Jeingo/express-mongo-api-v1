@@ -49,7 +49,7 @@ authRouter.post(
             res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
             return
         }
-        const deviceName = req.headers['user-agent']
+        const deviceName = req.headers['user-agent'] || 'some device'
         const ipAddress = req.ip
         const accessToken = jwtService.createJWT(user.id)
         const deviceId = uuidv4()

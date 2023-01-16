@@ -3,6 +3,7 @@ import { BlogsTypeToDB } from '../models/blogs-models'
 import { PostsTypeToDB } from '../models/posts-models'
 import { UsersTypeToDB } from '../models/users-models'
 import {CommentsTypeToDB} from "../models/comments-models";
+import {SessionTypeToDB} from "../models/session-models";
 
 export const BlogsSchema = new mongoose.Schema<BlogsTypeToDB>({
     name: { type: String, required: true, maxlength: 15 },
@@ -43,4 +44,13 @@ export const CommentsSchema = new mongoose.Schema<CommentsTypeToDB>({
     userLogin: { type: String, required: true },
     createdAt: { type: String, required: true },
     postId: { type: String, required: true }
+})
+
+export const SessionsSchema = new mongoose.Schema<SessionTypeToDB>({
+    issueAt: { type: String, required: true },
+    deviceId: { type: String, required: true },
+    deviceName: { type: String, required: true },
+    ip: { type: String, required: true },
+    userId: { type: String, required: true },
+    expireAt: { type: String, required: true }
 })

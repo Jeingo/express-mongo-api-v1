@@ -1,5 +1,5 @@
-import { sessionCollection } from './db'
-import { SessionInputType, SessionOutputType } from '../models/session-models'
+import { SessionsModel} from './db'
+import {SessionInputType, SessionOutputType, SessionTypeToDB} from '../models/session-models'
 
 const getOutputSession = (session: any) => {
     return {
@@ -10,62 +10,51 @@ const getOutputSession = (session: any) => {
     }
 }
 
+const getFullSession = (session: any) => {
+    return {
+        issueAt: session.issueAt,
+        deviceId: session.deviceId,
+        deviceName: session.deviceName,
+        ip: session.ip,
+        userId: session.userId,
+        expireAt: session.expireAt
+    }
+}
+
 export const sessionsRepository = {
-    async saveSession(session: SessionInputType): Promise<void> {
-        await sessionCollection.insertOne(session)
-    },
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
         const currentDate = new Date().toISOString()
-        const result = await sessionCollection
-            .find({ userId: userId, expireAt: { $gt: currentDate } })
-            .toArray()
-
-        if (!result) {
-            return null
-        }
+        const result = await SessionsModel.find({ userId: userId, expireAt: { $gt: currentDate } })
+        if (!result) return null
         return result.map(getOutputSession)
     },
     async findSession(iat: string): Promise<SessionOutputType | null> {
-        const result = await sessionCollection.findOne({ issueAt: iat })
-        if (!result) {
-            return null
-        }
+        const result = await SessionsModel.findOne({ issueAt: iat })
+        if (!result) return null
         return getOutputSession(result)
     },
     async findSessionByDeviceId(deviceId: string): Promise<SessionInputType | null> {
-        const result = await sessionCollection.findOne({ deviceId: deviceId })
-        if (!result) {
-            return null
-        }
-        return {
-            issueAt: result.issueAt,
-            deviceId: result.deviceId,
-            deviceName: result.deviceName,
-            ip: result.ip,
-            userId: result.userId,
-            expireAt: result.expireAt
-        }
+        const result = await SessionsModel.findOne({ deviceId: deviceId })
+        if (!result) return null
+        return getFullSession(result)
+    },
+    async saveSession(session: SessionTypeToDB): Promise<void> {
+        await SessionsModel.create(session)
     },
     async updateSession(issueAt: string, expireAt: string, deviceId: string): Promise<boolean> {
-        const result = await sessionCollection.updateOne(
-            { deviceId: deviceId },
-            { $set: { issueAt: issueAt, expireAt: expireAt } }
-        )
-        return result.matchedCount === 1
+        const result = await SessionsModel.findOneAndUpdate({ deviceId: deviceId }, { issueAt: issueAt, expireAt: expireAt })
+        return !!result
     },
     async deleteSession(issueAt: string): Promise<boolean> {
-        const result = await sessionCollection.deleteOne({ issueAt: issueAt })
-        return result.deletedCount === 1
+        const result = await SessionsModel.findOneAndDelete({ issueAt: issueAt })
+        return !!result
     },
     async deleteSessionByDeviceId(deviceId: string): Promise<boolean> {
-        const result = await sessionCollection.deleteOne({ deviceId: deviceId })
-        return result.deletedCount === 1
+        const result = await SessionsModel.findOneAndDelete({ deviceId: deviceId })
+        return !!result
     },
     async deleteSessionsWithoutCurrent(userId: string, issueAt: string): Promise<boolean> {
-        const result = await sessionCollection.deleteMany({
-            userId: userId,
-            issueAt: { $ne: issueAt }
-        })
-        return result.deletedCount === 1
+        const result = await SessionsModel.deleteMany({userId: userId}).where('issueAt').ne(issueAt)
+        return !!result
     }
 }

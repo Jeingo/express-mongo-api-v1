@@ -3,7 +3,7 @@ import { settings } from '../settings/settings'
 import { TokenPayloadType } from '../models/token-models'
 import { sessionsRepository } from '../repositories/sessions-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { SessionInputType, SessionOutputType } from '../models/session-models'
+import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { HttpTypes } from '../models/status-models'
 
 class SessionsService {
@@ -17,14 +17,14 @@ class SessionsService {
         const userId = result.userId
         const deviceId = result.deviceId
 
-        const session: SessionInputType = {
-            issueAt: issueAt,
-            deviceId: deviceId,
-            deviceName: deviceName,
-            ip: ip,
-            userId: userId,
-            expireAt: expireAt
-        }
+        const session: SessionTypeToDB = new SessionTypeToDB(
+            issueAt,
+            deviceId,
+            deviceName,
+            ip,
+            userId,
+            expireAt
+        )
         await sessionsRepository.saveSession(session)
     }
     async updateSession(token: string): Promise<void> {

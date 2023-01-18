@@ -12,11 +12,13 @@ export type BlogsTypeInput = {
     websiteUrl: string
 }
 
-export type BlogsTypeToDB = {
-    name: string
-    description: string
-    websiteUrl: string
-    createdAt: string
+export class BlogsTypeToDB {
+    constructor(
+        public name: string,
+        public description: string,
+        public websiteUrl: string,
+        public createdAt: string
+    ) {}
 }
 
 export type BlogsIdParams = {

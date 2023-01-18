@@ -3,7 +3,7 @@ import { usersRepository } from '../repositories/users-repository'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
 import { emailManager } from '../managers/email-manager'
-import { UsersHashType, UsersTypeOutput } from '../models/users-models'
+import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 
 class AuthService {
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
@@ -18,26 +18,26 @@ class AuthService {
     async registerUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password, passwordSalt)
-        const createdUser = {
-            login: login,
-            hash: passwordHash,
-            email: email,
-            createdAt: new Date().toISOString(),
-            passwordRecoveryConfirmation: {
+        const createdUser = new UsersTypeToDB(
+            login,
+            passwordHash,
+            email,
+            new Date().toISOString(),
+            {
                 passwordRecoveryCode: v4(),
                 expirationDate: add(new Date(), {
                     hours: 1
                 }),
                 isConfirmed: true
             },
-            emailConfirmation: {
+            {
                 confirmationCode: v4(),
                 expirationDate: add(new Date(), {
                     hours: 1
                 }),
                 isConfirmed: false
             }
-        }
+        )
         const result = await usersRepository.createUser(createdUser)
         await emailManager.sendRegistrationEmailConfirmation(createdUser)
         return result

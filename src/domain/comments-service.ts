@@ -1,4 +1,4 @@
-import { CommentsTypeOutput } from '../models/comments-models'
+import { CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
 import { postsRepository } from '../repositories/posts-repository'
 import { LoginTypeForAuth } from '../models/auth-models'
 import { commentsRepository } from '../repositories/comments-repository'
@@ -14,13 +14,13 @@ class CommentsService {
         if (!foundPost) {
             return null
         }
-        const createdComment = {
-            content: content,
-            userId: user.userId,
-            userLogin: user.login,
-            createdAt: new Date().toISOString(),
-            postId: postId
-        }
+        const createdComment = new CommentsTypeToDB(
+            content,
+            user.userId,
+            user.login,
+            new Date().toISOString(),
+            postId
+        )
         return await commentsRepository.createComment(createdComment)
     }
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {

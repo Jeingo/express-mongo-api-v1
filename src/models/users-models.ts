@@ -11,20 +11,31 @@ export type UsersTypeInput = {
     email: string
 }
 
-export type UsersTypeToDB = {
-    login: string
-    hash: string
-    email: string
-    createdAt: string
-    passwordRecoveryConfirmation: {
-        passwordRecoveryCode: string
-        expirationDate: Date
-        isConfirmed: boolean
-    }
-    emailConfirmation: {
-        confirmationCode: string
-        expirationDate: Date
-        isConfirmed: boolean
+export class UsersTypeToDB {
+    constructor(
+        public login: string,
+        public hash: string,
+        public email: string,
+        public createdAt: string,
+        public passwordRecoveryConfirmation: {
+            passwordRecoveryCode: string
+            expirationDate: Date
+            isConfirmed: boolean
+        },
+        public emailConfirmation: {
+            confirmationCode: string
+            expirationDate: Date
+            isConfirmed: boolean
+        }
+    ) {
+        this.passwordRecoveryConfirmation.passwordRecoveryCode =
+            passwordRecoveryConfirmation.passwordRecoveryCode
+        this.passwordRecoveryConfirmation.expirationDate =
+            passwordRecoveryConfirmation.expirationDate
+        this.passwordRecoveryConfirmation.isConfirmed = passwordRecoveryConfirmation.isConfirmed
+        this.emailConfirmation.confirmationCode = emailConfirmation.confirmationCode
+        this.emailConfirmation.expirationDate = emailConfirmation.expirationDate
+        this.emailConfirmation.isConfirmed = emailConfirmation.isConfirmed
     }
 }
 

@@ -14,11 +14,13 @@ export type SessionInputType = {
     expireAt: string
 }
 
-export type SessionTypeToDB = {
-    issueAt: string
-    deviceId: string
-    deviceName: string
-    ip: string
-    userId: string
-    expireAt: string
+export class SessionTypeToDB {
+    constructor(
+        public issueAt: string,
+        public deviceId: string,
+        public deviceName: string,
+        public ip: string,
+        public userId: string,
+        public expireAt: string
+    ) {}
 }

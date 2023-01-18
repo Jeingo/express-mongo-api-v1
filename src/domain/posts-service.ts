@@ -1,6 +1,6 @@
 import { postsRepository } from '../repositories/posts-repository'
 import { blogsRepository } from '../repositories/blogs-repository'
-import { PostsTypeOutput } from '../models/posts-models'
+import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
 
 class PostsService {
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
@@ -14,14 +14,14 @@ class PostsService {
     ): Promise<PostsTypeOutput | null> {
         const foundBlog = await blogsRepository.getBlogById(blogId)
         if (!foundBlog) return null
-        const createdPost = {
-            title: title,
-            shortDescription: desc,
-            content: content,
-            blogId: blogId,
-            blogName: foundBlog.name,
-            createdAt: new Date().toISOString()
-        }
+        const createdPost = new PostsTypeToDB(
+            title,
+            desc,
+            content,
+            blogId,
+            foundBlog.name,
+            new Date().toISOString()
+        )
         return await postsRepository.createPost(createdPost)
     }
     async updatePost(

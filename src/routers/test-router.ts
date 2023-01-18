@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import {testController} from "../controllers/test-controller";
+import { Router } from 'express'
+import { testController } from '../controllers/test-controller'
 
 export const testRouter = Router({})
 

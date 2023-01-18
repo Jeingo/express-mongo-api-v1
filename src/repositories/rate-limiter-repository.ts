@@ -30,7 +30,7 @@ class RateLimiterRepository {
         })
         return !!result
     }
-    private _getOutputIPBase (base: any) {
+    private _getOutputIPBase(base: any) {
         return {
             id: base._id,
             ip: base.ip,

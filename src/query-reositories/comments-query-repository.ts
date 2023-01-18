@@ -35,7 +35,7 @@ class CommentsQueryRepository {
             countAllDocuments
         )
     }
-    private _getOutputComment (comment: any): CommentsTypeOutput {
+    private _getOutputComment(comment: any): CommentsTypeOutput {
         return {
             id: comment._id.toString(),
             content: comment.content,

@@ -93,20 +93,20 @@ class UsersRepository {
         )
         return !!result
     }
-    private _getOutputUserForAuth (user: any): LoginTypeForAuth {
+    private _getOutputUserForAuth(user: any): LoginTypeForAuth {
         return {
             email: user.email,
             login: user.login,
             userId: user._id.toString()
         }
     }
-    private _getOutputUserHash (user: any): UsersHashType {
+    private _getOutputUserHash(user: any): UsersHashType {
         return {
             id: user._id.toString(),
             hash: user.hash
         }
     }
-    private _getOutputUserForConfirmationCode (user: any): UsersConfirmationCodeType {
+    private _getOutputUserForConfirmationCode(user: any): UsersConfirmationCodeType {
         return {
             id: user._id.toString(),
             emailConfirmation: {
@@ -116,7 +116,7 @@ class UsersRepository {
             }
         }
     }
-    private _getOutputUserForPasswordRecoveryConfirmationCode (
+    private _getOutputUserForPasswordRecoveryConfirmationCode(
         user: any
     ): UsersConfirmationCodePasswordRecoveryType {
         return {
@@ -129,7 +129,7 @@ class UsersRepository {
         }
     }
 
-    private _getOutputUser (user: any): UsersTypeToDB {
+    private _getOutputUser(user: any): UsersTypeToDB {
         return {
             login: user.login,
             hash: user.hash,
@@ -148,7 +148,7 @@ class UsersRepository {
         }
     }
 
-    private _getShortOutputUser (user: any): UsersTypeOutput {
+    private _getShortOutputUser(user: any): UsersTypeOutput {
         return {
             id: user._id.toString(),
             login: user.login,

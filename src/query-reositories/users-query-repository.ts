@@ -31,9 +31,14 @@ class UsersQueryRepository {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(res.map(this._getOutputUser), +pageSize, +pageNumber, countAllDocuments)
+        return getPaginatedType(
+            res.map(this._getOutputUser),
+            +pageSize,
+            +pageNumber,
+            countAllDocuments
+        )
     }
-    private _getOutputUser (user: any): UsersTypeOutput {
+    private _getOutputUser(user: any): UsersTypeOutput {
         return {
             id: user._id.toString(),
             login: user.login,

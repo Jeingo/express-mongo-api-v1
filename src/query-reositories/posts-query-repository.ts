@@ -20,7 +20,12 @@ class PostsQueryRepository {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+        return getPaginatedType(
+            res.map(this._getOutputPost),
+            +pageSize,
+            +pageNumber,
+            countAllDocuments
+        )
     }
     async getPostsById(
         id: string,
@@ -44,9 +49,14 @@ class PostsQueryRepository {
             .skip(skipNumber)
             .limit(+pageSize)
 
-        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+        return getPaginatedType(
+            res.map(this._getOutputPost),
+            +pageSize,
+            +pageNumber,
+            countAllDocuments
+        )
     }
-    private _getOutputPost (post: any): PostsTypeOutput {
+    private _getOutputPost(post: any): PostsTypeOutput {
         return {
             id: post._id.toString(),
             title: post.title,

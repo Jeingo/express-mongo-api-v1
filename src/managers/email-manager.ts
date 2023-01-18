@@ -22,7 +22,7 @@ class EmailManager {
         }
         await emailAdapter.sendEmail(emailForm)
     }
-    private _registrationConfirmationMessage (code: string): string {
+    private _registrationConfirmationMessage(code: string): string {
         return `
         <h1>Thank for your registration</h1>
             <p>To finish registration please follow the link below:
@@ -30,7 +30,7 @@ class EmailManager {
             </p>
            `
     }
-    private _passwordRecoveryConfirmationMessage (code: string): string {
+    private _passwordRecoveryConfirmationMessage(code: string): string {
         return `
         <h1>Password recovery</h1>
             <p>To finish password recovery please follow the link below:

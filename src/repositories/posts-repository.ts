@@ -20,7 +20,7 @@ class PostsRepository {
         const result = await PostsModel.findByIdAndDelete(new ObjectId(id))
         return !!result
     }
-    private _getOutputPost (post: any): PostsTypeOutput {
+    private _getOutputPost(post: any): PostsTypeOutput {
         return {
             id: post._id.toString(),
             title: post.title,

@@ -42,7 +42,7 @@ class SessionsRepository {
             .ne(issueAt)
         return !!result
     }
-    private _getOutputSession (session: any) {
+    private _getOutputSession(session: any) {
         return {
             ip: session.ip,
             title: session.deviceName,
@@ -50,7 +50,7 @@ class SessionsRepository {
             deviceId: session.deviceId
         }
     }
-    private _getFullSession (session: any) {
+    private _getFullSession(session: any) {
         return {
             issueAt: session.issueAt,
             deviceId: session.deviceId,

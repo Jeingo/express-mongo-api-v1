@@ -2,10 +2,10 @@ import { postsRepository } from '../repositories/posts-repository'
 import { blogsRepository } from '../repositories/blogs-repository'
 import { PostsTypeOutput } from '../models/posts-models'
 
-export const postsService = {
+class PostsService {
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
         return await postsRepository.getPostById(id)
-    },
+    }
     async createPost(
         title: string,
         desc: string,
@@ -23,7 +23,7 @@ export const postsService = {
             createdAt: new Date().toISOString()
         }
         return await postsRepository.createPost(createdPost)
-    },
+    }
     async updatePost(
         id: string,
         title: string,
@@ -41,8 +41,10 @@ export const postsService = {
             blogName: foundBlog.name
         }
         return await postsRepository.updatePost(id, updatedPost)
-    },
+    }
     async deletePost(id: string): Promise<boolean> {
         return await postsRepository.deletePost(id)
     }
 }
+
+export const postsService = new PostsService()

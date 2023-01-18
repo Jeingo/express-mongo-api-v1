@@ -4,7 +4,7 @@ import { LoginTypeForAuth } from '../models/auth-models'
 import { commentsRepository } from '../repositories/comments-repository'
 import { HTTP_STATUSES } from '../constats/status'
 
-export const commentsService = {
+class CommentsService {
     async createComment(
         content: string,
         postId: string,
@@ -22,10 +22,10 @@ export const commentsService = {
             postId: postId
         }
         return await commentsRepository.createComment(createdComment)
-    },
+    }
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
         return await commentsRepository.getCommentById(id)
-    },
+    }
     async updateComment(
         id: string,
         content: string,
@@ -42,7 +42,7 @@ export const commentsService = {
         }
         const updatedComment = { content: content }
         return await commentsRepository.updateComment(id, updatedComment)
-    },
+    }
     async deleteComment(id: string, user: LoginTypeForAuth): Promise<boolean | number> {
         const comment = await commentsRepository.getCommentById(id)
 
@@ -57,3 +57,5 @@ export const commentsService = {
         return await commentsRepository.deleteComment(id)
     }
 }
+
+export const commentsService = new CommentsService()

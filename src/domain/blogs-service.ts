@@ -1,10 +1,10 @@
 import { blogsRepository } from '../repositories/blogs-repository'
 import { BlogsTypeOutput } from '../models/blogs-models'
 
-export const blogsService = {
+class BlogsService {
     async getBlogById(id: string): Promise<BlogsTypeOutput | null> {
         return await blogsRepository.getBlogById(id)
-    },
+    }
     async createBlog(name: string, desc: string, url: string): Promise<BlogsTypeOutput> {
         const createdBlog = {
             name: name,
@@ -13,7 +13,7 @@ export const blogsService = {
             createdAt: new Date().toISOString()
         }
         return await blogsRepository.createBlog(createdBlog)
-    },
+    }
     async updateBlog(id: string, name: string, desc: string, url: string): Promise<boolean> {
         const updatedBlog = {
             name: name,
@@ -21,8 +21,10 @@ export const blogsService = {
             websiteUrl: url
         }
         return await blogsRepository.updateBlog(id, updatedBlog)
-    },
+    }
     async deleteBlog(id: string): Promise<boolean> {
         return await blogsRepository.deleteBlog(id)
     }
 }
+
+export const blogsService = new BlogsService()

@@ -1,7 +1,9 @@
 import { testRepository } from '../repositories/test-repository'
 
-export const testService = {
+class TestService {
     async deleteAllDB(): Promise<void> {
         await testRepository.deleteAllDB()
     }
 }
+
+export const testService = new TestService()

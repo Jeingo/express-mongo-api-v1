@@ -6,11 +6,10 @@ import { LoginTypeForAuth } from '../models/auth-models'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
 
-export const usersService = {
+class UsersService {
     async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
         return await usersRepository.findUserById(_id)
-    },
-
+    }
     async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password, passwordSalt)
@@ -35,8 +34,10 @@ export const usersService = {
             }
         }
         return await usersRepository.createUser(createdUser)
-    },
+    }
     async deleteUser(id: string): Promise<boolean> {
         return await usersRepository.deleteUser(id)
     }
 }
+
+export const usersService = new UsersService()

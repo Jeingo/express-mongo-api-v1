@@ -10,6 +10,7 @@ import { auth } from '../authorization/basic-auth'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { contentInCommentValidation } from '../middleware/input-comments-validation'
 import { postsController } from '../controllers/posts-controller'
+import { commentsController } from '../controllers/comments-controller'
 
 export const postsRouter = Router({})
 
@@ -17,7 +18,12 @@ postsRouter.get('/', queryValidation, postsController.getAllPosts)
 
 postsRouter.get('/:id', idValidation, postsController.getPostById)
 
-postsRouter.get('/:id/comments', idValidation, queryValidation, postsController.getCommentsByPostId)
+postsRouter.get(
+    '/:id/comments',
+    idValidation,
+    queryValidation,
+    commentsController.getCommentsByPostId
+)
 
 postsRouter.post(
     '/',
@@ -36,7 +42,7 @@ postsRouter.post(
     idValidation,
     contentInCommentValidation,
     inputValidation,
-    postsController.createCommentByPostId
+    commentsController.createCommentByPostId
 )
 
 postsRouter.put(

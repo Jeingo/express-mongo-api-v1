@@ -5,7 +5,7 @@ import {
     RequestWithParamsAndQuery,
     RequestWithQuery
 } from '../models/types'
-import { QueryBlogs, QueryComments, QueryPosts } from '../models/query-models'
+import { QueryBlogs, QueryPosts } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
 import {
@@ -17,13 +17,6 @@ import {
 import { postsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { postsService } from '../domain/posts-service'
-import {
-    CommentsIdParams,
-    CommentsTypeInputInPost,
-    CommentsTypeOutput
-} from '../models/comments-models'
-import { commentsQueryRepository } from '../query-reositories/comments-query-repository'
-import { commentsService } from '../domain/comments-service'
 
 class PostsController {
     async getAllPosts(
@@ -107,39 +100,6 @@ class PostsController {
         }
 
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-    }
-    async getCommentsByPostId(
-        req: RequestWithParamsAndQuery<CommentsIdParams, QueryComments>,
-        res: Response<PaginatedType<CommentsTypeOutput | null>>
-    ) {
-        const foundComments = await commentsQueryRepository.getCommentsById(
-            req.params.id,
-            req.query
-        )
-
-        if (!foundComments) {
-            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
-            return
-        }
-
-        res.json(foundComments)
-    }
-    async createCommentByPostId(
-        req: RequestWithParamsAndBody<CommentsIdParams, CommentsTypeInputInPost>,
-        res: Response<CommentsTypeOutput>
-    ) {
-        const createdComment = await commentsService.createComment(
-            req.body.content,
-            req.params.id,
-            req.user!
-        )
-
-        if (!createdComment) {
-            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
-            return
-        }
-
-        res.status(HTTP_STATUSES.CREATED_201).json(createdComment)
     }
 }
 

@@ -12,6 +12,7 @@ import {
     titleValidation
 } from '../middleware/input-posts-validation'
 import { blogsController } from '../controllers/blogs-controller'
+import { postsController } from '../controllers/posts-controller'
 
 export const blogsRouter = Router({})
 
@@ -19,7 +20,7 @@ blogsRouter.get('/', queryValidation, blogsController.getAllBlogs)
 
 blogsRouter.get('/:id', idValidation, blogsController.getBlogById)
 
-blogsRouter.get('/:id/posts', idValidation, queryValidation, blogsController.getPostsByBlogId)
+blogsRouter.get('/:id/posts', idValidation, queryValidation, postsController.getPostsByBlogId)
 
 blogsRouter.post(
     '/',
@@ -39,7 +40,7 @@ blogsRouter.post(
     shortDescriptionValidation,
     contentValidation,
     inputValidation,
-    blogsController.createPostByBlogId
+    postsController.createPostByBlogId
 )
 
 blogsRouter.put(

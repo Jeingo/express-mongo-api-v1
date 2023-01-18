@@ -5,10 +5,15 @@ import {
     RequestWithParamsAndQuery,
     RequestWithQuery
 } from '../models/types'
-import { QueryComments, QueryPosts } from '../models/query-models'
+import { QueryBlogs, QueryComments, QueryPosts } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
-import { PostsIdParams, PostsTypeInput, PostsTypeOutput } from '../models/posts-models'
+import {
+    PostsIdParams,
+    PostsTypeInput,
+    PostsTypeInputInBlog,
+    PostsTypeOutput
+} from '../models/posts-models'
 import { postsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { postsService } from '../domain/posts-service'
@@ -37,6 +42,19 @@ class PostsController {
         }
         res.json(foundPost)
     }
+    async getPostsByBlogId(
+        req: RequestWithParamsAndQuery<PostsIdParams, QueryBlogs>,
+        res: Response<PaginatedType<PostsTypeOutput> | null>
+    ) {
+        const foundPosts = await postsQueryRepository.getPostsById(req.params.id, req.query)
+
+        if (!foundPosts) {
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+            return
+        }
+
+        res.json(foundPosts)
+    }
     async createPost(req: RequestWithBody<PostsTypeInput>, res: Response<PostsTypeOutput | null>) {
         const createdPost = await postsService.createPost(
             req.body.title,
@@ -44,6 +62,24 @@ class PostsController {
             req.body.content,
             req.body.blogId
         )
+        res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
+    }
+    async createPostByBlogId(
+        req: RequestWithParamsAndBody<PostsIdParams, PostsTypeInputInBlog>,
+        res: Response<PostsTypeOutput>
+    ) {
+        const createdPost = await postsService.createPost(
+            req.body.title,
+            req.body.shortDescription,
+            req.body.content,
+            req.params.id
+        )
+
+        if (!createdPost) {
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+            return
+        }
+
         res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
     }
     async updatePost(req: RequestWithParamsAndBody<PostsIdParams, PostsTypeInput>, res: Response) {

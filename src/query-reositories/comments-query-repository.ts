@@ -5,17 +5,7 @@ import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 
-const getOutputComment = (comment: any): CommentsTypeOutput => {
-    return {
-        id: comment._id.toString(),
-        content: comment.content,
-        userId: comment.userId,
-        userLogin: comment.userLogin,
-        createdAt: comment.createdAt
-    }
-}
-
-export const commentsQueryRepository = {
+class CommentsQueryRepository {
     async getCommentsById(
         id: string,
         query: QueryComments
@@ -39,10 +29,21 @@ export const commentsQueryRepository = {
             .limit(+pageSize)
 
         return getPaginatedType(
-            res.map(getOutputComment),
+            res.map(this._getOutputComment),
             +pageSize,
             +pageNumber,
             countAllDocuments
         )
     }
+    private _getOutputComment (comment: any): CommentsTypeOutput {
+        return {
+            id: comment._id.toString(),
+            content: comment.content,
+            userId: comment.userId,
+            userLogin: comment.userLogin,
+            createdAt: comment.createdAt
+        }
+    }
 }
+
+export const commentsQueryRepository = new CommentsQueryRepository()

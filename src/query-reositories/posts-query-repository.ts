@@ -5,19 +5,7 @@ import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 
-const getOutputPost = (post: any): PostsTypeOutput => {
-    return {
-        id: post._id.toString(),
-        title: post.title,
-        shortDescription: post.shortDescription,
-        content: post.content,
-        blogId: post.blogId,
-        blogName: post.blogName,
-        createdAt: post.createdAt
-    }
-}
-
-export const postsQueryRepository = {
+class PostsQueryRepository {
     async getAllPost(query: QueryPosts): Promise<PaginatedType<PostsTypeOutput>> {
         const countAllDocuments = await PostsModel.countDocuments()
         const {
@@ -32,8 +20,8 @@ export const postsQueryRepository = {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(res.map(getOutputPost), +pageSize, +pageNumber, countAllDocuments)
-    },
+        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+    }
     async getPostsById(
         id: string,
         query: QueryPosts
@@ -56,6 +44,19 @@ export const postsQueryRepository = {
             .skip(skipNumber)
             .limit(+pageSize)
 
-        return getPaginatedType(res.map(getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+    }
+    private _getOutputPost (post: any): PostsTypeOutput {
+        return {
+            id: post._id.toString(),
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: post.blogName,
+            createdAt: post.createdAt
+        }
     }
 }
+
+export const postsQueryRepository = new PostsQueryRepository()

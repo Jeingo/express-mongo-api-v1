@@ -4,16 +4,7 @@ import { UsersTypeOutput } from '../models/users-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { UsersModel } from '../repositories/db'
 
-const getOutputUser = (user: any): UsersTypeOutput => {
-    return {
-        id: user._id.toString(),
-        login: user.login,
-        email: user.email,
-        createdAt: user.createdAt
-    }
-}
-
-export const usersQueryRepository = {
+class UsersQueryRepository {
     async getAllUsers(query: QueryUsers): Promise<PaginatedType<UsersTypeOutput>> {
         const {
             searchLoginTerm = null,
@@ -40,6 +31,16 @@ export const usersQueryRepository = {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(res.map(getOutputUser), +pageSize, +pageNumber, countAllDocuments)
+        return getPaginatedType(res.map(this._getOutputUser), +pageSize, +pageNumber, countAllDocuments)
+    }
+    private _getOutputUser (user: any): UsersTypeOutput {
+        return {
+            id: user._id.toString(),
+            login: user.login,
+            email: user.email,
+            createdAt: user.createdAt
+        }
     }
 }
+
+export const usersQueryRepository = new UsersQueryRepository()

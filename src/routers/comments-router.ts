@@ -1,8 +1,8 @@
-import {Router} from 'express'
-import {bearerAuth} from '../authorization/bearer-auth'
-import {idValidation, inputValidation} from '../middleware/input-validation'
-import {contentInCommentValidation} from '../middleware/input-comments-validation'
-import {commentsController} from '../controllers/comments-controller'
+import { Router } from 'express'
+import { bearerAuth } from '../authorization/bearer-auth'
+import { idValidation, inputValidation } from '../middleware/input-validation'
+import { contentInCommentValidation } from '../middleware/input-comments-validation'
+import { commentsController } from '../controllers/comments-controller'
 
 export const commentsRouter = Router({})
 

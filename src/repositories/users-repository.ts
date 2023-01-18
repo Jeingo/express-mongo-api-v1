@@ -10,102 +10,35 @@ import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'
 import { LoginTypeForAuth } from '../models/auth-models'
 
-const getOutputUserForAuth = (user: any): LoginTypeForAuth => {
-    return {
-        email: user.email,
-        login: user.login,
-        userId: user._id.toString()
-    }
-}
-
-const getOutputUserHash = (user: any): UsersHashType => {
-    return {
-        id: user._id.toString(),
-        hash: user.hash
-    }
-}
-
-const getOutputUserForConfirmationCode = (user: any): UsersConfirmationCodeType => {
-    return {
-        id: user._id.toString(),
-        emailConfirmation: {
-            confirmationCode: user.emailConfirmation.confirmationCode,
-            expirationDate: user.emailConfirmation.expirationDate,
-            isConfirmed: user.emailConfirmation.isConfirmed
-        }
-    }
-}
-
-const getOutputUserForPasswordRecoveryConfirmationCode = (
-    user: any
-): UsersConfirmationCodePasswordRecoveryType => {
-    return {
-        id: user._id.toString(),
-        passwordRecoveryConfirmation: {
-            passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
-            expirationDate: user.passwordRecoveryConfirmation.expirationDate,
-            isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
-        }
-    }
-}
-
-const getOutputUser = (user: any): UsersTypeToDB => {
-    return {
-        login: user.login,
-        hash: user.hash,
-        email: user.email,
-        createdAt: user.createdAt,
-        passwordRecoveryConfirmation: {
-            passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
-            expirationDate: user.passwordRecoveryConfirmation.expirationDate,
-            isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
-        },
-        emailConfirmation: {
-            confirmationCode: user.emailConfirmation.confirmationCode,
-            expirationDate: user.emailConfirmation.expirationDate,
-            isConfirmed: user.emailConfirmation.isConfirmed
-        }
-    }
-}
-
-const getShortOutputUser = (user: any): UsersTypeOutput => {
-    return {
-        id: user._id.toString(),
-        login: user.login,
-        email: user.email,
-        createdAt: user.createdAt
-    }
-}
-
-export const usersRepository = {
+class UsersRepository {
     async findUserById(id: ObjectId): Promise<LoginTypeForAuth | null> {
         const result = await UsersModel.findById(id)
         if (!result) return null
-        return getOutputUserForAuth(result)
-    },
+        return this._getOutputUserForAuth(result)
+    }
     async createUser(createdUser: UsersTypeToDB): Promise<UsersTypeOutput> {
         const result = await UsersModel.create(createdUser)
-        return getShortOutputUser(result)
-    },
+        return this._getShortOutputUser(result)
+    }
     async deleteUser(id: string): Promise<boolean> {
         const result = await UsersModel.findByIdAndDelete(new ObjectId(id))
         return !!result
-    },
+    }
     async findUserHashByLoginOrEmail(loginOrEmail: string): Promise<UsersHashType | null> {
         const result = await UsersModel.findOne().or([
             { email: loginOrEmail },
             { login: loginOrEmail }
         ])
         if (!result) return null
-        return getOutputUserHash(result)
-    },
+        return this._getOutputUserHash(result)
+    }
     async findUserByConfirmationCode(code: string): Promise<UsersConfirmationCodeType | null> {
         const result = await UsersModel.findOne({
             'emailConfirmation.confirmationCode': code
         })
         if (!result) return null
-        return getOutputUserForConfirmationCode(result)
-    },
+        return this._getOutputUserForConfirmationCode(result)
+    }
     async findUserByConfirmationCodeRecoveryPassword(
         code: string
     ): Promise<UsersConfirmationCodePasswordRecoveryType | null> {
@@ -113,32 +46,32 @@ export const usersRepository = {
             'passwordRecoveryConfirmation.passwordRecoveryCode': code
         })
         if (!result) return null
-        return getOutputUserForPasswordRecoveryConfirmationCode(result)
-    },
+        return this._getOutputUserForPasswordRecoveryConfirmationCode(result)
+    }
     async updateConfirmationStatus(code: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
             { 'emailConfirmation.confirmationCode': code },
             { 'emailConfirmation.isConfirmed': true }
         )
         return !!result
-    },
+    }
     async findUserByEmail(email: string): Promise<UsersTypeToDB | null> {
         const result = await UsersModel.findOne({ email: email })
         if (!result) return null
-        return getOutputUser(result)
-    },
+        return this._getOutputUser(result)
+    }
     async findUserByLogin(login: string): Promise<UsersTypeToDB | null> {
         const result = await UsersModel.findOne({ login: login })
         if (!result) return null
-        return getOutputUser(result)
-    },
+        return this._getOutputUser(result)
+    }
     async updateConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
             { login: user.login },
             { 'emailConfirmation.confirmationCode': code }
         )
         return !!result
-    },
+    }
     async updatePasswordRecoveryConfirmationCode(
         user: UsersTypeToDB,
         code: string
@@ -152,7 +85,7 @@ export const usersRepository = {
             }
         )
         return !!result
-    },
+    }
     async updatePassword(recoveryCode: string, newHash: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
             { 'passwordRecoveryConfirmation.passwordRecoveryCode': recoveryCode },
@@ -160,4 +93,69 @@ export const usersRepository = {
         )
         return !!result
     }
+    private _getOutputUserForAuth (user: any): LoginTypeForAuth {
+        return {
+            email: user.email,
+            login: user.login,
+            userId: user._id.toString()
+        }
+    }
+    private _getOutputUserHash (user: any): UsersHashType {
+        return {
+            id: user._id.toString(),
+            hash: user.hash
+        }
+    }
+    private _getOutputUserForConfirmationCode (user: any): UsersConfirmationCodeType {
+        return {
+            id: user._id.toString(),
+            emailConfirmation: {
+                confirmationCode: user.emailConfirmation.confirmationCode,
+                expirationDate: user.emailConfirmation.expirationDate,
+                isConfirmed: user.emailConfirmation.isConfirmed
+            }
+        }
+    }
+    private _getOutputUserForPasswordRecoveryConfirmationCode (
+        user: any
+    ): UsersConfirmationCodePasswordRecoveryType {
+        return {
+            id: user._id.toString(),
+            passwordRecoveryConfirmation: {
+                passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
+                expirationDate: user.passwordRecoveryConfirmation.expirationDate,
+                isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
+            }
+        }
+    }
+
+    private _getOutputUser (user: any): UsersTypeToDB {
+        return {
+            login: user.login,
+            hash: user.hash,
+            email: user.email,
+            createdAt: user.createdAt,
+            passwordRecoveryConfirmation: {
+                passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
+                expirationDate: user.passwordRecoveryConfirmation.expirationDate,
+                isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
+            },
+            emailConfirmation: {
+                confirmationCode: user.emailConfirmation.confirmationCode,
+                expirationDate: user.emailConfirmation.expirationDate,
+                isConfirmed: user.emailConfirmation.isConfirmed
+            }
+        }
+    }
+
+    private _getShortOutputUser (user: any): UsersTypeOutput {
+        return {
+            id: user._id.toString(),
+            login: user.login,
+            email: user.email,
+            createdAt: user.createdAt
+        }
+    }
 }
+
+export const usersRepository = new UsersRepository()

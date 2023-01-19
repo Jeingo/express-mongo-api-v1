@@ -9,6 +9,8 @@ import {BlogsQueryRepository} from "./query-reositories/blogs-query-repository";
 import {CommentsQueryRepository} from "./query-reositories/comments-query-repository";
 import {PostsQueryRepository} from "./query-reositories/posts-query-repository";
 import {UsersQueryRepository} from "./query-reositories/users-query-repository";
+import {EmailAdapter} from "./adapters/email-adapter";
+import {JwtService} from "./application/jwt-service";
 
 const blogsRepository = new BlogsRepository()
 const commentsRepository = new CommentsRepository()
@@ -22,6 +24,11 @@ const blogsQueryRepository = new BlogsQueryRepository()
 const commentsQueryRepository = new CommentsQueryRepository()
 const postsQueryRepository = new PostsQueryRepository()
 const usersQueryRepository = new UsersQueryRepository()
+
+const emailAdapter = new EmailAdapter()
+const jwtService = new JwtService()
+
+
 
 
 

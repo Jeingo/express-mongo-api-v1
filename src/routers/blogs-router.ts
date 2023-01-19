@@ -1,26 +1,18 @@
 import { Router } from 'express'
 import { idValidation, inputValidation, queryValidation } from '../middleware/input-validation'
-import {
-    descriptionValidation,
-    nameValidation,
-    websiteUrlValidation
-} from '../middleware/input-blogs-vallidation'
+import { descriptionValidation, nameValidation, websiteUrlValidation } from '../middleware/input-blogs-vallidation'
 import { auth } from '../authorization/basic-auth'
-import {
-    contentValidation,
-    shortDescriptionValidation,
-    titleValidation
-} from '../middleware/input-posts-validation'
+import { contentValidation, shortDescriptionValidation, titleValidation } from '../middleware/input-posts-validation'
 import { blogsController } from '../controllers/blogs-controller'
 import { postsController } from '../controllers/posts-controller'
 
 export const blogsRouter = Router({})
 
-blogsRouter.get('/', queryValidation, blogsController.getAllBlogs)
+blogsRouter.get('/', queryValidation, blogsController.getAllBlogs.bind(blogsController))
 
-blogsRouter.get('/:id', idValidation, blogsController.getBlogById)
+blogsRouter.get('/:id', idValidation, blogsController.getBlogById.bind(blogsController))
 
-blogsRouter.get('/:id/posts', idValidation, queryValidation, postsController.getPostsByBlogId)
+blogsRouter.get('/:id/posts', idValidation, queryValidation, postsController.getPostsByBlogId.bind(postsController))
 
 blogsRouter.post(
     '/',
@@ -29,7 +21,7 @@ blogsRouter.post(
     descriptionValidation,
     websiteUrlValidation,
     inputValidation,
-    blogsController.createBlog
+    blogsController.createBlog.bind(blogsController)
 )
 
 blogsRouter.post(
@@ -40,7 +32,7 @@ blogsRouter.post(
     shortDescriptionValidation,
     contentValidation,
     inputValidation,
-    postsController.createPostByBlogId
+    postsController.createPostByBlogId.bind(postsController)
 )
 
 blogsRouter.put(
@@ -51,7 +43,7 @@ blogsRouter.put(
     descriptionValidation,
     websiteUrlValidation,
     inputValidation,
-    blogsController.updateBlog
+    blogsController.updateBlog.bind(blogsController)
 )
 
-blogsRouter.delete('/:id', auth, idValidation, blogsController.deleteBlog)
+blogsRouter.delete('/:id', auth, idValidation, blogsController.deleteBlog.bind(blogsController))

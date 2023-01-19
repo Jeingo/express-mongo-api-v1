@@ -11,32 +11,18 @@ class CommentsService {
         this.commentsRepository = new CommentsRepository()
         this.postsRepository = new PostsRepository()
     }
-    async createComment(
-        content: string,
-        postId: string,
-        user: LoginTypeForAuth
-    ): Promise<CommentsTypeOutput | null> {
+    async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentsTypeOutput | null> {
         const foundPost = await this.postsRepository.getPostById(postId)
         if (!foundPost) {
             return null
         }
-        const createdComment = new CommentsTypeToDB(
-            content,
-            user.userId,
-            user.login,
-            new Date().toISOString(),
-            postId
-        )
+        const createdComment = new CommentsTypeToDB(content, user.userId, user.login, new Date().toISOString(), postId)
         return await this.commentsRepository.createComment(createdComment)
     }
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
         return await this.commentsRepository.getCommentById(id)
     }
-    async updateComment(
-        id: string,
-        content: string,
-        user: LoginTypeForAuth
-    ): Promise<boolean | number> {
+    async updateComment(id: string, content: string, user: LoginTypeForAuth): Promise<boolean | number> {
         const comment = await this.commentsRepository.getCommentById(id)
 
         if (!comment) {

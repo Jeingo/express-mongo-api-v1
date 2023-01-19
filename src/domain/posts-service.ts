@@ -12,22 +12,10 @@ class PostsService {
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
         return await this.postsRepository.getPostById(id)
     }
-    async createPost(
-        title: string,
-        desc: string,
-        content: string,
-        blogId: string
-    ): Promise<PostsTypeOutput | null> {
+    async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostsTypeOutput | null> {
         const foundBlog = await this.blogsRepository.getBlogById(blogId)
         if (!foundBlog) return null
-        const createdPost = new PostsTypeToDB(
-            title,
-            desc,
-            content,
-            blogId,
-            foundBlog.name,
-            new Date().toISOString()
-        )
+        const createdPost = new PostsTypeToDB(title, desc, content, blogId, foundBlog.name, new Date().toISOString())
         return await this.postsRepository.createPost(createdPost)
     }
     async updatePost(

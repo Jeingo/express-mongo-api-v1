@@ -18,12 +18,8 @@ class UsersQueryRepository {
         const skipNumber = (+pageNumber - 1) * +pageSize
 
         const filter = (a: any, b: any) => ({ $or: [a, b] })
-        const loginFilter = searchLoginTerm
-            ? { login: { $regex: new RegExp(searchLoginTerm, 'gi') } }
-            : {}
-        const emailFilter = searchEmailTerm
-            ? { email: { $regex: new RegExp(searchEmailTerm, 'gi') } }
-            : {}
+        const loginFilter = searchLoginTerm ? { login: { $regex: new RegExp(searchLoginTerm, 'gi') } } : {}
+        const emailFilter = searchEmailTerm ? { email: { $regex: new RegExp(searchEmailTerm, 'gi') } } : {}
         const filterMain = filter(loginFilter, emailFilter)
 
         const countAllDocuments = await UsersModel.countDocuments(filterMain)
@@ -31,12 +27,7 @@ class UsersQueryRepository {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(
-            res.map(this._getOutputUser),
-            +pageSize,
-            +pageNumber,
-            countAllDocuments
-        )
+        return getPaginatedType(res.map(this._getOutputUser), +pageSize, +pageNumber, countAllDocuments)
     }
     private _getOutputUser(user: any): UsersTypeOutput {
         return {

@@ -25,10 +25,7 @@ export class UsersRepository {
         return !!result
     }
     async findUserHashByLoginOrEmail(loginOrEmail: string): Promise<UsersHashType | null> {
-        const result = await UsersModel.findOne().or([
-            { email: loginOrEmail },
-            { login: loginOrEmail }
-        ])
+        const result = await UsersModel.findOne().or([{ email: loginOrEmail }, { login: loginOrEmail }])
         if (!result) return null
         return this._getOutputUserHash(result)
     }
@@ -72,10 +69,7 @@ export class UsersRepository {
         )
         return !!result
     }
-    async updatePasswordRecoveryConfirmationCode(
-        user: UsersTypeToDB,
-        code: string
-    ): Promise<boolean> {
+    async updatePasswordRecoveryConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
             { login: user.login },
             {
@@ -116,9 +110,7 @@ export class UsersRepository {
             }
         }
     }
-    private _getOutputUserForPasswordRecoveryConfirmationCode(
-        user: any
-    ): UsersConfirmationCodePasswordRecoveryType {
+    private _getOutputUserForPasswordRecoveryConfirmationCode(user: any): UsersConfirmationCodePasswordRecoveryType {
         return {
             id: user._id.toString(),
             passwordRecoveryConfirmation: {

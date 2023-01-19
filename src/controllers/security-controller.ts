@@ -41,10 +41,7 @@ class SecurityController {
             return
         }
 
-        const deletedDevice = await sessionsService.deleteSessionByDeviceId(
-            req.params.id,
-            payload.userId
-        )
+        const deletedDevice = await sessionsService.deleteSessionByDeviceId(req.params.id, payload.userId)
         if (deletedDevice === HTTP_STATUSES.NOT_FOUND_404) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return

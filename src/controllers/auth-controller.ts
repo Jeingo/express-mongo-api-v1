@@ -7,7 +7,7 @@ import {
     RegistrationResendType
 } from '../models/auth-models'
 import { Request, Response } from 'express'
-import {AuthService} from '../domain/auth-service'
+import { AuthService } from '../domain/auth-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { jwtService } from '../application/jwt-service'
 import { v4 as uuidv4 } from 'uuid'
@@ -85,10 +85,7 @@ class AuthController {
         await this.authService.registerUser(req.body.login, req.body.password, req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
-    async registrationConfirmation(
-        req: RequestWithBody<RegistrationConfirmationType>,
-        res: Response
-    ) {
+    async registrationConfirmation(req: RequestWithBody<RegistrationConfirmationType>, res: Response) {
         await this.authService.confirmEmail(req.body.code)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }

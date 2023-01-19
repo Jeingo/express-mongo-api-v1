@@ -21,14 +21,7 @@ class SessionsService {
         const userId = result.userId
         const deviceId = result.deviceId
 
-        const session: SessionTypeToDB = new SessionTypeToDB(
-            issueAt,
-            deviceId,
-            deviceName,
-            ip,
-            userId,
-            expireAt
-        )
+        const session: SessionTypeToDB = new SessionTypeToDB(issueAt, deviceId, deviceName, ip, userId, expireAt)
         await this.sessionsRepository.saveSession(session)
     }
     async updateSession(token: string): Promise<void> {

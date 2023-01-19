@@ -8,40 +8,22 @@ import { getPaginatedType, makeDirectionToNumber } from './helper'
 class PostsQueryRepository {
     async getAllPost(query: QueryPosts): Promise<PaginatedType<PostsTypeOutput>> {
         const countAllDocuments = await PostsModel.countDocuments()
-        const {
-            sortBy = 'createdAt',
-            sortDirection = 'desc',
-            pageNumber = 1,
-            pageSize = 10
-        } = query
+        const { sortBy = 'createdAt', sortDirection = 'desc', pageNumber = 1, pageSize = 10 } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
         const res = await PostsModel.find()
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(
-            res.map(this._getOutputPost),
-            +pageSize,
-            +pageNumber,
-            countAllDocuments
-        )
+        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
     }
-    async getPostsById(
-        id: string,
-        query: QueryPosts
-    ): Promise<PaginatedType<PostsTypeOutput> | null> {
+    async getPostsById(id: string, query: QueryPosts): Promise<PaginatedType<PostsTypeOutput> | null> {
         const foundBlogs = await BlogsModel.findById(new ObjectId(id))
         if (!foundBlogs) return null
         const countAllDocuments = await PostsModel.countDocuments({
             blogId: id
         })
-        const {
-            sortBy = 'createdAt',
-            sortDirection = 'desc',
-            pageNumber = 1,
-            pageSize = 10
-        } = query
+        const { sortBy = 'createdAt', sortDirection = 'desc', pageNumber = 1, pageSize = 10 } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
         const skipNumber = (+pageNumber - 1) * +pageSize
         const res = await PostsModel.find({ blogId: id })
@@ -49,12 +31,7 @@ class PostsQueryRepository {
             .skip(skipNumber)
             .limit(+pageSize)
 
-        return getPaginatedType(
-            res.map(this._getOutputPost),
-            +pageSize,
-            +pageNumber,
-            countAllDocuments
-        )
+        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
     }
     private _getOutputPost(post: any): PostsTypeOutput {
         return {

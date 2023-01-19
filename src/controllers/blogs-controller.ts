@@ -1,9 +1,4 @@
-import {
-    RequestWithBody,
-    RequestWithParams,
-    RequestWithParamsAndBody,
-    RequestWithQuery
-} from '../models/types'
+import { RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithQuery } from '../models/types'
 import { QueryBlogs } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
@@ -13,10 +8,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { blogsService } from '../domain/blogs-service'
 
 class BlogsController {
-    async getAllBlogs(
-        req: RequestWithQuery<QueryBlogs>,
-        res: Response<PaginatedType<BlogsTypeOutput>>
-    ) {
+    async getAllBlogs(req: RequestWithQuery<QueryBlogs>, res: Response<PaginatedType<BlogsTypeOutput>>) {
         const allBlogs = await blogsQueryRepository.getAllBlogs(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allBlogs)
     }
@@ -30,11 +22,7 @@ class BlogsController {
         res.json(foundBlog)
     }
     async createBlog(req: RequestWithBody<BlogsTypeInput>, res: Response<BlogsTypeOutput>) {
-        const createdBlog = await blogsService.createBlog(
-            req.body.name,
-            req.body.description,
-            req.body.websiteUrl
-        )
+        const createdBlog = await blogsService.createBlog(req.body.name, req.body.description, req.body.websiteUrl)
         res.status(HTTP_STATUSES.CREATED_201).json(createdBlog)
     }
     async updateBlog(req: RequestWithParamsAndBody<BlogsIdParams, BlogsTypeInput>, res: Response) {

@@ -65,10 +65,7 @@ export class AuthService {
             return null
         }
         const newPasswordRecoveryConfirmationCode = v4()
-        await this.usersRepository.updatePasswordRecoveryConfirmationCode(
-            user,
-            newPasswordRecoveryConfirmationCode
-        )
+        await this.usersRepository.updatePasswordRecoveryConfirmationCode(user, newPasswordRecoveryConfirmationCode)
         user.passwordRecoveryConfirmation.passwordRecoveryCode = newPasswordRecoveryConfirmationCode
         await emailManager.sendPasswordRecoveryEmailConfirmation(user)
     }

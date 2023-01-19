@@ -8,19 +8,12 @@ import { HTTP_STATUSES } from '../constats/status'
 import { usersService } from '../domain/users-service'
 
 class UsersController {
-    async getAllUsers(
-        req: RequestWithQuery<QueryUsers>,
-        res: Response<PaginatedType<UsersTypeOutput>>
-    ) {
+    async getAllUsers(req: RequestWithQuery<QueryUsers>, res: Response<PaginatedType<UsersTypeOutput>>) {
         const allUsers = await usersQueryRepository.getAllUsers(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allUsers)
     }
     async createUser(req: RequestWithBody<UsersTypeInput>, res: Response<UsersTypeOutput>) {
-        const createdUser = await usersService.createUser(
-            req.body.login,
-            req.body.password,
-            req.body.email
-        )
+        const createdUser = await usersService.createUser(req.body.login, req.body.password, req.body.email)
         res.status(HTTP_STATUSES.CREATED_201).json(createdUser)
     }
     async deleteUser(req: RequestWithParams<UsersIdParams>, res: Response) {

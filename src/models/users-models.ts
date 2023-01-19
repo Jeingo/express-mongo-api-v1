@@ -28,10 +28,8 @@ export class UsersTypeToDB {
             isConfirmed: boolean
         }
     ) {
-        this.passwordRecoveryConfirmation.passwordRecoveryCode =
-            passwordRecoveryConfirmation.passwordRecoveryCode
-        this.passwordRecoveryConfirmation.expirationDate =
-            passwordRecoveryConfirmation.expirationDate
+        this.passwordRecoveryConfirmation.passwordRecoveryCode = passwordRecoveryConfirmation.passwordRecoveryCode
+        this.passwordRecoveryConfirmation.expirationDate = passwordRecoveryConfirmation.expirationDate
         this.passwordRecoveryConfirmation.isConfirmed = passwordRecoveryConfirmation.isConfirmed
         this.emailConfirmation.confirmationCode = emailConfirmation.confirmationCode
         this.emailConfirmation.expirationDate = emailConfirmation.expirationDate

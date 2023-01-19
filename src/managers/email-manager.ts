@@ -16,9 +16,7 @@ class EmailManager {
             from: '"Backend-09" <backend.jeingo@gmail.com>',
             to: user.email,
             subject: 'Password recovery confirmation',
-            html: this._passwordRecoveryConfirmationMessage(
-                user.passwordRecoveryConfirmation.passwordRecoveryCode
-            )
+            html: this._passwordRecoveryConfirmationMessage(user.passwordRecoveryConfirmation.passwordRecoveryCode)
         }
         await emailAdapter.sendEmail(emailForm)
     }

@@ -3,8 +3,8 @@ import { securityController } from '../controllers/security-controller'
 
 export const securityRouter = Router({})
 
-securityRouter.get('/devices', securityController.getAllActiveSession)
+securityRouter.get('/devices', securityController.getAllActiveSession.bind(securityController))
 
-securityRouter.delete('/devices', securityController.deleteAllSessionWithoutCurrent)
+securityRouter.delete('/devices', securityController.deleteAllSessionWithoutCurrent.bind(securityController))
 
-securityRouter.delete('/devices/:id', securityController.deleteSessionById)
+securityRouter.delete('/devices/:id', securityController.deleteSessionById.bind(securityController))

@@ -6,7 +6,7 @@ import { commentsController } from '../controllers/comments-controller'
 
 export const commentsRouter = Router({})
 
-commentsRouter.get('/:id', idValidation, commentsController.getCommentById)
+commentsRouter.get('/:id', idValidation, commentsController.getCommentById.bind(commentsController))
 
 commentsRouter.put(
     '/:id',
@@ -14,7 +14,7 @@ commentsRouter.put(
     idValidation,
     contentInCommentValidation,
     inputValidation,
-    commentsController.updateComment
+    commentsController.updateComment.bind(commentsController)
 )
 
-commentsRouter.delete('/:id', bearerAuth, idValidation, commentsController.deleteComment)
+commentsRouter.delete('/:id', bearerAuth, idValidation, commentsController.deleteComment.bind(commentsController))

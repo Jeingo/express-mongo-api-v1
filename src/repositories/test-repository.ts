@@ -1,11 +1,4 @@
-import {
-    BlogsModel,
-    CommentsModel,
-    PostsModel,
-    RateLimiterModel,
-    SessionsModel,
-    UsersModel
-} from './db'
+import { BlogsModel, CommentsModel, PostsModel, RateLimiterModel, SessionsModel, UsersModel } from './db'
 
 export class TestRepository {
     async deleteAllDB(): Promise<void> {

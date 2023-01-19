@@ -37,9 +37,7 @@ export class SessionsRepository {
         return !!result
     }
     async deleteSessionsWithoutCurrent(userId: string, issueAt: string): Promise<boolean> {
-        const result = await SessionsModel.deleteMany({ userId: userId })
-            .where('issueAt')
-            .ne(issueAt)
+        const result = await SessionsModel.deleteMany({ userId: userId }).where('issueAt').ne(issueAt)
         return !!result
     }
     private _getOutputSession(session: any) {

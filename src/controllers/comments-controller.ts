@@ -1,8 +1,4 @@
-import {
-    RequestWithParams,
-    RequestWithParamsAndBody,
-    RequestWithParamsAndQuery
-} from '../models/types'
+import { RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery } from '../models/types'
 import {
     CommentsIdParams,
     CommentsTypeInput,
@@ -17,10 +13,7 @@ import { PaginatedType } from '../models/main-models'
 import { commentsQueryRepository } from '../query-reositories/comments-query-repository'
 
 class CommentsController {
-    async getCommentById(
-        req: RequestWithParams<CommentsIdParams>,
-        res: Response<CommentsTypeOutput>
-    ) {
+    async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
         const foundComment = await commentsService.getCommentById(req.params.id)
 
         if (!foundComment) {
@@ -33,10 +26,7 @@ class CommentsController {
         req: RequestWithParamsAndQuery<CommentsIdParams, QueryComments>,
         res: Response<PaginatedType<CommentsTypeOutput | null>>
     ) {
-        const foundComments = await commentsQueryRepository.getCommentsById(
-            req.params.id,
-            req.query
-        )
+        const foundComments = await commentsQueryRepository.getCommentsById(req.params.id, req.query)
 
         if (!foundComments) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -49,11 +39,7 @@ class CommentsController {
         req: RequestWithParamsAndBody<CommentsIdParams, CommentsTypeInputInPost>,
         res: Response<CommentsTypeOutput>
     ) {
-        const createdComment = await commentsService.createComment(
-            req.body.content,
-            req.params.id,
-            req.user!
-        )
+        const createdComment = await commentsService.createComment(req.body.content, req.params.id, req.user!)
 
         if (!createdComment) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -62,15 +48,8 @@ class CommentsController {
 
         res.status(HTTP_STATUSES.CREATED_201).json(createdComment)
     }
-    async updateComment(
-        req: RequestWithParamsAndBody<CommentsIdParams, CommentsTypeInput>,
-        res: Response
-    ) {
-        const updatedComment = await commentsService.updateComment(
-            req.params.id,
-            req.body.content,
-            req.user!
-        )
+    async updateComment(req: RequestWithParamsAndBody<CommentsIdParams, CommentsTypeInput>, res: Response) {
+        const updatedComment = await commentsService.updateComment(req.params.id, req.body.content, req.user!)
 
         if (updatedComment === HTTP_STATUSES.NOT_FOUND_404) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

@@ -6,10 +6,7 @@ export const checkAuthorizationAndGetPayload = async (token: string) => {
     if (!payload) {
         return null
     }
-    const statusSession = await sessionsService.isActiveSession(
-        payload.deviceId,
-        payload.iat.toString()
-    )
+    const statusSession = await sessionsService.isActiveSession(payload.deviceId, payload.iat.toString())
     if (statusSession) {
         return null
     }

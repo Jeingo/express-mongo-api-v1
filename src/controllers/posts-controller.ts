@@ -8,21 +8,13 @@ import {
 import { QueryBlogs, QueryPosts } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
-import {
-    PostsIdParams,
-    PostsTypeInput,
-    PostsTypeInputInBlog,
-    PostsTypeOutput
-} from '../models/posts-models'
+import { PostsIdParams, PostsTypeInput, PostsTypeInputInBlog, PostsTypeOutput } from '../models/posts-models'
 import { postsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { postsService } from '../domain/posts-service'
 
 class PostsController {
-    async getAllPosts(
-        req: RequestWithQuery<QueryPosts>,
-        res: Response<PaginatedType<PostsTypeOutput>>
-    ) {
+    async getAllPosts(req: RequestWithQuery<QueryPosts>, res: Response<PaginatedType<PostsTypeOutput>>) {
         const allPosts = await postsQueryRepository.getAllPost(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allPosts)
     }

@@ -14,15 +14,15 @@ import { commentsController } from '../controllers/comments-controller'
 
 export const postsRouter = Router({})
 
-postsRouter.get('/', queryValidation, postsController.getAllPosts)
+postsRouter.get('/', queryValidation, postsController.getAllPosts.bind(postsController))
 
-postsRouter.get('/:id', idValidation, postsController.getPostById)
+postsRouter.get('/:id', idValidation, postsController.getPostById.bind(postsController))
 
 postsRouter.get(
     '/:id/comments',
     idValidation,
     queryValidation,
-    commentsController.getCommentsByPostId
+    commentsController.getCommentsByPostId.bind(commentsController)
 )
 
 postsRouter.post(
@@ -33,7 +33,7 @@ postsRouter.post(
     contentValidation,
     blogIdValidation,
     inputValidation,
-    postsController.createPost
+    postsController.createPost.bind(postsController)
 )
 
 postsRouter.post(
@@ -42,7 +42,7 @@ postsRouter.post(
     idValidation,
     contentInCommentValidation,
     inputValidation,
-    commentsController.createCommentByPostId
+    commentsController.createCommentByPostId.bind(commentsController)
 )
 
 postsRouter.put(
@@ -54,7 +54,7 @@ postsRouter.put(
     contentValidation,
     blogIdValidation,
     inputValidation,
-    postsController.updatePost
+    postsController.updatePost.bind(postsController)
 )
 
-postsRouter.delete('/:id', auth, idValidation, postsController.deletePost)
+postsRouter.delete('/:id', auth, idValidation, postsController.deletePost.bind(postsController))

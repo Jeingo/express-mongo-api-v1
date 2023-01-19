@@ -24,12 +24,7 @@ class BlogsQueryRepository {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(
-            res.map(this._getOutputBlog),
-            +pageSize,
-            +pageNumber,
-            countAllDocuments
-        )
+        return getPaginatedType(res.map(this._getOutputBlog), +pageSize, +pageNumber, countAllDocuments)
     }
     private _getOutputBlog(blog: any): BlogsTypeOutput {
         return {

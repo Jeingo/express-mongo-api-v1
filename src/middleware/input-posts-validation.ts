@@ -1,8 +1,9 @@
 import { body } from 'express-validator'
 import { ObjectId } from 'mongodb'
-import { blogsRepository } from '../repositories/blogs-repository'
+import {BlogsRepository} from "../repositories/blogs-repository";
 
 const checkId = async (id: string): Promise<true> => {
+    const blogsRepository = new BlogsRepository()
     if (!ObjectId.isValid(id)) {
         throw new Error('ID is bad')
     }

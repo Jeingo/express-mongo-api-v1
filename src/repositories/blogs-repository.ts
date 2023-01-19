@@ -2,7 +2,7 @@ import { BlogsModel } from './db'
 import { ObjectId } from 'mongodb'
 import { BlogsTypeInput, BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
 
-class BlogsRepository {
+export class BlogsRepository {
     async getBlogById(id: string): Promise<BlogsTypeOutput | null> {
         const result = await BlogsModel.findById(new ObjectId(id))
         if (!result) return null
@@ -30,5 +30,3 @@ class BlogsRepository {
         }
     }
 }
-
-export const blogsRepository = new BlogsRepository()

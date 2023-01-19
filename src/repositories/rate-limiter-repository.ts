@@ -2,7 +2,7 @@ import { RateLimiterModel } from './db'
 import { RateLimiterType } from '../models/auth-models'
 import { ObjectId } from 'mongodb'
 
-class RateLimiterRepository {
+export class RateLimiterRepository {
     async findIpBase(ip: string, endpoint: string): Promise<RateLimiterType | null> {
         const result = await RateLimiterModel.findOne({ ip: ip, endpoint: endpoint })
         if (!result) return null
@@ -40,5 +40,3 @@ class RateLimiterRepository {
         }
     }
 }
-
-export const rateLimiterRepository = new RateLimiterRepository()

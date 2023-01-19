@@ -2,7 +2,7 @@ import { PostsModel } from './db'
 import { ObjectId } from 'mongodb'
 import { PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
 
-class PostsRepository {
+export class PostsRepository {
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
         const result = await PostsModel.findById(new ObjectId(id))
         if (!result) return null
@@ -32,5 +32,3 @@ class PostsRepository {
         }
     }
 }
-
-export const postsRepository = new PostsRepository()

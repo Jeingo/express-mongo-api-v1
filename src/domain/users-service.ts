@@ -1,4 +1,4 @@
-import { usersRepository } from '../repositories/users-repository'
+import {UsersRepository} from '../repositories/users-repository'
 import { UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 import bcrypt from 'bcrypt'
 import { ObjectId } from 'mongodb'
@@ -7,8 +7,12 @@ import { v4 } from 'uuid'
 import add from 'date-fns/add'
 
 class UsersService {
+    usersRepository: UsersRepository
+    constructor() {
+        this.usersRepository = new UsersRepository()
+    }
     async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
-        return await usersRepository.findUserById(_id)
+        return await this.usersRepository.findUserById(_id)
     }
     async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)
@@ -33,10 +37,10 @@ class UsersService {
                 isConfirmed: true
             }
         )
-        return await usersRepository.createUser(createdUser)
+        return await this.usersRepository.createUser(createdUser)
     }
     async deleteUser(id: string): Promise<boolean> {
-        return await usersRepository.deleteUser(id)
+        return await this.usersRepository.deleteUser(id)
     }
 }
 

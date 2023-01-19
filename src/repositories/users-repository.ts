@@ -10,7 +10,7 @@ import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'
 import { LoginTypeForAuth } from '../models/auth-models'
 
-class UsersRepository {
+export class UsersRepository {
     async findUserById(id: ObjectId): Promise<LoginTypeForAuth | null> {
         const result = await UsersModel.findById(id)
         if (!result) return null
@@ -157,5 +157,3 @@ class UsersRepository {
         }
     }
 }
-
-export const usersRepository = new UsersRepository()

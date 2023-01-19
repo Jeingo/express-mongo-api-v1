@@ -1,14 +1,18 @@
 import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { TokenPayloadType } from '../models/token-models'
-import { sessionsRepository } from '../repositories/sessions-repository'
+import {SessionsRepository} from '../repositories/sessions-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { HttpTypes } from '../models/status-models'
 
 class SessionsService {
+    sessionsRepository: SessionsRepository
+    constructor() {
+        this.sessionsRepository = new SessionsRepository()
+    }
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
-        return await sessionsRepository.findAllActiveSession(userId)
+        return await this.sessionsRepository.findAllActiveSession(userId)
     }
     async saveSession(token: string, ip: string, deviceName: string): Promise<void> {
         const result = jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
@@ -25,17 +29,17 @@ class SessionsService {
             userId,
             expireAt
         )
-        await sessionsRepository.saveSession(session)
+        await this.sessionsRepository.saveSession(session)
     }
     async updateSession(token: string): Promise<void> {
         const result = jwt.verify(token, settings.JWT_REFRESH_SECRET) as TokenPayloadType
         const issueAt = new Date(result.iat * 1000).toISOString()
         const expireAt = new Date(result.exp * 1000).toISOString()
         const deviceId = result.deviceId
-        await sessionsRepository.updateSession(issueAt, expireAt, deviceId)
+        await this.sessionsRepository.updateSession(issueAt, expireAt, deviceId)
     }
     async isActiveSession(deviceId: string, iat: string): Promise<boolean> {
-        const result = await sessionsRepository.findSession(iat)
+        const result = await this.sessionsRepository.findSession(iat)
         if (!result) {
             return false
         }
@@ -43,10 +47,10 @@ class SessionsService {
     }
     async deleteSession(iat: number): Promise<boolean> {
         const issueAt = new Date(iat * 1000).toISOString()
-        return await sessionsRepository.deleteSession(issueAt)
+        return await this.sessionsRepository.deleteSession(issueAt)
     }
     async deleteSessionByDeviceId(deviceId: string, userId: string): Promise<boolean | HttpTypes> {
-        const device = await sessionsRepository.findSessionByDeviceId(deviceId)
+        const device = await this.sessionsRepository.findSessionByDeviceId(deviceId)
 
         if (!device) {
             return HTTP_STATUSES.NOT_FOUND_404
@@ -55,11 +59,11 @@ class SessionsService {
         if (device.userId !== userId) {
             return HTTP_STATUSES.FORBIDDEN_403
         }
-        return await sessionsRepository.deleteSessionByDeviceId(deviceId)
+        return await this.sessionsRepository.deleteSessionByDeviceId(deviceId)
     }
     async deleteActiveSessionWithoutCurrent(userId: string, iat: number): Promise<void> {
         const issueAt = new Date(iat * 1000).toISOString()
-        await sessionsRepository.deleteSessionsWithoutCurrent(userId, issueAt)
+        await this.sessionsRepository.deleteSessionsWithoutCurrent(userId, issueAt)
     }
 }
 

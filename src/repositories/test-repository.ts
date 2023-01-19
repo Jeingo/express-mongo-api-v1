@@ -7,7 +7,7 @@ import {
     UsersModel
 } from './db'
 
-class TestRepository {
+export class TestRepository {
     async deleteAllDB(): Promise<void> {
         await BlogsModel.deleteMany({})
         await PostsModel.deleteMany({})
@@ -17,5 +17,3 @@ class TestRepository {
         await RateLimiterModel.deleteMany({})
     }
 }
-
-export const testRepository = new TestRepository()

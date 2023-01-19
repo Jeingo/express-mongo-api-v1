@@ -2,7 +2,7 @@ import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../mode
 import { CommentsModel } from './db'
 import { ObjectId } from 'mongodb'
 
-class CommentsRepository {
+export class CommentsRepository {
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
         const result = await CommentsModel.findById(new ObjectId(id))
         if (!result) return null
@@ -30,5 +30,3 @@ class CommentsRepository {
         }
     }
 }
-
-export const commentsRepository = new CommentsRepository()

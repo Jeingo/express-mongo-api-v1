@@ -1,8 +1,10 @@
 import { body } from 'express-validator'
-import { usersRepository } from '../repositories/users-repository'
+import {UsersRepository} from '../repositories/users-repository'
 
 const patternLogin = /^[a-zA-Z0-9_-]*$/
 const patternEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
+
+const usersRepository = new UsersRepository()
 
 const checkEmail = async (email: string) => {
     const foundUser = await usersRepository.findUserByEmail(email)

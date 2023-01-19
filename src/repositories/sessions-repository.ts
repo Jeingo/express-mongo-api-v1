@@ -1,7 +1,7 @@
 import { SessionsModel } from './db'
 import { SessionInputType, SessionOutputType, SessionTypeToDB } from '../models/session-models'
 
-class SessionsRepository {
+export class SessionsRepository {
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
         const currentDate = new Date().toISOString()
         const result = await SessionsModel.find({ userId: userId, expireAt: { $gt: currentDate } })
@@ -61,5 +61,3 @@ class SessionsRepository {
         }
     }
 }
-
-export const sessionsRepository = new SessionsRepository()

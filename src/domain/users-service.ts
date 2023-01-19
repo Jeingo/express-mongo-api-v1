@@ -6,7 +6,7 @@ import { LoginTypeForAuth } from '../models/auth-models'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
 
-class UsersService {
+export class UsersService {
     usersRepository: UsersRepository
     constructor() {
         this.usersRepository = new UsersRepository()
@@ -43,5 +43,3 @@ class UsersService {
         return await this.usersRepository.deleteUser(id)
     }
 }
-
-export const usersService = new UsersService()

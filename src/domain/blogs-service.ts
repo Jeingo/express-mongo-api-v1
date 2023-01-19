@@ -1,7 +1,7 @@
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
 
-class BlogsService {
+export class BlogsService {
     blogsRepository: BlogsRepository
     constructor() {
         this.blogsRepository = new BlogsRepository()
@@ -25,5 +25,3 @@ class BlogsService {
         return await this.blogsRepository.deleteBlog(id)
     }
 }
-
-export const blogsService = new BlogsService()

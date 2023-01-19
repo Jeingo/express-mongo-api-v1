@@ -11,7 +11,7 @@ import { AuthService } from '../domain/auth-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { jwtService } from '../application/jwt-service'
 import { v4 as uuidv4 } from 'uuid'
-import { sessionsService } from '../domain/sessions-service'
+import {SessionsService} from '../domain/sessions-service'
 import { settings } from '../settings/settings'
 import { checkAuthorizationAndGetPayload } from './helper'
 import { UsersTypeInput } from '../models/users-models'
@@ -20,8 +20,10 @@ const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
 class AuthController {
     authService: AuthService
+    sessionsService: SessionsService
     constructor() {
         this.authService = new AuthService()
+        this.sessionsService = new SessionsService()
     }
     async login(req: RequestWithBody<LoginTypeInput>, res: Response) {
         const user = await this.authService.checkCredentials(req.body.loginOrEmail, req.body.password)
@@ -37,7 +39,7 @@ class AuthController {
         const deviceId = uuidv4()
         const refreshToken = jwtService.createRefreshJWT(user.id, deviceId)
 
-        await sessionsService.saveSession(refreshToken, ipAddress, deviceName!)
+        await this.sessionsService.saveSession(refreshToken, ipAddress, deviceName!)
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: SECURE_COOKIE_MODE
@@ -56,7 +58,7 @@ class AuthController {
 
         const accessToken = jwtService.createJWT(payload.userId)
         const refreshToken = jwtService.createRefreshJWT(payload.userId, payload.deviceId)
-        await sessionsService.updateSession(refreshToken)
+        await this.sessionsService.updateSession(refreshToken)
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -74,7 +76,7 @@ class AuthController {
             return
         }
 
-        await sessionsService.deleteSession(payload.iat)
+        await this.sessionsService.deleteSession(payload.iat)
         res.clearCookie('refreshToken')
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }

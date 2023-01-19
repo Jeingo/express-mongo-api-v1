@@ -1,9 +1,10 @@
 import { NextFunction, Response, Request } from 'express'
 import { HTTP_STATUSES } from '../constats/status'
 import { jwtService } from '../application/jwt-service'
-import { usersService } from '../domain/users-service'
+import {UsersService} from '../domain/users-service'
 
 export const bearerAuth = async (req: Request, res: Response, next: NextFunction) => {
+    const usersService = new UsersService()
     if (!req.headers.authorization) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return

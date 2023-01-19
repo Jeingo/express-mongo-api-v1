@@ -1,6 +1,6 @@
 import { TestRepository } from '../repositories/test-repository'
 
-class TestService {
+export class TestService {
     testRepository: TestRepository
     constructor() {
         this.testRepository = new TestRepository()
@@ -9,5 +9,3 @@ class TestService {
         await this.testRepository.deleteAllDB()
     }
 }
-
-export const testService = new TestService()

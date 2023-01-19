@@ -6,7 +6,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { HttpTypes } from '../models/status-models'
 
-class SessionsService {
+export class SessionsService {
     sessionsRepository: SessionsRepository
     constructor() {
         this.sessionsRepository = new SessionsRepository()
@@ -59,5 +59,3 @@ class SessionsService {
         await this.sessionsRepository.deleteSessionsWithoutCurrent(userId, issueAt)
     }
 }
-
-export const sessionsService = new SessionsService()

@@ -1,7 +1,8 @@
 import { jwtService } from '../application/jwt-service'
-import { sessionsService } from '../domain/sessions-service'
+import {SessionsService} from '../domain/sessions-service'
 
 export const checkAuthorizationAndGetPayload = async (token: string) => {
+    const sessionsService = new SessionsService()
     const payload = jwtService.checkExpirationAndGetPayload(token)
     if (!payload) {
         return null

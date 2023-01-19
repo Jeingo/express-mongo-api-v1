@@ -5,19 +5,23 @@ import { PaginatedType } from '../models/main-models'
 import { UsersIdParams, UsersTypeInput, UsersTypeOutput } from '../models/users-models'
 import { usersQueryRepository } from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { usersService } from '../domain/users-service'
+import {UsersService} from '../domain/users-service'
 
 class UsersController {
+    usersService: UsersService
+    constructor() {
+        this.usersService = new UsersService()
+    }
     async getAllUsers(req: RequestWithQuery<QueryUsers>, res: Response<PaginatedType<UsersTypeOutput>>) {
         const allUsers = await usersQueryRepository.getAllUsers(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allUsers)
     }
     async createUser(req: RequestWithBody<UsersTypeInput>, res: Response<UsersTypeOutput>) {
-        const createdUser = await usersService.createUser(req.body.login, req.body.password, req.body.email)
+        const createdUser = await this.usersService.createUser(req.body.login, req.body.password, req.body.email)
         res.status(HTTP_STATUSES.CREATED_201).json(createdUser)
     }
     async deleteUser(req: RequestWithParams<UsersIdParams>, res: Response) {
-        const deletedUser = await usersService.deleteUser(req.params.id)
+        const deletedUser = await this.usersService.deleteUser(req.params.id)
 
         if (!deletedUser) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

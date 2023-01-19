@@ -4,7 +4,7 @@ import { LoginTypeForAuth } from '../models/auth-models'
 import { HTTP_STATUSES } from '../constats/status'
 import { CommentsRepository } from '../repositories/comments-repository'
 
-class CommentsService {
+export class CommentsService {
     commentsRepository: CommentsRepository
     postsRepository: PostsRepository
     constructor() {
@@ -49,5 +49,3 @@ class CommentsService {
         return await this.commentsRepository.deleteComment(id)
     }
 }
-
-export const commentsService = new CommentsService()

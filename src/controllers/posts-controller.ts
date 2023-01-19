@@ -11,15 +11,19 @@ import { PaginatedType } from '../models/main-models'
 import { PostsIdParams, PostsTypeInput, PostsTypeInputInBlog, PostsTypeOutput } from '../models/posts-models'
 import { postsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { postsService } from '../domain/posts-service'
+import {PostsService} from '../domain/posts-service'
 
 class PostsController {
+    postsService: PostsService
+    constructor() {
+        this.postsService = new PostsService()
+    }
     async getAllPosts(req: RequestWithQuery<QueryPosts>, res: Response<PaginatedType<PostsTypeOutput>>) {
         const allPosts = await postsQueryRepository.getAllPost(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allPosts)
     }
     async getPostById(req: RequestWithParams<PostsIdParams>, res: Response<PostsTypeOutput>) {
-        const foundPost = await postsService.getPostById(req.params.id)
+        const foundPost = await this.postsService.getPostById(req.params.id)
 
         if (!foundPost) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -41,7 +45,7 @@ class PostsController {
         res.json(foundPosts)
     }
     async createPost(req: RequestWithBody<PostsTypeInput>, res: Response<PostsTypeOutput | null>) {
-        const createdPost = await postsService.createPost(
+        const createdPost = await this.postsService.createPost(
             req.body.title,
             req.body.shortDescription,
             req.body.content,
@@ -53,7 +57,7 @@ class PostsController {
         req: RequestWithParamsAndBody<PostsIdParams, PostsTypeInputInBlog>,
         res: Response<PostsTypeOutput>
     ) {
-        const createdPost = await postsService.createPost(
+        const createdPost = await this.postsService.createPost(
             req.body.title,
             req.body.shortDescription,
             req.body.content,
@@ -68,7 +72,7 @@ class PostsController {
         res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
     }
     async updatePost(req: RequestWithParamsAndBody<PostsIdParams, PostsTypeInput>, res: Response) {
-        const updatedPost = await postsService.updatePost(
+        const updatedPost = await this.postsService.updatePost(
             req.params.id,
             req.body.title,
             req.body.shortDescription,
@@ -84,7 +88,7 @@ class PostsController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async deletePost(req: RequestWithParams<PostsIdParams>, res: Response) {
-        const deletedPost = await postsService.deletePost(req.params.id)
+        const deletedPost = await this.postsService.deletePost(req.params.id)
 
         if (!deletedPost) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

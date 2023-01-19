@@ -1,11 +1,15 @@
 import { Request, Response } from 'express'
 import { checkAuthorizationAndGetPayload } from './helper'
 import { HTTP_STATUSES } from '../constats/status'
-import { sessionsService } from '../domain/sessions-service'
+import {SessionsService} from '../domain/sessions-service'
 import { RequestWithParams } from '../models/types'
 import { DeviceIdParams } from '../models/auth-models'
 
 class SecurityController {
+    sessionsService: SessionsService
+    constructor() {
+        this.sessionsService = new SessionsService()
+    }
     async getAllActiveSession(req: Request, res: Response) {
         const gotRefreshToken = req.cookies.refreshToken
 
@@ -16,7 +20,7 @@ class SecurityController {
             return
         }
 
-        const allSession = await sessionsService.findAllActiveSession(payload.userId)
+        const allSession = await this.sessionsService.findAllActiveSession(payload.userId)
         res.json(allSession)
     }
     async deleteAllSessionWithoutCurrent(req: Request, res: Response) {
@@ -28,7 +32,7 @@ class SecurityController {
             res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
             return
         }
-        await sessionsService.deleteActiveSessionWithoutCurrent(payload.userId, payload.iat)
+        await this.sessionsService.deleteActiveSessionWithoutCurrent(payload.userId, payload.iat)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async deleteSessionById(req: RequestWithParams<DeviceIdParams>, res: Response) {
@@ -41,7 +45,7 @@ class SecurityController {
             return
         }
 
-        const deletedDevice = await sessionsService.deleteSessionByDeviceId(req.params.id, payload.userId)
+        const deletedDevice = await this.sessionsService.deleteSessionByDeviceId(req.params.id, payload.userId)
         if (deletedDevice === HTTP_STATUSES.NOT_FOUND_404) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return

@@ -1,10 +1,14 @@
 import { Request, Response } from 'express'
-import { testService } from '../domain/test-service'
+import {TestService} from '../domain/test-service'
 import { HTTP_STATUSES } from '../constats/status'
 
 class TestController {
+    testService: TestService
+    constructor() {
+        this.testService = new TestService()
+    }
     async clearAllCollection(req: Request, res: Response) {
-        await testService.deleteAllDB()
+        await this.testService.deleteAllDB()
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }

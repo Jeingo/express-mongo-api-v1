@@ -2,7 +2,7 @@ import { PostsRepository } from '../repositories/posts-repository'
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
 
-class PostsService {
+export class PostsService {
     blogsRepository: BlogsRepository
     postsRepository: PostsRepository
     constructor() {
@@ -40,5 +40,3 @@ class PostsService {
         return await this.postsRepository.deletePost(id)
     }
 }
-
-export const postsService = new PostsService()

@@ -28,7 +28,13 @@ export class CommentsQueryRepository {
             content: comment.content,
             userId: comment.userId,
             userLogin: comment.userLogin,
-            createdAt: comment.createdAt
+            createdAt: comment.createdAt,
+            likesInfo: {
+                likesCount: comment.likesInfo.likesCount,
+                dislikesCount: comment.likesInfo.dislikesCount,
+                myStatus: comment.likesInfo.myStatus,
+
+            }
         }
     }
 }

@@ -12,7 +12,11 @@ export class CommentsService {
         if (!foundPost) {
             return null
         }
-        const createdComment = new CommentsTypeToDB(content, user.userId, user.login, new Date().toISOString(), postId)
+        const createdComment = new CommentsTypeToDB(content, user.userId, user.login, new Date().toISOString(), postId, {
+            likesCount: 0,
+            dislikesCount: 0,
+            myStatus: "None"
+        })
         return await this.commentsRepository.createComment(createdComment)
     }
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {

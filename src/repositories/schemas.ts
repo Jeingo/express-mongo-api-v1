@@ -44,7 +44,13 @@ export const CommentsSchema = new mongoose.Schema<CommentsTypeToDB>({
     userId: { type: String, required: true },
     userLogin: { type: String, required: true },
     createdAt: { type: String, required: true },
-    postId: { type: String, required: true }
+    postId: { type: String, required: true },
+    likesInfo: {
+        likesCount: {type: Number, required: true},
+        dislikesCount: {type: Number, required: true},
+        myStatus: {type: String, required: true}
+    }
+
 })
 
 export const SessionsSchema = new mongoose.Schema<SessionTypeToDB>({

@@ -9,9 +9,9 @@ import {
 import { Request, Response } from 'express'
 import { AuthService } from '../domain/auth-service'
 import { HTTP_STATUSES } from '../constats/status'
-import {JwtService} from '../application/jwt-service'
+import { JwtService } from '../application/jwt-service'
 import { v4 as uuidv4 } from 'uuid'
-import {SessionsService} from '../domain/sessions-service'
+import { SessionsService } from '../domain/sessions-service'
 import { settings } from '../settings/settings'
 import { checkAuthorizationAndGetPayload } from './helper'
 import { UsersTypeInput } from '../models/users-models'
@@ -19,7 +19,11 @@ import { UsersTypeInput } from '../models/users-models'
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
 export class AuthController {
-    constructor(protected jwtService: JwtService, protected authService: AuthService, protected sessionsService: SessionsService) {}
+    constructor(
+        protected jwtService: JwtService,
+        protected authService: AuthService,
+        protected sessionsService: SessionsService
+    ) {}
 
     async login(req: RequestWithBody<LoginTypeInput>, res: Response) {
         const user = await this.authService.checkCredentials(req.body.loginOrEmail, req.body.password)

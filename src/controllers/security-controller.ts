@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { checkAuthorizationAndGetPayload } from './helper'
 import { HTTP_STATUSES } from '../constats/status'
-import {SessionsService} from '../domain/sessions-service'
+import { SessionsService } from '../domain/sessions-service'
 import { RequestWithParams } from '../models/types'
 import { DeviceIdParams } from '../models/auth-models'
 

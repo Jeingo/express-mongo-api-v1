@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import { UsersRepository } from '../repositories/users-repository'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
-import {EmailManager} from '../managers/email-manager'
+import { EmailManager } from '../managers/email-manager'
 import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 
 export class AuthService {

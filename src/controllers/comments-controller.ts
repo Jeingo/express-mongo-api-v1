@@ -6,14 +6,17 @@ import {
     CommentsTypeOutput
 } from '../models/comments-models'
 import { Response } from 'express'
-import {CommentsService} from '../domain/comments-service'
+import { CommentsService } from '../domain/comments-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
-import {CommentsQueryRepository} from '../query-reositories/comments-query-repository'
+import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
 
 export class CommentsController {
-    constructor(protected commentsService: CommentsService, protected commentsQueryRepository: CommentsQueryRepository) {}
+    constructor(
+        protected commentsService: CommentsService,
+        protected commentsQueryRepository: CommentsQueryRepository
+    ) {}
 
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
         const foundComment = await this.commentsService.getCommentById(req.params.id)

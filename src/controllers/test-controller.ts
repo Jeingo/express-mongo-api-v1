@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import {TestService} from '../domain/test-service'
+import { TestService } from '../domain/test-service'
 import { HTTP_STATUSES } from '../constats/status'
 
 export class TestController {

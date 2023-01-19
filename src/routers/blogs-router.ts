@@ -3,7 +3,7 @@ import { idValidation, inputValidation, queryValidation } from '../middleware/in
 import { descriptionValidation, nameValidation, websiteUrlValidation } from '../middleware/input-blogs-vallidation'
 import { auth } from '../authorization/basic-auth'
 import { contentValidation, shortDescriptionValidation, titleValidation } from '../middleware/input-posts-validation'
-import {blogsController, postsController} from "../composition-root";
+import { blogsController, postsController } from '../composition-root'
 
 export const blogsRouter = Router({})
 

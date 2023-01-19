@@ -3,9 +3,9 @@ import { QueryBlogs } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
 import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-models'
-import {BlogsQueryRepository} from '../query-reositories/blogs-query-repository'
+import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import {BlogsService} from '../domain/blogs-service'
+import { BlogsService } from '../domain/blogs-service'
 
 export class BlogsController {
     constructor(protected blogsService: BlogsService, protected blogsQueryRepository: BlogsQueryRepository) {}

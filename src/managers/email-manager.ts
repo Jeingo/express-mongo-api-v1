@@ -1,5 +1,5 @@
 import { UsersTypeToDB } from '../models/users-models'
-import {EmailAdapter} from '../adapters/email-adapter'
+import { EmailAdapter } from '../adapters/email-adapter'
 
 export class EmailManager {
     constructor(protected emailAdapter: EmailAdapter) {}

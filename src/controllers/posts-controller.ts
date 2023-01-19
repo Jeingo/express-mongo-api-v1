@@ -9,9 +9,9 @@ import { QueryBlogs, QueryPosts } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
 import { PostsIdParams, PostsTypeInput, PostsTypeInputInBlog, PostsTypeOutput } from '../models/posts-models'
-import {PostsQueryRepository} from '../query-reositories/posts-query-repository'
+import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import {PostsService} from '../domain/posts-service'
+import { PostsService } from '../domain/posts-service'
 
 export class PostsController {
     constructor(protected postsService: PostsService, protected postsQueryRepository: PostsQueryRepository) {}

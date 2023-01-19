@@ -3,12 +3,12 @@ import { QueryUsers } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
 import { UsersIdParams, UsersTypeInput, UsersTypeOutput } from '../models/users-models'
-import {UsersQueryRepository} from '../query-reositories/users-query-repository'
+import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import {UsersService} from '../domain/users-service'
+import { UsersService } from '../domain/users-service'
 
 export class UsersController {
-    constructor( protected usersService: UsersService, protected usersQueryRepository: UsersQueryRepository) {}
+    constructor(protected usersService: UsersService, protected usersQueryRepository: UsersQueryRepository) {}
 
     async getAllUsers(req: RequestWithQuery<QueryUsers>, res: Response<PaginatedType<UsersTypeOutput>>) {
         const allUsers = await this.usersQueryRepository.getAllUsers(req.query)

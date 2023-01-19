@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import {securityController} from "../composition-root";
+import { securityController } from '../composition-root'
 
 export const securityRouter = Router({})
 

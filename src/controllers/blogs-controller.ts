@@ -3,17 +3,19 @@ import { QueryBlogs } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
 import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-models'
-import { blogsQueryRepository } from '../query-reositories/blogs-query-repository'
+import {BlogsQueryRepository} from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import {BlogsService} from '../domain/blogs-service'
 
 class BlogsController {
     blogsService: BlogsService
+    blogsQueryRepository: BlogsQueryRepository
     constructor() {
         this.blogsService = new BlogsService()
+        this.blogsQueryRepository = new BlogsQueryRepository()
     }
     async getAllBlogs(req: RequestWithQuery<QueryBlogs>, res: Response<PaginatedType<BlogsTypeOutput>>) {
-        const allBlogs = await blogsQueryRepository.getAllBlogs(req.query)
+        const allBlogs = await this.blogsQueryRepository.getAllBlogs(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allBlogs)
     }
     async getBlogById(req: RequestWithParams<BlogsIdParams>, res: Response<BlogsTypeOutput>) {

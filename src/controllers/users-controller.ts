@@ -3,17 +3,19 @@ import { QueryUsers } from '../models/query-models'
 import { Response } from 'express'
 import { PaginatedType } from '../models/main-models'
 import { UsersIdParams, UsersTypeInput, UsersTypeOutput } from '../models/users-models'
-import { usersQueryRepository } from '../query-reositories/users-query-repository'
+import {UsersQueryRepository} from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import {UsersService} from '../domain/users-service'
 
 class UsersController {
     usersService: UsersService
+    usersQueryRepository: UsersQueryRepository
     constructor() {
         this.usersService = new UsersService()
+        this.usersQueryRepository = new UsersQueryRepository()
     }
     async getAllUsers(req: RequestWithQuery<QueryUsers>, res: Response<PaginatedType<UsersTypeOutput>>) {
-        const allUsers = await usersQueryRepository.getAllUsers(req.query)
+        const allUsers = await this.usersQueryRepository.getAllUsers(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allUsers)
     }
     async createUser(req: RequestWithBody<UsersTypeInput>, res: Response<UsersTypeOutput>) {

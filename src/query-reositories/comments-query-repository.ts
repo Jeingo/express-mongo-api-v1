@@ -5,7 +5,7 @@ import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 
-class CommentsQueryRepository {
+export class CommentsQueryRepository {
     async getCommentsById(id: string, query: QueryComments): Promise<PaginatedType<CommentsTypeOutput> | null> {
         const foundPosts = await PostsModel.findById(new ObjectId(id))
         if (!foundPosts) return null
@@ -32,5 +32,3 @@ class CommentsQueryRepository {
         }
     }
 }
-
-export const commentsQueryRepository = new CommentsQueryRepository()

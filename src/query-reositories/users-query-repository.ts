@@ -4,7 +4,7 @@ import { UsersTypeOutput } from '../models/users-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { UsersModel } from '../repositories/db'
 
-class UsersQueryRepository {
+export class UsersQueryRepository {
     async getAllUsers(query: QueryUsers): Promise<PaginatedType<UsersTypeOutput>> {
         const {
             searchLoginTerm = null,
@@ -38,5 +38,3 @@ class UsersQueryRepository {
         }
     }
 }
-
-export const usersQueryRepository = new UsersQueryRepository()

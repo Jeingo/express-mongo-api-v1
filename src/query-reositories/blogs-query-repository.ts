@@ -4,7 +4,7 @@ import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 
-class BlogsQueryRepository {
+export class BlogsQueryRepository {
     async getAllBlogs(query: QueryBlogs): Promise<PaginatedType<BlogsTypeOutput>> {
         const {
             searchNameTerm = null,
@@ -36,5 +36,3 @@ class BlogsQueryRepository {
         }
     }
 }
-
-export const blogsQueryRepository = new BlogsQueryRepository()

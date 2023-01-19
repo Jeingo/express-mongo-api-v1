@@ -5,7 +5,7 @@ import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 
-class PostsQueryRepository {
+export class PostsQueryRepository {
     async getAllPost(query: QueryPosts): Promise<PaginatedType<PostsTypeOutput>> {
         const countAllDocuments = await PostsModel.countDocuments()
         const { sortBy = 'createdAt', sortDirection = 'desc', pageNumber = 1, pageSize = 10 } = query
@@ -45,5 +45,3 @@ class PostsQueryRepository {
         }
     }
 }
-
-export const postsQueryRepository = new PostsQueryRepository()

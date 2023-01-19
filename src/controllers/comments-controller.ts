@@ -10,12 +10,14 @@ import {CommentsService} from '../domain/comments-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
-import { commentsQueryRepository } from '../query-reositories/comments-query-repository'
+import {CommentsQueryRepository} from '../query-reositories/comments-query-repository'
 
 class CommentsController {
     commentsService: CommentsService
+    commentsQueryRepository: CommentsQueryRepository
     constructor() {
         this.commentsService = new CommentsService()
+        this.commentsQueryRepository = new CommentsQueryRepository()
     }
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
         const foundComment = await this.commentsService.getCommentById(req.params.id)
@@ -30,7 +32,7 @@ class CommentsController {
         req: RequestWithParamsAndQuery<CommentsIdParams, QueryComments>,
         res: Response<PaginatedType<CommentsTypeOutput | null>>
     ) {
-        const foundComments = await commentsQueryRepository.getCommentsById(req.params.id, req.query)
+        const foundComments = await this.commentsQueryRepository.getCommentsById(req.params.id, req.query)
 
         if (!foundComments) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

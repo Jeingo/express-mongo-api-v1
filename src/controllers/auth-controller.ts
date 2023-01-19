@@ -9,7 +9,7 @@ import {
 import { Request, Response } from 'express'
 import { AuthService } from '../domain/auth-service'
 import { HTTP_STATUSES } from '../constats/status'
-import { jwtService } from '../application/jwt-service'
+import {JwtService} from '../application/jwt-service'
 import { v4 as uuidv4 } from 'uuid'
 import {SessionsService} from '../domain/sessions-service'
 import { settings } from '../settings/settings'
@@ -19,11 +19,13 @@ import { UsersTypeInput } from '../models/users-models'
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
 class AuthController {
+    jwtService: JwtService
     authService: AuthService
     sessionsService: SessionsService
     constructor() {
         this.authService = new AuthService()
         this.sessionsService = new SessionsService()
+        this.jwtService = new JwtService()
     }
     async login(req: RequestWithBody<LoginTypeInput>, res: Response) {
         const user = await this.authService.checkCredentials(req.body.loginOrEmail, req.body.password)
@@ -35,9 +37,9 @@ class AuthController {
         }
         const deviceName = req.headers['user-agent'] || 'some device'
         const ipAddress = req.ip
-        const accessToken = jwtService.createJWT(user.id)
+        const accessToken = this.jwtService.createJWT(user.id)
         const deviceId = uuidv4()
-        const refreshToken = jwtService.createRefreshJWT(user.id, deviceId)
+        const refreshToken = this.jwtService.createRefreshJWT(user.id, deviceId)
 
         await this.sessionsService.saveSession(refreshToken, ipAddress, deviceName!)
         res.cookie('refreshToken', refreshToken, {
@@ -56,8 +58,8 @@ class AuthController {
             return
         }
 
-        const accessToken = jwtService.createJWT(payload.userId)
-        const refreshToken = jwtService.createRefreshJWT(payload.userId, payload.deviceId)
+        const accessToken = this.jwtService.createJWT(payload.userId)
+        const refreshToken = this.jwtService.createRefreshJWT(payload.userId, payload.deviceId)
         await this.sessionsService.updateSession(refreshToken)
 
         res.cookie('refreshToken', refreshToken, {

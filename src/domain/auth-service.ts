@@ -2,13 +2,15 @@ import bcrypt from 'bcrypt'
 import { UsersRepository } from '../repositories/users-repository'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
-import { emailManager } from '../managers/email-manager'
+import {EmailManager} from '../managers/email-manager'
 import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 
 export class AuthService {
+    emailManager: EmailManager
     usersRepository: UsersRepository
     constructor() {
         this.usersRepository = new UsersRepository()
+        this.emailManager = new EmailManager()
     }
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
         const user = await this.usersRepository.findUserHashByLoginOrEmail(loginOrEmail)
@@ -43,7 +45,7 @@ export class AuthService {
             }
         )
         const result = await this.usersRepository.createUser(createdUser)
-        await emailManager.sendRegistrationEmailConfirmation(createdUser)
+        await this.emailManager.sendRegistrationEmailConfirmation(createdUser)
         return result
     }
     async confirmEmail(code: string): Promise<void> {
@@ -57,7 +59,7 @@ export class AuthService {
         const newConfirmationCode = v4()
         await this.usersRepository.updateConfirmationCode(user, newConfirmationCode)
         user.emailConfirmation.confirmationCode = newConfirmationCode
-        await emailManager.sendRegistrationEmailConfirmation(user)
+        await this.emailManager.sendRegistrationEmailConfirmation(user)
     }
     async recoveryPassword(email: string): Promise<null | void> {
         const user = await this.usersRepository.findUserByEmail(email)
@@ -67,7 +69,7 @@ export class AuthService {
         const newPasswordRecoveryConfirmationCode = v4()
         await this.usersRepository.updatePasswordRecoveryConfirmationCode(user, newPasswordRecoveryConfirmationCode)
         user.passwordRecoveryConfirmation.passwordRecoveryCode = newPasswordRecoveryConfirmationCode
-        await emailManager.sendPasswordRecoveryEmailConfirmation(user)
+        await this.emailManager.sendPasswordRecoveryEmailConfirmation(user)
     }
     async setNewPassword(recoveryCode: string, newPassword: string): Promise<void> {
         const passwordSalt = await bcrypt.genSalt(10)

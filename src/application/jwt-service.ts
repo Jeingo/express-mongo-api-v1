@@ -3,7 +3,7 @@ import { settings } from '../settings/settings'
 import { ObjectId } from 'mongodb'
 import { Token, TokenPayloadType } from '../models/token-models'
 
-class JwtService {
+export class JwtService {
     createJWT(userId: string): Token {
         return jwt.sign({ userId: userId }, settings.JWT_SECRET, {
             expiresIn: settings.EXPIRE_JWT
@@ -30,5 +30,3 @@ class JwtService {
         }
     }
 }
-
-export const jwtService = new JwtService()

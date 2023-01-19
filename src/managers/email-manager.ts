@@ -1,7 +1,11 @@
 import { UsersTypeToDB } from '../models/users-models'
-import { emailAdapter } from '../adapters/email-adapter'
+import {EmailAdapter} from '../adapters/email-adapter'
 
-class EmailManager {
+export class EmailManager {
+    emailAdapter: EmailAdapter
+    constructor() {
+        this.emailAdapter = new EmailAdapter()
+    }
     async sendRegistrationEmailConfirmation(user: UsersTypeToDB): Promise<void> {
         const emailForm = {
             from: '"Backend-09" <backend.jeingo@gmail.com>',
@@ -9,7 +13,7 @@ class EmailManager {
             subject: 'Registration confirmation',
             html: this._registrationConfirmationMessage(user.emailConfirmation.confirmationCode)
         }
-        await emailAdapter.sendEmail(emailForm)
+        await this.emailAdapter.sendEmail(emailForm)
     }
     async sendPasswordRecoveryEmailConfirmation(user: UsersTypeToDB): Promise<void> {
         const emailForm = {
@@ -18,7 +22,7 @@ class EmailManager {
             subject: 'Password recovery confirmation',
             html: this._passwordRecoveryConfirmationMessage(user.passwordRecoveryConfirmation.passwordRecoveryCode)
         }
-        await emailAdapter.sendEmail(emailForm)
+        await this.emailAdapter.sendEmail(emailForm)
     }
     private _registrationConfirmationMessage(code: string): string {
         return `
@@ -37,5 +41,3 @@ class EmailManager {
            `
     }
 }
-
-export const emailManager = new EmailManager()

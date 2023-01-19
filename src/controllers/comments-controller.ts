@@ -1,4 +1,8 @@
-import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery} from '../models/types'
+import {
+    RequestWithParams,
+    RequestWithParamsAndBody,
+    RequestWithParamsAndQuery
+} from '../models/types'
 import {
     CommentsIdParams,
     CommentsTypeInput,
@@ -11,7 +15,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
-import {LikesType} from "../models/likes-models";
+import { LikesType } from '../models/likes-models'
 
 export class CommentsController {
     constructor(
@@ -92,5 +96,4 @@ export class CommentsController {
         }
         res.json(HTTP_STATUSES.NO_CONTENT_204)
     }
-
 }

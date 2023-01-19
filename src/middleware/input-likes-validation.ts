@@ -1,10 +1,10 @@
-import {body} from "express-validator";
+import { body } from 'express-validator'
 
-const availableStatus = ["None", "Like", "Dislike"]
+const availableStatus = ['None', 'Like', 'Dislike']
 
 const isLike = async (status: string): Promise<true> => {
     if (availableStatus.indexOf(status) === -1) {
-        throw new Error("Incorrect like status")
+        throw new Error('Incorrect like status')
     }
     return true
 }

@@ -1,6 +1,7 @@
 import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
 import { CommentsModel } from './db'
 import { ObjectId } from 'mongodb'
+import { LikesInfoType } from '../models/likes-models'
 
 export class CommentsRepository {
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
@@ -17,14 +18,15 @@ export class CommentsRepository {
         return !!result
     }
     async updateLikeInComment(comment: CommentsTypeOutput, status: string): Promise<boolean> {
-        const currentLike = {
-            likesInfo: {
+        const newLike = this._getUpdatedLike(
+            {
                 likesCount: comment.likesInfo.likesCount,
                 dislikesCount: comment.likesInfo.dislikesCount,
                 myStatus: comment.likesInfo.myStatus
-            }
-        }
-        const  result = await CommentsModel.findByIdAndUpdate(new ObjectId(comment.id), currentLike)
+            },
+            status
+        )
+        const result = await CommentsModel.findByIdAndUpdate(new ObjectId(comment.id), { likesInfo: newLike })
         return !!result
     }
     async deleteComment(id: string): Promise<boolean> {
@@ -45,18 +47,35 @@ export class CommentsRepository {
             }
         }
     }
-    // private _getUpdatedLike(obj: any) {
-    //     switch (obj.myStatus) {
-    //         case "None":
-    //             return obj
-    //         case "Like":
-    //             return {
-    //                 likesInfo: {
-    //                     likesCount: obj.likesInfo.likesCount,
-    //                     dislikesCount: obj.likesInfo.dislikesCount,
-    //                     myStatus: obj.likesInfo.myStatus
-    //                 }
-    //             }
-    //     }
-    // }
+    private _getUpdatedLike(currentLike: LikesInfoType, status: string) {
+        if (status === 'None' && currentLike.myStatus === 'Like') {
+            return { ...currentLike, likesCount: --currentLike.likesCount, myStatus: status }
+        }
+        if (status === 'None' && currentLike.myStatus === 'Dislike') {
+            return { ...currentLike, dislikesCount: --currentLike.dislikesCount, myStatus: status }
+        }
+        if (status === 'Like' && currentLike.myStatus === 'None') {
+            return { ...currentLike, likesCount: ++currentLike.likesCount, myStatus: status }
+        }
+        if (status === 'Like' && currentLike.myStatus === 'Dislike') {
+            return {
+                ...currentLike,
+                likesCount: ++currentLike.likesCount,
+                dislikesCount: --currentLike.dislikesCount,
+                myStatus: status
+            }
+        }
+        if (status === 'Dislike' && currentLike.myStatus === 'None') {
+            return { ...currentLike, dislikesCount: ++currentLike.dislikesCount, myStatus: status }
+        }
+        if (status === 'Dislike' && currentLike.myStatus === 'Like') {
+            return {
+                ...currentLike,
+                likesCount: --currentLike.likesCount,
+                dislikesCount: ++currentLike.dislikesCount,
+                myStatus: status
+            }
+        }
+        return currentLike
+    }
 }

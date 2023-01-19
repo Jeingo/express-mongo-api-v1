@@ -1,8 +1,8 @@
-import {CommentsTypeOutput, CommentsTypeToDB} from '../models/comments-models'
-import {PostsRepository} from '../repositories/posts-repository'
-import {LoginTypeForAuth} from '../models/auth-models'
-import {HTTP_STATUSES} from '../constats/status'
-import {CommentsRepository} from '../repositories/comments-repository'
+import { CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
+import { PostsRepository } from '../repositories/posts-repository'
+import { LoginTypeForAuth } from '../models/auth-models'
+import { HTTP_STATUSES } from '../constats/status'
+import { CommentsRepository } from '../repositories/comments-repository'
 
 export class CommentsService {
     constructor(protected commentsRepository: CommentsRepository, protected postsRepository: PostsRepository) {}
@@ -12,11 +12,18 @@ export class CommentsService {
         if (!foundPost) {
             return null
         }
-        const createdComment = new CommentsTypeToDB(content, user.userId, user.login, new Date().toISOString(), postId, {
-            likesCount: 0,
-            dislikesCount: 0,
-            myStatus: "None"
-        })
+        const createdComment = new CommentsTypeToDB(
+            content,
+            user.userId,
+            user.login,
+            new Date().toISOString(),
+            postId,
+            {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
+        )
         return await this.commentsRepository.createComment(createdComment)
     }
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
@@ -50,7 +57,7 @@ export class CommentsService {
     }
     async updateStatusLike(commentId: string, status: string): Promise<boolean> {
         const comment = await this.commentsRepository.getCommentById(commentId)
-        if(!comment) return false
+        if (!comment) return false
         return await this.commentsRepository.updateLikeInComment(comment, status)
     }
 }

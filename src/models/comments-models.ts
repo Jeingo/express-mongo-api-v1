@@ -5,9 +5,9 @@ export type CommentsTypeOutput = {
     userLogin: string
     createdAt: string
     likesInfo: {
-        likesCount: number,
-        dislikesCount: number,
-        myStatus: "None" | "Like" | "Dislike"
+        likesCount: number
+        dislikesCount: number
+        myStatus: 'None' | 'Like' | 'Dislike'
     }
 }
 
@@ -23,16 +23,14 @@ export class CommentsTypeToDB {
         public createdAt: string,
         public postId: string,
         public likesInfo: {
-            likesCount: number,
-            dislikesCount: number,
-            myStatus: "None" | "Like" | "Dislike"
+            likesCount: number
+            dislikesCount: number
+            myStatus: 'None' | 'Like' | 'Dislike'
         }
-    )
-    {
+    ) {
         this.likesInfo.likesCount = likesInfo.likesCount
         this.likesInfo.dislikesCount = likesInfo.dislikesCount
         this.likesInfo.myStatus = likesInfo.myStatus
-
     }
 }
 

@@ -1,8 +1,8 @@
 import { CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
-import {PostsRepository} from '../repositories/posts-repository'
+import { PostsRepository } from '../repositories/posts-repository'
 import { LoginTypeForAuth } from '../models/auth-models'
 import { HTTP_STATUSES } from '../constats/status'
-import {CommentsRepository} from "../repositories/comments-repository";
+import { CommentsRepository } from '../repositories/comments-repository'
 
 class CommentsService {
     commentsRepository: CommentsRepository

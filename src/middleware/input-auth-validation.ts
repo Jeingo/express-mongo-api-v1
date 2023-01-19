@@ -1,5 +1,5 @@
 import { body } from 'express-validator'
-import {UsersRepository} from '../repositories/users-repository'
+import { UsersRepository } from '../repositories/users-repository'
 
 const patternLogin = /^[a-zA-Z0-9_-]*$/
 const patternEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/

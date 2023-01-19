@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { TokenPayloadType } from '../models/token-models'
-import {SessionsRepository} from '../repositories/sessions-repository'
+import { SessionsRepository } from '../repositories/sessions-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { HttpTypes } from '../models/status-models'

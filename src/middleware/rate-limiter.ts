@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import {RateLimiterRepository} from '../repositories/rate-limiter-repository'
+import { RateLimiterRepository } from '../repositories/rate-limiter-repository'
 import { HTTP_STATUSES } from '../constats/status'
 
 const maxRequest = 5

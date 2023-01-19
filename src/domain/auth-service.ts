@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import {UsersRepository} from '../repositories/users-repository'
+import { UsersRepository } from '../repositories/users-repository'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
 import { emailManager } from '../managers/email-manager'

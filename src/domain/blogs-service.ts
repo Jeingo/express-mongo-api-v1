@@ -1,4 +1,4 @@
-import {BlogsRepository} from '../repositories/blogs-repository'
+import { BlogsRepository } from '../repositories/blogs-repository'
 import { BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
 
 class BlogsService {

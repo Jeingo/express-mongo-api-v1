@@ -1,4 +1,4 @@
-import {UsersRepository} from '../repositories/users-repository'
+import { UsersRepository } from '../repositories/users-repository'
 import { UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 import bcrypt from 'bcrypt'
 import { ObjectId } from 'mongodb'

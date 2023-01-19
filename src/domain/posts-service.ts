@@ -1,5 +1,5 @@
-import {PostsRepository} from '../repositories/posts-repository'
-import {BlogsRepository} from '../repositories/blogs-repository'
+import { PostsRepository } from '../repositories/posts-repository'
+import { BlogsRepository } from '../repositories/blogs-repository'
 import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
 
 class PostsService {

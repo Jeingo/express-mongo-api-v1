@@ -1,4 +1,4 @@
-import {TestRepository} from '../repositories/test-repository'
+import { TestRepository } from '../repositories/test-repository'
 
 class TestService {
     testRepository: TestRepository

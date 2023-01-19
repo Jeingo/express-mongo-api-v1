@@ -1,4 +1,4 @@
-import { RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery } from '../models/types'
+import {RequestWithBody, RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery} from '../models/types'
 import {
     CommentsIdParams,
     CommentsTypeInput,
@@ -11,6 +11,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
+import {LikesType} from "../models/likes-models";
 
 export class CommentsController {
     constructor(
@@ -83,4 +84,13 @@ export class CommentsController {
 
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
+    async updateStatusLike(req: RequestWithParamsAndBody<CommentsIdParams, LikesType>, res: Response) {
+        const updatedCommentLike = await this.commentsService.updateStatusLike(req.params.id, req.body.likeStatus)
+        if (!updatedCommentLike) {
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
+            return
+        }
+        res.json(HTTP_STATUSES.NO_CONTENT_204)
+    }
+
 }

@@ -26,7 +26,6 @@ import { PostsController } from './controllers/posts-controller'
 import { SecurityController } from './controllers/security-controller'
 import { TestController } from './controllers/test-controller'
 import { UsersController } from './controllers/users-controller'
-import {LikesController} from "./controllers/likes-controller";
 
 const blogsRepository = new BlogsRepository()
 const commentsRepository = new CommentsRepository()
@@ -60,4 +59,3 @@ export const postsController = new PostsController(postsService, postsQueryRepos
 export const securityController = new SecurityController(sessionsService)
 export const testController = new TestController(testService)
 export const usersController = new UsersController(usersService, usersQueryRepository)
-export const likesController = new LikesController()

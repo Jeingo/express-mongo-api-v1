@@ -1,8 +1,8 @@
-import { CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
-import { PostsRepository } from '../repositories/posts-repository'
-import { LoginTypeForAuth } from '../models/auth-models'
-import { HTTP_STATUSES } from '../constats/status'
-import { CommentsRepository } from '../repositories/comments-repository'
+import {CommentsTypeOutput, CommentsTypeToDB} from '../models/comments-models'
+import {PostsRepository} from '../repositories/posts-repository'
+import {LoginTypeForAuth} from '../models/auth-models'
+import {HTTP_STATUSES} from '../constats/status'
+import {CommentsRepository} from '../repositories/comments-repository'
 
 export class CommentsService {
     constructor(protected commentsRepository: CommentsRepository, protected postsRepository: PostsRepository) {}
@@ -47,5 +47,10 @@ export class CommentsService {
         }
 
         return await this.commentsRepository.deleteComment(id)
+    }
+    async updateStatusLike(commentId: string, status: string): Promise<boolean> {
+        const comment = await this.commentsRepository.getCommentById(commentId)
+        if(!comment) return false
+        return await this.commentsRepository.updateLikeInComment(comment, status)
     }
 }

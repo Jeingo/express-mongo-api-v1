@@ -16,6 +16,17 @@ export class CommentsRepository {
         const result = await CommentsModel.findByIdAndUpdate(new ObjectId(id), updatedComment)
         return !!result
     }
+    async updateLikeInComment(comment: CommentsTypeOutput, status: string): Promise<boolean> {
+        const currentLike = {
+            likesInfo: {
+                likesCount: comment.likesInfo.likesCount,
+                dislikesCount: comment.likesInfo.dislikesCount,
+                myStatus: comment.likesInfo.myStatus
+            }
+        }
+        const  result = await CommentsModel.findByIdAndUpdate(new ObjectId(comment.id), currentLike)
+        return !!result
+    }
     async deleteComment(id: string): Promise<boolean> {
         const result = await CommentsModel.findByIdAndDelete(new ObjectId(id))
         return !!result
@@ -34,4 +45,18 @@ export class CommentsRepository {
             }
         }
     }
+    // private _getUpdatedLike(obj: any) {
+    //     switch (obj.myStatus) {
+    //         case "None":
+    //             return obj
+    //         case "Like":
+    //             return {
+    //                 likesInfo: {
+    //                     likesCount: obj.likesInfo.likesCount,
+    //                     dislikesCount: obj.likesInfo.dislikesCount,
+    //                     myStatus: obj.likesInfo.myStatus
+    //                 }
+    //             }
+    //     }
+    // }
 }

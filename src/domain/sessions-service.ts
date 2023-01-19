@@ -7,10 +7,8 @@ import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { HttpTypes } from '../models/status-models'
 
 export class SessionsService {
-    sessionsRepository: SessionsRepository
-    constructor() {
-        this.sessionsRepository = new SessionsRepository()
-    }
+    constructor(protected sessionsRepository: SessionsRepository) {}
+
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
         return await this.sessionsRepository.findAllActiveSession(userId)
     }

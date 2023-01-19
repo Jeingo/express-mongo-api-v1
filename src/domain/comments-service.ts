@@ -5,12 +5,8 @@ import { HTTP_STATUSES } from '../constats/status'
 import { CommentsRepository } from '../repositories/comments-repository'
 
 export class CommentsService {
-    commentsRepository: CommentsRepository
-    postsRepository: PostsRepository
-    constructor() {
-        this.commentsRepository = new CommentsRepository()
-        this.postsRepository = new PostsRepository()
-    }
+    constructor(protected commentsRepository: CommentsRepository, protected postsRepository: PostsRepository) {}
+
     async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentsTypeOutput | null> {
         const foundPost = await this.postsRepository.getPostById(postId)
         if (!foundPost) {

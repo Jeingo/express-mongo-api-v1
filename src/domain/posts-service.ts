@@ -3,12 +3,8 @@ import { BlogsRepository } from '../repositories/blogs-repository'
 import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
 
 export class PostsService {
-    blogsRepository: BlogsRepository
-    postsRepository: PostsRepository
-    constructor() {
-        this.blogsRepository = new BlogsRepository()
-        this.postsRepository = new PostsRepository()
-    }
+    constructor( protected blogsRepository: BlogsRepository, protected postsRepository: PostsRepository) {}
+
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
         return await this.postsRepository.getPostById(id)
     }

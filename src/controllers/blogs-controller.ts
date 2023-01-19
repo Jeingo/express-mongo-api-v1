@@ -7,13 +7,9 @@ import {BlogsQueryRepository} from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import {BlogsService} from '../domain/blogs-service'
 
-class BlogsController {
-    blogsService: BlogsService
-    blogsQueryRepository: BlogsQueryRepository
-    constructor() {
-        this.blogsService = new BlogsService()
-        this.blogsQueryRepository = new BlogsQueryRepository()
-    }
+export class BlogsController {
+    constructor(protected blogsService: BlogsService, protected blogsQueryRepository: BlogsQueryRepository) {}
+
     async getAllBlogs(req: RequestWithQuery<QueryBlogs>, res: Response<PaginatedType<BlogsTypeOutput>>) {
         const allBlogs = await this.blogsQueryRepository.getAllBlogs(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allBlogs)
@@ -57,5 +53,3 @@ class BlogsController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }
-
-export const blogsController = new BlogsController()

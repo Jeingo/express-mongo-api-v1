@@ -12,13 +12,9 @@ import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import {CommentsQueryRepository} from '../query-reositories/comments-query-repository'
 
-class CommentsController {
-    commentsService: CommentsService
-    commentsQueryRepository: CommentsQueryRepository
-    constructor() {
-        this.commentsService = new CommentsService()
-        this.commentsQueryRepository = new CommentsQueryRepository()
-    }
+export class CommentsController {
+    constructor(protected commentsService: CommentsService, protected commentsQueryRepository: CommentsQueryRepository) {}
+
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
         const foundComment = await this.commentsService.getCommentById(req.params.id)
 
@@ -85,5 +81,3 @@ class CommentsController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }
-
-export const commentsController = new CommentsController()

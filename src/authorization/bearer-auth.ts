@@ -1,11 +1,9 @@
 import { NextFunction, Response, Request } from 'express'
 import { HTTP_STATUSES } from '../constats/status'
-import {JwtService} from '../application/jwt-service'
-import {UsersService} from '../domain/users-service'
+import {jwtService, usersService} from "../composition-root";
+
 
 export const bearerAuth = async (req: Request, res: Response, next: NextFunction) => {
-    const jwtService = new JwtService()
-    const usersService = new UsersService()
     if (!req.headers.authorization) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return

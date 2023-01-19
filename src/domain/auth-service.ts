@@ -6,12 +6,8 @@ import {EmailManager} from '../managers/email-manager'
 import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 
 export class AuthService {
-    emailManager: EmailManager
-    usersRepository: UsersRepository
-    constructor() {
-        this.usersRepository = new UsersRepository()
-        this.emailManager = new EmailManager()
-    }
+    constructor(protected emailManager: EmailManager, protected usersRepository: UsersRepository) {}
+
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
         const user = await this.usersRepository.findUserHashByLoginOrEmail(loginOrEmail)
         if (!user) return false

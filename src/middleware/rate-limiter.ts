@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
-import { RateLimiterRepository } from '../repositories/rate-limiter-repository'
 import { HTTP_STATUSES } from '../constats/status'
+import {rateLimiterRepository} from "../composition-root";
 
 const maxRequest = 5
 const timeInterval = 10000 // 10s
 
 export const rateLimiterMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    const rateLimiterRepository = new RateLimiterRepository()
     const currentEndpoint = req.originalUrl
     const currentDate = Date.now()
     const currentIp = req.ip

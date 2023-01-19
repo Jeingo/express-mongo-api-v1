@@ -9,8 +9,7 @@ import {
 import { auth } from '../authorization/basic-auth'
 import { bearerAuth } from '../authorization/bearer-auth'
 import { contentInCommentValidation } from '../middleware/input-comments-validation'
-import { postsController } from '../controllers/posts-controller'
-import { commentsController } from '../controllers/comments-controller'
+import {commentsController, postsController} from "../composition-root";
 
 export const postsRouter = Router({})
 

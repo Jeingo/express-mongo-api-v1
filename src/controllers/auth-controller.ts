@@ -18,15 +18,9 @@ import { UsersTypeInput } from '../models/users-models'
 
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
-class AuthController {
-    jwtService: JwtService
-    authService: AuthService
-    sessionsService: SessionsService
-    constructor() {
-        this.authService = new AuthService()
-        this.sessionsService = new SessionsService()
-        this.jwtService = new JwtService()
-    }
+export class AuthController {
+    constructor(protected jwtService: JwtService, protected authService: AuthService, protected sessionsService: SessionsService) {}
+
     async login(req: RequestWithBody<LoginTypeInput>, res: Response) {
         const user = await this.authService.checkCredentials(req.body.loginOrEmail, req.body.password)
 
@@ -106,5 +100,3 @@ class AuthController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }
-
-export const authController = new AuthController()

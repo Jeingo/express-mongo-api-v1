@@ -7,13 +7,9 @@ import {UsersQueryRepository} from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import {UsersService} from '../domain/users-service'
 
-class UsersController {
-    usersService: UsersService
-    usersQueryRepository: UsersQueryRepository
-    constructor() {
-        this.usersService = new UsersService()
-        this.usersQueryRepository = new UsersQueryRepository()
-    }
+export class UsersController {
+    constructor( protected usersService: UsersService, protected usersQueryRepository: UsersQueryRepository) {}
+
     async getAllUsers(req: RequestWithQuery<QueryUsers>, res: Response<PaginatedType<UsersTypeOutput>>) {
         const allUsers = await this.usersQueryRepository.getAllUsers(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allUsers)
@@ -33,5 +29,3 @@ class UsersController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }
-
-export const usersController = new UsersController()

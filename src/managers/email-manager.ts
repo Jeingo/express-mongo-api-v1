@@ -2,10 +2,8 @@ import { UsersTypeToDB } from '../models/users-models'
 import {EmailAdapter} from '../adapters/email-adapter'
 
 export class EmailManager {
-    emailAdapter: EmailAdapter
-    constructor() {
-        this.emailAdapter = new EmailAdapter()
-    }
+    constructor(protected emailAdapter: EmailAdapter) {}
+
     async sendRegistrationEmailConfirmation(user: UsersTypeToDB): Promise<void> {
         const emailForm = {
             from: '"Backend-09" <backend.jeingo@gmail.com>',

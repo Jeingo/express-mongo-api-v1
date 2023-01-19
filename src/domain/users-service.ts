@@ -7,10 +7,8 @@ import { v4 } from 'uuid'
 import add from 'date-fns/add'
 
 export class UsersService {
-    usersRepository: UsersRepository
-    constructor() {
-        this.usersRepository = new UsersRepository()
-    }
+    constructor(protected usersRepository: UsersRepository) {}
+
     async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
         return await this.usersRepository.findUserById(_id)
     }

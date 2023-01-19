@@ -15,7 +15,7 @@ import { inputValidation } from '../middleware/input-validation'
 
 import { bearerAuth } from '../authorization/bearer-auth'
 import { rateLimiterMiddleware } from '../middleware/rate-limiter'
-import { authController } from '../controllers/auth-controller'
+import {authController} from "../composition-root";
 
 export const authRouter = Router({})
 

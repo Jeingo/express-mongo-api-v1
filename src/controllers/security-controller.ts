@@ -5,11 +5,9 @@ import {SessionsService} from '../domain/sessions-service'
 import { RequestWithParams } from '../models/types'
 import { DeviceIdParams } from '../models/auth-models'
 
-class SecurityController {
-    sessionsService: SessionsService
-    constructor() {
-        this.sessionsService = new SessionsService()
-    }
+export class SecurityController {
+    constructor(protected sessionsService: SessionsService) {}
+
     async getAllActiveSession(req: Request, res: Response) {
         const gotRefreshToken = req.cookies.refreshToken
 
@@ -59,5 +57,3 @@ class SecurityController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }
-
-export const securityController = new SecurityController()

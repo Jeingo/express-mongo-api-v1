@@ -13,13 +13,9 @@ import {PostsQueryRepository} from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import {PostsService} from '../domain/posts-service'
 
-class PostsController {
-    postsService: PostsService
-    postsQueryRepository: PostsQueryRepository
-    constructor() {
-        this.postsService = new PostsService()
-        this.postsQueryRepository = new PostsQueryRepository()
-    }
+export class PostsController {
+    constructor(protected postsService: PostsService, protected postsQueryRepository: PostsQueryRepository) {}
+
     async getAllPosts(req: RequestWithQuery<QueryPosts>, res: Response<PaginatedType<PostsTypeOutput>>) {
         const allPosts = await this.postsQueryRepository.getAllPost(req.query)
         res.status(HTTP_STATUSES.OK_200).json(allPosts)
@@ -100,5 +96,3 @@ class PostsController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }
-
-export const postsController = new PostsController()

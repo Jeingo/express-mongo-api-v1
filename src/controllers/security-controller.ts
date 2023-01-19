@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { checkAuthorizationAndGetPayload } from '../routers/helper'
+import { checkAuthorizationAndGetPayload } from './helper'
 import { HTTP_STATUSES } from '../constats/status'
 import { sessionsService } from '../domain/sessions-service'
 import { RequestWithParams } from '../models/types'

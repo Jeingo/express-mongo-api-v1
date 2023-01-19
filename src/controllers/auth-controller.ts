@@ -7,20 +7,24 @@ import {
     RegistrationResendType
 } from '../models/auth-models'
 import { Request, Response } from 'express'
-import { authService } from '../domain/auth-service'
+import {AuthService} from '../domain/auth-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { jwtService } from '../application/jwt-service'
 import { v4 as uuidv4 } from 'uuid'
 import { sessionsService } from '../domain/sessions-service'
 import { settings } from '../settings/settings'
-import { checkAuthorizationAndGetPayload } from '../routers/helper'
+import { checkAuthorizationAndGetPayload } from './helper'
 import { UsersTypeInput } from '../models/users-models'
 
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
 class AuthController {
+    authService: AuthService
+    constructor() {
+        this.authService = new AuthService()
+    }
     async login(req: RequestWithBody<LoginTypeInput>, res: Response) {
-        const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
+        const user = await this.authService.checkCredentials(req.body.loginOrEmail, req.body.password)
 
         if (!user) {
             res.clearCookie('refreshToken')
@@ -78,26 +82,26 @@ class AuthController {
         res.status(HTTP_STATUSES.OK_200).json(req.user)
     }
     async registration(req: RequestWithBody<UsersTypeInput>, res: Response) {
-        await authService.registerUser(req.body.login, req.body.password, req.body.email)
+        await this.authService.registerUser(req.body.login, req.body.password, req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async registrationConfirmation(
         req: RequestWithBody<RegistrationConfirmationType>,
         res: Response
     ) {
-        await authService.confirmEmail(req.body.code)
+        await this.authService.confirmEmail(req.body.code)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async registrationEmailResending(req: RequestWithBody<RegistrationResendType>, res: Response) {
-        await authService.resendEmail(req.body.email)
+        await this.authService.resendEmail(req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async passwordRecovery(req: RequestWithBody<PasswordRecoveryType>, res: Response) {
-        await authService.recoveryPassword(req.body.email)
+        await this.authService.recoveryPassword(req.body.email)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async newPassword(req: RequestWithBody<NewPasswordType>, res: Response) {
-        await authService.setNewPassword(req.body.recoveryCode, req.body.newPassword)
+        await this.authService.setNewPassword(req.body.recoveryCode, req.body.newPassword)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 }

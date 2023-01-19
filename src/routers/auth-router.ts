@@ -25,14 +25,14 @@ authRouter.post(
     loginOrEmailValidation,
     passwordFromAuthValidation,
     inputValidation,
-    authController.login
+    authController.login.bind(authController)
 )
 
-authRouter.post('/refresh-token', authController.refreshToken)
+authRouter.post('/refresh-token', authController.refreshToken.bind(authController))
 
-authRouter.post('/logout', authController.logout)
+authRouter.post('/logout', authController.logout.bind(authController))
 
-authRouter.get('/me', bearerAuth, authController.me)
+authRouter.get('/me', bearerAuth, authController.me.bind(authController))
 
 authRouter.post(
     '/registration',
@@ -41,7 +41,7 @@ authRouter.post(
     passwordRegistrationValidation,
     emailRegistrationValidation,
     inputValidation,
-    authController.registration
+    authController.registration.bind(authController)
 )
 
 authRouter.post(
@@ -49,7 +49,7 @@ authRouter.post(
     rateLimiterMiddleware,
     codeValidation,
     inputValidation,
-    authController.registrationConfirmation
+    authController.registrationConfirmation.bind(authController)
 )
 
 authRouter.post(
@@ -57,7 +57,7 @@ authRouter.post(
     rateLimiterMiddleware,
     emailResendValidation,
     inputValidation,
-    authController.registrationEmailResending
+    authController.registrationEmailResending.bind(authController)
 )
 
 authRouter.post(
@@ -65,7 +65,7 @@ authRouter.post(
     rateLimiterMiddleware,
     emailPasswordRecoveryValidation,
     inputValidation,
-    authController.passwordRecovery
+    authController.passwordRecovery.bind(authController)
 )
 
 authRouter.post(
@@ -74,5 +74,5 @@ authRouter.post(
     codePasswordRecoveryValidation,
     passwordRecoveryValidation,
     inputValidation,
-    authController.newPassword
+    authController.newPassword.bind(authController)
 )

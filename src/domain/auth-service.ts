@@ -5,7 +5,7 @@ import add from 'date-fns/add'
 import { emailManager } from '../managers/email-manager'
 import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 
-class AuthService {
+export class AuthService {
     usersRepository: UsersRepository
     constructor() {
         this.usersRepository = new UsersRepository()
@@ -78,5 +78,3 @@ class AuthService {
         await this.usersRepository.updatePassword(recoveryCode, passwordHash)
     }
 }
-
-export const authService = new AuthService()

@@ -31,8 +31,15 @@ export class CommentsService {
         )
         return await this.commentsRepository.createComment(createdComment)
     }
-    async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
-        return await this.commentsRepository.getCommentById(id)
+    async getCommentById(id: string, userId?: string): Promise<CommentsTypeOutput | null> {
+        const comment =  await this.commentsRepository.getCommentById(id)
+        if(userId && comment) {
+            const like = await this.likesRepository.getLike(userId, comment.id)
+            if(like) {
+                comment.likesInfo.myStatus = like.myStatus
+            }
+        }
+        return comment
     }
     async updateComment(id: string, content: string, user: LoginTypeForAuth): Promise<boolean | number> {
         const comment = await this.commentsRepository.getCommentById(id)

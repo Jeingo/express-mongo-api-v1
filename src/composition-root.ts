@@ -38,7 +38,7 @@ const likesRepository = new LikesRepository()
 export const rateLimiterRepository = new RateLimiterRepository()
 
 const blogsQueryRepository = new BlogsQueryRepository()
-const commentsQueryRepository = new CommentsQueryRepository()
+const commentsQueryRepository = new CommentsQueryRepository(likesRepository)
 const postsQueryRepository = new PostsQueryRepository()
 const usersQueryRepository = new UsersQueryRepository()
 

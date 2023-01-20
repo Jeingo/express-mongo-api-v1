@@ -20,7 +20,7 @@ export class CommentsController {
     ) {}
 
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
-        const foundComment = await this.commentsService.getCommentById(req.params.id)
+        const foundComment = await this.commentsService.getCommentById(req.params.id, req.user?.userId)
 
         if (!foundComment) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -32,7 +32,7 @@ export class CommentsController {
         req: RequestWithParamsAndQuery<CommentsIdParams, QueryComments>,
         res: Response<PaginatedType<CommentsTypeOutput | null>>
     ) {
-        const foundComments = await this.commentsQueryRepository.getCommentsById(req.params.id, req.query)
+        const foundComments = await this.commentsQueryRepository.getCommentsById(req.params.id, req.query, req.user?.userId)
 
         if (!foundComments) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

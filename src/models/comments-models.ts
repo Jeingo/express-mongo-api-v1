@@ -1,3 +1,5 @@
+import {StatusLikeType} from "./likes-models";
+
 export type CommentsTypeOutput = {
     id: string
     content: string
@@ -7,7 +9,7 @@ export type CommentsTypeOutput = {
     likesInfo: {
         likesCount: number
         dislikesCount: number
-        myStatus: string
+        myStatus: StatusLikeType
     }
 }
 

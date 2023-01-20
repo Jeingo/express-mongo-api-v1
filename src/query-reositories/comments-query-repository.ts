@@ -4,9 +4,12 @@ import { CommentsTypeOutput } from '../models/comments-models'
 import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
+import {LikesRepository} from "../repositories/likes-repository";
 
 export class CommentsQueryRepository {
-    async getCommentsById(id: string, query: QueryComments): Promise<PaginatedType<CommentsTypeOutput> | null> {
+    constructor(protected likesRepository: LikesRepository) {}
+
+    async getCommentsById(id: string, query: QueryComments, userId?: string): Promise<PaginatedType<CommentsTypeOutput> | null> {
         const foundPosts = await PostsModel.findById(new ObjectId(id))
         if (!foundPosts) return null
         const countAllDocuments = await CommentsModel.countDocuments({
@@ -20,7 +23,9 @@ export class CommentsQueryRepository {
             .skip(skipNumber)
             .limit(+pageSize)
 
-        return getPaginatedType(res.map(this._getOutputComment), +pageSize, +pageNumber, countAllDocuments)
+        const mappedComments = res.map(this._getOutputComment)
+        const mappedCommentsWithStatusLike = await this._setStatusLike(mappedComments, userId!)
+        return getPaginatedType(mappedCommentsWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
     }
     private _getOutputComment(comment: any): CommentsTypeOutput {
         return {
@@ -36,4 +41,16 @@ export class CommentsQueryRepository {
             }
         }
     }
+    private async _setStatusLike ( comments: Array<CommentsTypeOutput>, userId: string) {
+        if(!userId) return comments
+        for(let i= 0; i < comments.length; i++) {
+            const like = await this.likesRepository.getLike(userId, comments[i].id)
+            if(like) {
+                comments[i].likesInfo.myStatus = like.myStatus
+            }
+        }
+        return comments
+    }
 }
+
+

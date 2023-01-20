@@ -1,7 +1,7 @@
 import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
 import { CommentsModel } from './db'
 import { ObjectId } from 'mongodb'
-import {LikesInfoType, StatusLikeType} from '../models/likes-models'
+import { LikesInfoType, StatusLikeType } from '../models/likes-models'
 
 export class CommentsRepository {
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
@@ -17,11 +17,15 @@ export class CommentsRepository {
         const result = await CommentsModel.findByIdAndUpdate(new ObjectId(id), updatedComment)
         return !!result
     }
-    async updateLikeInComment(comment: CommentsTypeOutput, lastStatus: StatusLikeType, newStatus: StatusLikeType): Promise<boolean> {
+    async updateLikeInComment(
+        comment: CommentsTypeOutput,
+        lastStatus: StatusLikeType,
+        newStatus: StatusLikeType
+    ): Promise<boolean> {
         const newLikesInfo = this._getUpdatedLike(
             {
                 likesCount: comment.likesInfo.likesCount,
-                dislikesCount: comment.likesInfo.dislikesCount,
+                dislikesCount: comment.likesInfo.dislikesCount
             },
             lastStatus,
             newStatus
@@ -49,13 +53,13 @@ export class CommentsRepository {
     }
     private _getUpdatedLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
         if (newStatus === 'None' && lastStatus === 'Like') {
-            return { ...likesInfo, likesCount: --likesInfo.likesCount}
+            return { ...likesInfo, likesCount: --likesInfo.likesCount }
         }
         if (newStatus === 'None' && lastStatus === 'Dislike') {
-            return { ...likesInfo, dislikesCount: --likesInfo.dislikesCount}
+            return { ...likesInfo, dislikesCount: --likesInfo.dislikesCount }
         }
         if (newStatus === 'Like' && lastStatus === 'None') {
-            return { ...likesInfo, likesCount: ++likesInfo.likesCount}
+            return { ...likesInfo, likesCount: ++likesInfo.likesCount }
         }
         if (newStatus === 'Like' && lastStatus === 'Dislike') {
             return {
@@ -65,7 +69,7 @@ export class CommentsRepository {
             }
         }
         if (newStatus === 'Dislike' && lastStatus === 'None') {
-            return { ...likesInfo, dislikesCount: ++likesInfo.dislikesCount}
+            return { ...likesInfo, dislikesCount: ++likesInfo.dislikesCount }
         }
         if (newStatus === 'Dislike' && lastStatus === 'Like') {
             return {

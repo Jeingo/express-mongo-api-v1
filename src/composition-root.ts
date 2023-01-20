@@ -26,7 +26,7 @@ import { PostsController } from './controllers/posts-controller'
 import { SecurityController } from './controllers/security-controller'
 import { TestController } from './controllers/test-controller'
 import { UsersController } from './controllers/users-controller'
-import {LikesRepository} from "./repositories/likes-repository";
+import { LikesRepository } from './repositories/likes-repository'
 
 const blogsRepository = new BlogsRepository()
 const commentsRepository = new CommentsRepository()

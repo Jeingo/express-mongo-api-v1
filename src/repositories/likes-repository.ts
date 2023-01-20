@@ -1,11 +1,11 @@
-import {LikesModel} from "./db";
-import {LikesTypeOutput, LikesTypeToDB, StatusLikeType} from "../models/likes-models";
-import {ObjectId} from "mongodb";
+import { LikesModel } from './db'
+import { LikesTypeOutput, LikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import { ObjectId } from 'mongodb'
 
 export class LikesRepository {
     async getLike(userId: string, commentId: string): Promise<LikesTypeOutput | null> {
-        const result = await LikesModel.findOne({userId: userId, commentId: commentId})
-        if(!result) return null
+        const result = await LikesModel.findOne({ userId: userId, commentId: commentId })
+        if (!result) return null
         return this._getOutputLike(result)
     }
     async createLike(newLike: LikesTypeToDB): Promise<LikesTypeOutput> {

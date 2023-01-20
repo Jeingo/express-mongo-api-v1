@@ -1,8 +1,4 @@
-import {
-    RequestWithParams,
-    RequestWithParamsAndBody,
-    RequestWithParamsAndQuery
-} from '../models/types'
+import { RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery } from '../models/types'
 import {
     CommentsIdParams,
     CommentsTypeInput,
@@ -89,7 +85,11 @@ export class CommentsController {
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async updateStatusLike(req: RequestWithParamsAndBody<CommentsIdParams, LikesType>, res: Response) {
-        const updatedCommentLike = await this.commentsService.updateStatusLike(req.user!.userId, req.params.id, req.body.likeStatus)
+        const updatedCommentLike = await this.commentsService.updateStatusLike(
+            req.user!.userId,
+            req.params.id,
+            req.body.likeStatus
+        )
         if (!updatedCommentLike) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return

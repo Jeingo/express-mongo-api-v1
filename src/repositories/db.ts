@@ -31,4 +31,3 @@ export const CommentsModel = mongoose.model('comments', CommentsSchema)
 export const SessionsModel = mongoose.model('sessions', SessionsSchema)
 export const RateLimiterModel = mongoose.model('limiters', RateLimiterSchema)
 export const LikesModel = mongoose.model('likes', LikesSchema)
-

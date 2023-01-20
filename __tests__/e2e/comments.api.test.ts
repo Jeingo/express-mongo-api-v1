@@ -121,7 +121,12 @@ describe('/comments', () => {
             ...correctComment,
             userId: createdUser.id,
             userLogin: createdUser.login,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it(`PUT /comments/id: shouldn't update comment without authorization`, async () => {
@@ -180,7 +185,12 @@ describe('/comments', () => {
             ...correctCommentNew,
             userId: createdUser.id,
             userLogin: createdUser.login,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it(`DELETE /comments/id: shouldn't delete blog without authorization`, async () => {

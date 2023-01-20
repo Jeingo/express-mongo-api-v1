@@ -270,7 +270,12 @@ describe('/posts', () => {
             ...correctComment,
             userId: createdUser.id,
             userLogin: createdUser.login,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it(`GET /posts/bad-id/comments: should return 404 for not existing comment`, async () => {
@@ -295,7 +300,12 @@ describe('/posts', () => {
                     ...correctComment,
                     userId: createdUser.id,
                     userLogin: createdUser.login,
-                    createdAt: expect.any(String)
+                    createdAt: expect.any(String),
+                    likesInfo: {
+                        likesCount: 0,
+                        dislikesCount: 0,
+                        myStatus: 'None'
+                    }
                 }]
             }
         )

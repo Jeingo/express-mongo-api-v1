@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { idValidation, inputValidation, queryValidation } from '../middleware/input-validation'
+import {getUserIdByAccessToken, idValidation, inputValidation, queryValidation} from '../middleware/input-validation'
 import {
     blogIdValidation,
     contentValidation,
@@ -19,6 +19,7 @@ postsRouter.get('/:id', idValidation, postsController.getPostById.bind(postsCont
 
 postsRouter.get(
     '/:id/comments',
+    getUserIdByAccessToken,
     idValidation,
     queryValidation,
     commentsController.getCommentsByPostId.bind(commentsController)

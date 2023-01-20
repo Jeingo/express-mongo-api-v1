@@ -1,13 +1,13 @@
 import { Router } from 'express'
 import { bearerAuth } from '../authorization/bearer-auth'
-import { idValidation, inputValidation } from '../middleware/input-validation'
+import {getUserIdByAccessToken, idValidation, inputValidation} from '../middleware/input-validation'
 import { contentInCommentValidation } from '../middleware/input-comments-validation'
 import { commentsController } from '../composition-root'
 import { likesValidation } from '../middleware/input-likes-validation'
 
 export const commentsRouter = Router({})
 
-commentsRouter.get('/:id', idValidation, commentsController.getCommentById.bind(commentsController))
+commentsRouter.get('/:id',getUserIdByAccessToken, idValidation, commentsController.getCommentById.bind(commentsController))
 
 commentsRouter.put(
     '/:id',

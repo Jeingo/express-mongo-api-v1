@@ -2,6 +2,7 @@ import { validationResult } from 'express-validator'
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { HTTP_STATUSES } from '../constats/status'
+import {jwtService, usersService} from "../composition-root";
 
 const baseValidationResult = validationResult.withDefaults({
     formatter: (error) => {
@@ -37,5 +38,20 @@ export const queryValidation = async (req: Request, res: Response, next: NextFun
     if (!Number(pageSize)) {
         req.query.pageSize = '10'
     }
+    next()
+}
+
+export const getUserIdByAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.headers.authorization) {
+        next()
+        return
+    }
+    const token = req.headers.authorization.split(' ')[1]
+    const userId = jwtService.getUserIdByToken(token)
+    if (!userId) {
+        next()
+        return
+    }
+    req.user = await usersService.getUserById(userId)
     next()
 }

@@ -1,6 +1,14 @@
 import mongoose from 'mongoose'
 import { settings } from '../settings/settings'
-import { BlogsSchema, CommentsSchema, PostsSchema, RateLimiterSchema, SessionsSchema, UsersSchema } from './schemas'
+import {
+    BlogsSchema,
+    CommentsSchema,
+    LikesSchema,
+    PostsSchema,
+    RateLimiterSchema,
+    SessionsSchema,
+    UsersSchema
+} from './schemas'
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME
@@ -22,3 +30,5 @@ export const UsersModel = mongoose.model('users', UsersSchema)
 export const CommentsModel = mongoose.model('comments', CommentsSchema)
 export const SessionsModel = mongoose.model('sessions', SessionsSchema)
 export const RateLimiterModel = mongoose.model('limiters', RateLimiterSchema)
+export const LikesModel = mongoose.model('likes', LikesSchema)
+

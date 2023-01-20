@@ -3,9 +3,11 @@ import { PostsRepository } from '../repositories/posts-repository'
 import { LoginTypeForAuth } from '../models/auth-models'
 import { HTTP_STATUSES } from '../constats/status'
 import { CommentsRepository } from '../repositories/comments-repository'
+import {LikesRepository} from "../repositories/likes-repository";
+import {LikesTypeToDB, StatusLikeType} from "../models/likes-models";
 
 export class CommentsService {
-    constructor(protected commentsRepository: CommentsRepository, protected postsRepository: PostsRepository) {}
+    constructor(protected commentsRepository: CommentsRepository, protected postsRepository: PostsRepository, protected likesRepository: LikesRepository) {}
 
     async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentsTypeOutput | null> {
         const foundPost = await this.postsRepository.getPostById(postId)
@@ -21,7 +23,6 @@ export class CommentsService {
             {
                 likesCount: 0,
                 dislikesCount: 0,
-                myStatus: 'None'
             }
         )
         return await this.commentsRepository.createComment(createdComment)
@@ -55,9 +56,19 @@ export class CommentsService {
 
         return await this.commentsRepository.deleteComment(id)
     }
-    async updateStatusLike(commentId: string, status: string): Promise<boolean> {
+    async updateStatusLike(userId: string, commentId: string, newStatus: StatusLikeType): Promise<boolean> {
+        let lastStatus: StatusLikeType = 'None'
         const comment = await this.commentsRepository.getCommentById(commentId)
-        if (!comment) return false
-        return await this.commentsRepository.updateLikeInComment(comment, status)
+        if(!comment) return false
+        const likeInfo = await this.likesRepository.getLike(userId, commentId)
+        if(!likeInfo) {
+            const newLike = new LikesTypeToDB(userId, commentId, newStatus)
+            await this.likesRepository.createLike(newLike)
+        } else {
+            const updatedLike = {myStatus: newStatus}
+            await this.likesRepository.updateLike(likeInfo.id, updatedLike)
+            lastStatus = likeInfo.myStatus
+        }
+        return await this.commentsRepository.updateLikeInComment(comment, lastStatus, newStatus)
     }
 }

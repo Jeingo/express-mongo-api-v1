@@ -7,7 +7,7 @@ export type CommentsTypeOutput = {
     likesInfo: {
         likesCount: number
         dislikesCount: number
-        myStatus: 'None' | 'Like' | 'Dislike'
+        myStatus: string
     }
 }
 
@@ -25,12 +25,10 @@ export class CommentsTypeToDB {
         public likesInfo: {
             likesCount: number
             dislikesCount: number
-            myStatus: 'None' | 'Like' | 'Dislike'
         }
     ) {
         this.likesInfo.likesCount = likesInfo.likesCount
         this.likesInfo.dislikesCount = likesInfo.dislikesCount
-        this.likesInfo.myStatus = likesInfo.myStatus
     }
 }
 

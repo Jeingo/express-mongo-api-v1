@@ -5,6 +5,7 @@ import { UsersTypeToDB } from '../models/users-models'
 import { CommentsTypeToDB } from '../models/comments-models'
 import { SessionTypeToDB } from '../models/session-models'
 import { RateLimiterTypeToDB } from '../models/auth-models'
+import {LikesTypeToDB} from "../models/likes-models";
 
 export const BlogsSchema = new mongoose.Schema<BlogsTypeToDB>({
     name: { type: String, required: true, maxlength: 15 },
@@ -48,7 +49,6 @@ export const CommentsSchema = new mongoose.Schema<CommentsTypeToDB>({
     likesInfo: {
         likesCount: { type: Number, required: true },
         dislikesCount: { type: Number, required: true },
-        myStatus: { type: String, required: true }
     }
 })
 
@@ -66,4 +66,10 @@ export const RateLimiterSchema = new mongoose.Schema<RateLimiterTypeToDB>({
     endpoint: { type: String, required: true },
     date: { type: Number, required: true },
     count: { type: Number, required: true }
+})
+
+export const LikesSchema = new mongoose.Schema<LikesTypeToDB>({
+    userId: { type: String, required: true },
+    commentId: { type: String, required: true },
+    myStatus: { type: String, required: true }
 })

@@ -26,6 +26,7 @@ import { PostsController } from './controllers/posts-controller'
 import { SecurityController } from './controllers/security-controller'
 import { TestController } from './controllers/test-controller'
 import { UsersController } from './controllers/users-controller'
+import {LikesRepository} from "./repositories/likes-repository";
 
 const blogsRepository = new BlogsRepository()
 const commentsRepository = new CommentsRepository()
@@ -33,6 +34,7 @@ const postsRepository = new PostsRepository()
 const sessionsRepository = new SessionsRepository()
 const testRepository = new TestRepository()
 const usersRepository = new UsersRepository()
+const likesRepository = new LikesRepository()
 export const rateLimiterRepository = new RateLimiterRepository()
 
 const blogsQueryRepository = new BlogsQueryRepository()
@@ -46,7 +48,7 @@ export const jwtService = new JwtService()
 const emailManager = new EmailManager(emailAdapter)
 const authService = new AuthService(emailManager, usersRepository)
 const blogsService = new BlogsService(blogsRepository)
-const commentsService = new CommentsService(commentsRepository, postsRepository)
+const commentsService = new CommentsService(commentsRepository, postsRepository, likesRepository)
 const postsService = new PostsService(blogsRepository, postsRepository)
 const testService = new TestService(testRepository)
 export const sessionsService = new SessionsService(sessionsRepository)

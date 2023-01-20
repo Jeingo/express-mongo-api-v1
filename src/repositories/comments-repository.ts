@@ -1,7 +1,7 @@
 import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
 import { CommentsModel } from './db'
 import { ObjectId } from 'mongodb'
-import { LikesInfoType } from '../models/likes-models'
+import {LikesInfoType, StatusLikeType} from '../models/likes-models'
 
 export class CommentsRepository {
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
@@ -17,16 +17,16 @@ export class CommentsRepository {
         const result = await CommentsModel.findByIdAndUpdate(new ObjectId(id), updatedComment)
         return !!result
     }
-    async updateLikeInComment(comment: CommentsTypeOutput, status: string): Promise<boolean> {
-        const newLike = this._getUpdatedLike(
+    async updateLikeInComment(comment: CommentsTypeOutput, lastStatus: StatusLikeType, newStatus: StatusLikeType): Promise<boolean> {
+        const newLikesInfo = this._getUpdatedLike(
             {
                 likesCount: comment.likesInfo.likesCount,
                 dislikesCount: comment.likesInfo.dislikesCount,
-                myStatus: comment.likesInfo.myStatus
             },
-            status
+            lastStatus,
+            newStatus
         )
-        const result = await CommentsModel.findByIdAndUpdate(new ObjectId(comment.id), { likesInfo: newLike })
+        const result = await CommentsModel.findByIdAndUpdate(new ObjectId(comment.id), { likesInfo: newLikesInfo })
         return !!result
     }
     async deleteComment(id: string): Promise<boolean> {
@@ -43,39 +43,37 @@ export class CommentsRepository {
             likesInfo: {
                 likesCount: comment.likesInfo.likesCount,
                 dislikesCount: comment.likesInfo.dislikesCount,
-                myStatus: comment.likesInfo.myStatus
+                myStatus: 'None'
             }
         }
     }
-    private _getUpdatedLike(currentLike: LikesInfoType, status: string) {
-        if (status === 'None' && currentLike.myStatus === 'Like') {
-            return { ...currentLike, likesCount: --currentLike.likesCount, myStatus: status }
+    private _getUpdatedLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
+        if (newStatus === 'None' && lastStatus === 'Like') {
+            return { ...likesInfo, likesCount: --likesInfo.likesCount}
         }
-        if (status === 'None' && currentLike.myStatus === 'Dislike') {
-            return { ...currentLike, dislikesCount: --currentLike.dislikesCount, myStatus: status }
+        if (newStatus === 'None' && lastStatus === 'Dislike') {
+            return { ...likesInfo, dislikesCount: --likesInfo.dislikesCount}
         }
-        if (status === 'Like' && currentLike.myStatus === 'None') {
-            return { ...currentLike, likesCount: ++currentLike.likesCount, myStatus: status }
+        if (newStatus === 'Like' && lastStatus === 'None') {
+            return { ...likesInfo, likesCount: ++likesInfo.likesCount}
         }
-        if (status === 'Like' && currentLike.myStatus === 'Dislike') {
+        if (newStatus === 'Like' && lastStatus === 'Dislike') {
             return {
-                ...currentLike,
-                likesCount: ++currentLike.likesCount,
-                dislikesCount: --currentLike.dislikesCount,
-                myStatus: status
+                ...likesInfo,
+                likesCount: ++likesInfo.likesCount,
+                dislikesCount: --likesInfo.dislikesCount
             }
         }
-        if (status === 'Dislike' && currentLike.myStatus === 'None') {
-            return { ...currentLike, dislikesCount: ++currentLike.dislikesCount, myStatus: status }
+        if (newStatus === 'Dislike' && lastStatus === 'None') {
+            return { ...likesInfo, dislikesCount: ++likesInfo.dislikesCount}
         }
-        if (status === 'Dislike' && currentLike.myStatus === 'Like') {
+        if (newStatus === 'Dislike' && lastStatus === 'Like') {
             return {
-                ...currentLike,
-                likesCount: --currentLike.likesCount,
-                dislikesCount: ++currentLike.dislikesCount,
-                myStatus: status
+                ...likesInfo,
+                likesCount: --likesInfo.likesCount,
+                dislikesCount: ++likesInfo.dislikesCount
             }
         }
-        return currentLike
+        return likesInfo
     }
 }

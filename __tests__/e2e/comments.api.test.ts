@@ -55,6 +55,14 @@ const inCorrectCommentNew: CommentsTypeInput = {
     content: "incorrect content"
 }
 
+const badLikeStatus = {
+    likeStatus: ''
+}
+
+const correctLikeStatus = {
+    likeStatus: 'Like'
+}
+
 const emptyComments: PaginatedType<CommentsTypeOutput> = {
     "pagesCount": 0,
     "page": 1,
@@ -188,6 +196,63 @@ describe('/comments', () => {
             createdAt: expect.any(String),
             likesInfo: {
                 likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
+        })
+    })
+    it(`PUT /comments/id/like-status: should return 401 without authorization`, async () => {
+        await request(app)
+            .put('/comments' + '/' + createdComment.id + '/' + 'like-status')
+            .expect(HTTP_STATUSES.UNAUTHORIZED_401)
+    })
+    it(`PUT /comments/id/like-status: should return 400 with bad body`, async () => {
+        await request(app)
+            .put('/comments' + '/' + createdComment.id + '/' + 'like-status')
+            .set('Authorization', 'Bearer ' + createdToken.accessToken)
+            .send(badLikeStatus)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400)
+    })
+    it(`PUT /comments/bad-id/like-status: should return 404 if comment not exist`, async () => {
+        await request(app)
+            .put('/comments' + '/' + 999 + '/' + 'like-status')
+            .set('Authorization', 'Bearer ' + createdToken.accessToken)
+            .send(correctLikeStatus)
+            .expect(HTTP_STATUSES.NOT_FOUND_404)
+    })
+    it(`PUT /comments/id/like-status: should return 204 if all ok`, async () => {
+        await request(app)
+            .put('/comments' + '/' + createdComment.id + '/' + 'like-status')
+            .set('Authorization', 'Bearer ' + createdToken.accessToken)
+            .send(correctLikeStatus)
+            .expect(HTTP_STATUSES.NO_CONTENT_204)
+        const response = await request(app)
+            .get('/comments' + '/' + createdComment.id)
+            .set('Authorization', 'Bearer ' + createdToken.accessToken)
+            .expect(HTTP_STATUSES.OK_200)
+        expect(response.body).toEqual({
+            id: expect.any(String),
+            ...correctCommentNew,
+            userId: createdUser.id,
+            userLogin: createdUser.login,
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 1,
+                dislikesCount: 0,
+                myStatus: 'Like'
+            }
+        })
+        const response2 = await request(app)
+            .get('/comments' + '/' + createdComment.id)
+            .expect(HTTP_STATUSES.OK_200)
+        expect(response2.body).toEqual({
+            id: expect.any(String),
+            ...correctCommentNew,
+            userId: createdUser.id,
+            userLogin: createdUser.login,
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 1,
                 dislikesCount: 0,
                 myStatus: 'None'
             }

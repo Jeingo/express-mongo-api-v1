@@ -5,12 +5,14 @@ import { HTTP_STATUSES } from '../constats/status'
 import { CommentsRepository } from '../repositories/comments-repository'
 import { LikesRepository } from '../repositories/likes-repository'
 import { LikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class CommentsService {
     constructor(
-        protected commentsRepository: CommentsRepository,
-        protected postsRepository: PostsRepository,
-        protected likesRepository: LikesRepository
+        @inject(CommentsRepository) protected commentsRepository: CommentsRepository,
+        @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(LikesRepository) protected likesRepository: LikesRepository
     ) {}
 
     async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentsTypeOutput | null> {

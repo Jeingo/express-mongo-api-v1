@@ -3,7 +3,9 @@ import { BlogsModel } from '../repositories/db'
 import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
+import { injectable } from 'inversify'
 
+@injectable()
 export class BlogsQueryRepository {
     async getAllBlogs(query: QueryBlogs): Promise<PaginatedType<BlogsTypeOutput>> {
         const {

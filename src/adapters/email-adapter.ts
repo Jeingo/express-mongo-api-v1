@@ -1,7 +1,9 @@
 import { settings } from '../settings/settings'
 import nodemailer from 'nodemailer'
 import { EmailForm } from '../models/email-models'
+import { injectable } from 'inversify'
 
+@injectable()
 export class EmailAdapter {
     async sendEmail(form: EmailForm): Promise<void> {
         let transporter = nodemailer.createTransport({

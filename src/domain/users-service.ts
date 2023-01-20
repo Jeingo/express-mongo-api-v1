@@ -5,9 +5,11 @@ import { ObjectId } from 'mongodb'
 import { LoginTypeForAuth } from '../models/auth-models'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class UsersService {
-    constructor(protected usersRepository: UsersRepository) {}
+    constructor(@inject(UsersRepository) protected usersRepository: UsersRepository) {}
 
     async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
         return await this.usersRepository.findUserById(_id)

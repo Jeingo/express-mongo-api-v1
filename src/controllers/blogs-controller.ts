@@ -6,9 +6,14 @@ import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { BlogsService } from '../domain/blogs-service'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class BlogsController {
-    constructor(protected blogsService: BlogsService, protected blogsQueryRepository: BlogsQueryRepository) {}
+    constructor(
+        @inject(BlogsService) protected blogsService: BlogsService,
+        @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository
+    ) {}
 
     async getAllBlogs(req: RequestWithQuery<QueryBlogs>, res: Response<PaginatedType<BlogsTypeOutput>>) {
         const allBlogs = await this.blogsQueryRepository.getAllBlogs(req.query)

@@ -1,7 +1,9 @@
 import { RateLimiterModel } from './db'
 import { RateLimiterType } from '../models/auth-models'
 import { ObjectId } from 'mongodb'
+import { injectable } from 'inversify'
 
+@injectable()
 export class RateLimiterRepository {
     async findIpBase(ip: string, endpoint: string): Promise<RateLimiterType | null> {
         const result = await RateLimiterModel.findOne({ ip: ip, endpoint: endpoint })

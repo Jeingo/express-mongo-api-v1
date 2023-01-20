@@ -1,8 +1,10 @@
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class BlogsService {
-    constructor(protected blogsRepository: BlogsRepository) {}
+    constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository) {}
 
     async getBlogById(id: string): Promise<BlogsTypeOutput | null> {
         return await this.blogsRepository.getBlogById(id)

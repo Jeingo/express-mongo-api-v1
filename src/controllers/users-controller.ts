@@ -6,9 +6,14 @@ import { UsersIdParams, UsersTypeInput, UsersTypeOutput } from '../models/users-
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { UsersService } from '../domain/users-service'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class UsersController {
-    constructor(protected usersService: UsersService, protected usersQueryRepository: UsersQueryRepository) {}
+    constructor(
+        @inject(UsersService) protected usersService: UsersService,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
+    ) {}
 
     async getAllUsers(req: RequestWithQuery<QueryUsers>, res: Response<PaginatedType<UsersTypeOutput>>) {
         const allUsers = await this.usersQueryRepository.getAllUsers(req.query)

@@ -4,9 +4,11 @@ import { HTTP_STATUSES } from '../constats/status'
 import { SessionsService } from '../domain/sessions-service'
 import { RequestWithParams } from '../models/types'
 import { DeviceIdParams } from '../models/auth-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class SecurityController {
-    constructor(protected sessionsService: SessionsService) {}
+    constructor(@inject(SessionsService) protected sessionsService: SessionsService) {}
 
     async getAllActiveSession(req: Request, res: Response) {
         const gotRefreshToken = req.cookies.refreshToken

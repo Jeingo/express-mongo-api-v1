@@ -9,7 +9,9 @@ import { UsersModel } from './db'
 import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'
 import { LoginTypeForAuth } from '../models/auth-models'
+import { injectable } from 'inversify'
 
+@injectable()
 export class UsersRepository {
     async findUserById(id: ObjectId): Promise<LoginTypeForAuth | null> {
         const result = await UsersModel.findById(id)

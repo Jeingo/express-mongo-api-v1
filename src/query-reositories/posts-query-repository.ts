@@ -4,7 +4,9 @@ import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
+import { injectable } from 'inversify'
 
+@injectable()
 export class PostsQueryRepository {
     async getAllPost(query: QueryPosts): Promise<PaginatedType<PostsTypeOutput>> {
         const countAllDocuments = await PostsModel.countDocuments()

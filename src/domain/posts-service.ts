@@ -1,9 +1,14 @@
 import { PostsRepository } from '../repositories/posts-repository'
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class PostsService {
-    constructor(protected blogsRepository: BlogsRepository, protected postsRepository: PostsRepository) {}
+    constructor(
+        @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
+        @inject(PostsRepository) protected postsRepository: PostsRepository
+    ) {}
 
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
         return await this.postsRepository.getPostById(id)

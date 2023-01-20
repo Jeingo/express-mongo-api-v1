@@ -1,6 +1,8 @@
 import { SessionsModel } from './db'
 import { SessionInputType, SessionOutputType, SessionTypeToDB } from '../models/session-models'
+import { injectable } from 'inversify'
 
+@injectable()
 export class SessionsRepository {
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
         const currentDate = new Date().toISOString()

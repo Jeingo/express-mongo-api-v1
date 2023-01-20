@@ -5,9 +5,11 @@ import { SessionsRepository } from '../repositories/sessions-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { HttpTypes } from '../models/status-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class SessionsService {
-    constructor(protected sessionsRepository: SessionsRepository) {}
+    constructor(@inject(SessionsRepository) protected sessionsRepository: SessionsRepository) {}
 
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
         return await this.sessionsRepository.findAllActiveSession(userId)

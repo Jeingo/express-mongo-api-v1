@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { ObjectId } from 'mongodb'
 import { Token, TokenPayloadType } from '../models/token-models'
+import { injectable } from 'inversify'
 
+@injectable()
 export class JwtService {
     createJWT(userId: string): Token {
         return jwt.sign({ userId: userId }, settings.JWT_SECRET, {

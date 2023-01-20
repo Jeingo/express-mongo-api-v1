@@ -1,7 +1,9 @@
 import { LikesModel } from './db'
 import { LikesTypeOutput, LikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { ObjectId } from 'mongodb'
+import { injectable } from 'inversify'
 
+@injectable()
 export class LikesRepository {
     async getLike(userId: string, commentId: string): Promise<LikesTypeOutput | null> {
         const result = await LikesModel.findOne({ userId: userId, commentId: commentId })

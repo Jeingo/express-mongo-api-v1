@@ -4,9 +4,14 @@ import { v4 } from 'uuid'
 import add from 'date-fns/add'
 import { EmailManager } from '../managers/email-manager'
 import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class AuthService {
-    constructor(protected emailManager: EmailManager, protected usersRepository: UsersRepository) {}
+    constructor(
+        @inject(EmailManager) protected emailManager: EmailManager,
+        @inject(UsersRepository) protected usersRepository: UsersRepository
+    ) {}
 
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
         const user = await this.usersRepository.findUserHashByLoginOrEmail(loginOrEmail)

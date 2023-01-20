@@ -12,9 +12,14 @@ import { PostsIdParams, PostsTypeInput, PostsTypeInputInBlog, PostsTypeOutput } 
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { PostsService } from '../domain/posts-service'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class PostsController {
-    constructor(protected postsService: PostsService, protected postsQueryRepository: PostsQueryRepository) {}
+    constructor(
+        @inject(PostsService) protected postsService: PostsService,
+        @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository
+    ) {}
 
     async getAllPosts(req: RequestWithQuery<QueryPosts>, res: Response<PaginatedType<PostsTypeOutput>>) {
         const allPosts = await this.postsQueryRepository.getAllPost(req.query)

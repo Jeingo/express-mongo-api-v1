@@ -2,7 +2,9 @@ import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../mode
 import { CommentsModel } from './db'
 import { ObjectId } from 'mongodb'
 import { LikesInfoType, StatusLikeType } from '../models/likes-models'
+import { injectable } from 'inversify'
 
+@injectable()
 export class CommentsRepository {
     async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
         const result = await CommentsModel.findById(new ObjectId(id))

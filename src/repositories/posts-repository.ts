@@ -1,7 +1,9 @@
 import { PostsModel } from './db'
 import { ObjectId } from 'mongodb'
 import { PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
+import { injectable } from 'inversify'
 
+@injectable()
 export class PostsRepository {
     async getPostById(id: string): Promise<PostsTypeOutput | null> {
         const result = await PostsModel.findById(new ObjectId(id))

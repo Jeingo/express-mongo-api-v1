@@ -15,14 +15,16 @@ import { SessionsService } from '../domain/sessions-service'
 import { settings } from '../settings/settings'
 import { checkAuthorizationAndGetPayload } from './helper'
 import { UsersTypeInput } from '../models/users-models'
+import { inject, injectable } from 'inversify'
 
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
+@injectable()
 export class AuthController {
     constructor(
-        protected jwtService: JwtService,
-        protected authService: AuthService,
-        protected sessionsService: SessionsService
+        @inject(JwtService) protected jwtService: JwtService,
+        @inject(AuthService) protected authService: AuthService,
+        @inject(SessionsService) protected sessionsService: SessionsService
     ) {}
 
     async login(req: RequestWithBody<LoginTypeInput>, res: Response) {

@@ -5,9 +5,11 @@ import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 import { LikesRepository } from '../repositories/likes-repository'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class CommentsQueryRepository {
-    constructor(protected likesRepository: LikesRepository) {}
+    constructor(@inject(LikesRepository) protected likesRepository: LikesRepository) {}
 
     async getCommentsById(
         id: string,

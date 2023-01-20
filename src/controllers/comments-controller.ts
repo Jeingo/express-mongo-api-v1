@@ -12,11 +12,13 @@ import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
 import { LikesType } from '../models/likes-models'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export class CommentsController {
     constructor(
-        protected commentsService: CommentsService,
-        protected commentsQueryRepository: CommentsQueryRepository
+        @inject(CommentsService) protected commentsService: CommentsService,
+        @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository
     ) {}
 
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {

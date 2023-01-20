@@ -3,7 +3,9 @@ import { PaginatedType } from '../models/main-models'
 import { UsersTypeOutput } from '../models/users-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { UsersModel } from '../repositories/db'
+import { injectable } from 'inversify'
 
+@injectable()
 export class UsersQueryRepository {
     async getAllUsers(query: QueryUsers): Promise<PaginatedType<UsersTypeOutput>> {
         const {

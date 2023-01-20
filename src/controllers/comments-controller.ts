@@ -32,7 +32,11 @@ export class CommentsController {
         req: RequestWithParamsAndQuery<CommentsIdParams, QueryComments>,
         res: Response<PaginatedType<CommentsTypeOutput | null>>
     ) {
-        const foundComments = await this.commentsQueryRepository.getCommentsById(req.params.id, req.query, req.user?.userId)
+        const foundComments = await this.commentsQueryRepository.getCommentsById(
+            req.params.id,
+            req.query,
+            req.user?.userId
+        )
 
         if (!foundComments) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

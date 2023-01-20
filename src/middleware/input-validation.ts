@@ -2,7 +2,7 @@ import { validationResult } from 'express-validator'
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { HTTP_STATUSES } from '../constats/status'
-import {jwtService, usersService} from "../composition-root";
+import { jwtService, usersService } from '../composition-root'
 
 const baseValidationResult = validationResult.withDefaults({
     formatter: (error) => {

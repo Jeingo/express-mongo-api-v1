@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import {getUserIdByAccessToken, idValidation, inputValidation, queryValidation} from '../middleware/input-validation'
+import { getUserIdByAccessToken, idValidation, inputValidation, queryValidation } from '../middleware/input-validation'
 import {
     blogIdValidation,
     contentValidation,

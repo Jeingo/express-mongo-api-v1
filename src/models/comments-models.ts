@@ -1,4 +1,4 @@
-import {StatusLikeType} from "./likes-models";
+import { StatusLikeType } from './likes-models'
 
 export type CommentsTypeOutput = {
     id: string

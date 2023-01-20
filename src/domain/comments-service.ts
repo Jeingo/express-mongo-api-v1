@@ -32,10 +32,10 @@ export class CommentsService {
         return await this.commentsRepository.createComment(createdComment)
     }
     async getCommentById(id: string, userId?: string): Promise<CommentsTypeOutput | null> {
-        const comment =  await this.commentsRepository.getCommentById(id)
-        if(userId && comment) {
+        const comment = await this.commentsRepository.getCommentById(id)
+        if (userId && comment) {
             const like = await this.likesRepository.getLike(userId, comment.id)
-            if(like) {
+            if (like) {
                 comment.likesInfo.myStatus = like.myStatus
             }
         }

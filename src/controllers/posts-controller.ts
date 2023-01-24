@@ -104,6 +104,7 @@ export class PostsController {
     async updateStatusLike(req: RequestWithParamsAndBody<PostsIdParams, LikesType>, res: Response) {
         const updatedPostLike = await this.postsService.updateStatusLike(
             req.user!.userId,
+            req.user!.login,
             req.params.id,
             req.body.likeStatus
         )

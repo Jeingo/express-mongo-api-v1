@@ -18,7 +18,7 @@ export class PostsService {
         if (userId && post) {
             const like = await this.postsLikesRepository.getLike(userId, post.id)
             if (like) {
-                post.likesInfo.myStatus = like.myStatus
+                post.extendedLikesInfo.myStatus = like.myStatus
             }
         }
         return post
@@ -53,20 +53,19 @@ export class PostsService {
     async deletePost(id: string): Promise<boolean> {
         return await this.postsRepository.deletePost(id)
     }
-    async updateStatusLike(userId: string, postId: string, newStatus: StatusLikeType): Promise<boolean> {
+    async updateStatusLike(userId: string, login: string, postId: string, newStatus: StatusLikeType): Promise<boolean> {
         let lastStatus: StatusLikeType = 'None'
         const post = await this.postsRepository.getPostById(postId)
         if (!post) return false
         const likeInfo = await this.postsLikesRepository.getLike(userId, postId)
         if (!likeInfo) {
-            const newLike = new PostsLikesTypeToDB(userId, postId, newStatus)
+            const newLike = new PostsLikesTypeToDB(userId, postId, newStatus, login, new Date().toISOString())
             await this.postsLikesRepository.createLike(newLike)
         } else {
             const updatedLike = { myStatus: newStatus }
             await this.postsLikesRepository.updateLike(likeInfo.id, updatedLike)
             lastStatus = likeInfo.myStatus
         }
-        console.log(post, lastStatus, newStatus)
         return await this.postsRepository.updateLikeInPost(post, lastStatus, newStatus)
     }
 }

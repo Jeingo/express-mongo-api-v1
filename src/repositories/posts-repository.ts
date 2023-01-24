@@ -26,13 +26,13 @@ export class PostsRepository {
     ): Promise<boolean> {
         const newLikesInfo = this._getUpdatedPostLike(
             {
-                likesCount: post.likesInfo.likesCount,
-                dislikesCount: post.likesInfo.dislikesCount
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount
             },
             lastStatus,
             newStatus
         )
-        const result = await PostsModel.findByIdAndUpdate(new ObjectId(post.id), { likesInfo: newLikesInfo })
+        const result = await PostsModel.findByIdAndUpdate(new ObjectId(post.id), { extendedLikesInfo: newLikesInfo })
         return !!result
     }
     async deletePost(id: string): Promise<boolean> {
@@ -48,10 +48,11 @@ export class PostsRepository {
             blogId: post.blogId,
             blogName: post.blogName,
             createdAt: post.createdAt,
-            likesInfo: {
-                likesCount: post.likesInfo.likesCount,
-                dislikesCount: post.likesInfo.dislikesCount,
-                myStatus: 'None'
+            extendedLikesInfo: {
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount,
+                myStatus: 'None',
+                newestLikes: []
             }
         }
     }

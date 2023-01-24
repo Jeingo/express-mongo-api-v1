@@ -23,7 +23,9 @@ export class PostsLikesRepository {
             id: like._id.toString(),
             userId: like.userId,
             postId: like.postId,
-            myStatus: like.myStatus
+            myStatus: like.myStatus,
+            login: like.login,
+            addedAt: like.addedAt
         }
     }
 }

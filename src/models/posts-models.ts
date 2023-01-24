@@ -1,5 +1,11 @@
 import { StatusLikeType } from './likes-models'
 
+type NewestLikesType = {
+    addedAt: string,
+    userId: string,
+    login: string
+}
+
 export type PostsTypeOutput = {
     id: string
     title: string
@@ -8,10 +14,11 @@ export type PostsTypeOutput = {
     blogId: string
     blogName: string
     createdAt: string
-    likesInfo: {
-        likesCount: number
-        dislikesCount: number
-        myStatus: StatusLikeType
+    extendedLikesInfo: {
+        likesCount: number,
+        dislikesCount: number,
+        myStatus: StatusLikeType,
+        newestLikes: Array<NewestLikesType>
     }
 }
 
@@ -44,13 +51,13 @@ export class PostsTypeToDB {
         public blogId: string,
         public blogName: string,
         public createdAt: string,
-        public likesInfo: {
+        public extendedLikesInfo: {
             likesCount: number
             dislikesCount: number
         }
     ) {
-        this.likesInfo.likesCount = likesInfo.likesCount
-        this.likesInfo.dislikesCount = likesInfo.dislikesCount
+        this.extendedLikesInfo.likesCount = extendedLikesInfo.likesCount
+        this.extendedLikesInfo.dislikesCount = extendedLikesInfo.dislikesCount
     }
 }
 

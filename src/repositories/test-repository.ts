@@ -1,4 +1,12 @@
-import { BlogsModel, CommentsModel, PostsModel, RateLimiterModel, SessionsModel, UsersModel } from './db'
+import {
+    BlogsModel,
+    CommentsLikesModel,
+    CommentsModel, PostsLikesModel,
+    PostsModel,
+    RateLimiterModel,
+    SessionsModel,
+    UsersModel
+} from './db'
 import { injectable } from 'inversify'
 
 @injectable()
@@ -10,5 +18,7 @@ export class TestRepository {
         await CommentsModel.deleteMany({})
         await SessionsModel.deleteMany({})
         await RateLimiterModel.deleteMany({})
+        await CommentsLikesModel.deleteMany({})
+        await PostsLikesModel.deleteMany({})
     }
 }

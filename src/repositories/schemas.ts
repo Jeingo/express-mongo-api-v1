@@ -21,7 +21,7 @@ export const PostsSchema = new mongoose.Schema<PostsTypeToDB>({
     blogId: { type: String, required: true },
     blogName: { type: String, required: true },
     createdAt: { type: String, required: true },
-    likesInfo: {
+    extendedLikesInfo: {
         likesCount: { type: Number, required: true },
         dislikesCount: { type: Number, required: true }
     }
@@ -81,5 +81,7 @@ export const CommentsLikesSchema = new mongoose.Schema<CommentsLikesTypeToDB>({
 export const PostsLikesSchema = new mongoose.Schema<PostsLikesTypeToDB>({
     userId: { type: String, required: true },
     postId: { type: String, required: true },
-    myStatus: { type: String, required: true }
+    myStatus: { type: String, required: true },
+    login: { type: String, required: true },
+    addedAt: { type: String, required: true }
 })

@@ -6,6 +6,7 @@ import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { inject, injectable } from 'inversify'
 import { PostsLikesRepository } from '../repositories/posts-likes-repository'
+import {StatusLikeType} from "../models/likes-models";
 
 @injectable()
 export class PostsQueryRepository {
@@ -52,10 +53,11 @@ export class PostsQueryRepository {
             blogId: post.blogId,
             blogName: post.blogName,
             createdAt: post.createdAt,
-            likesInfo: {
-                likesCount: post.likesInfo.likesCount,
-                dislikesCount: post.likesInfo.dislikesCount,
-                myStatus: 'None'
+            extendedLikesInfo: {
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount,
+                myStatus: 'None',
+                newestLikes: []
             }
         }
     }
@@ -64,7 +66,7 @@ export class PostsQueryRepository {
         for (let i = 0; i < posts.length; i++) {
             const like = await this.postsLikesRepository.getLike(userId, posts[i].id)
             if (like) {
-                posts[i].likesInfo.myStatus = like.myStatus
+                posts[i].extendedLikesInfo.myStatus = like.myStatus
             }
         }
         return posts

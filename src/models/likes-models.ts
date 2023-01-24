@@ -21,6 +21,8 @@ export type PostsLikesTypeOutput = {
     userId: string
     postId: string
     myStatus: StatusLikeType
+    login: string
+    addedAt: string
 }
 
 export class CommentsLikesTypeToDB {
@@ -28,5 +30,11 @@ export class CommentsLikesTypeToDB {
 }
 
 export class PostsLikesTypeToDB {
-    constructor(public userId: string, public postId: string, public myStatus: StatusLikeType) {}
+    constructor(
+        public userId: string,
+        public postId: string,
+        public myStatus: StatusLikeType,
+        public login: string,
+        public addedAt: string
+    ) {}
 }

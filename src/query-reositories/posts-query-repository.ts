@@ -6,7 +6,6 @@ import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { inject, injectable } from 'inversify'
 import { PostsLikesRepository } from '../repositories/posts-likes-repository'
-import {StatusLikeType} from "../models/likes-models";
 
 @injectable()
 export class PostsQueryRepository {
@@ -24,7 +23,8 @@ export class PostsQueryRepository {
 
         const mappedPost = res.map(this._getOutputPost)
         const mappedPostWithStatusLike = await this._setStatusLike(mappedPost, userId!)
-        return getPaginatedType(mappedPostWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
+        const mappedFinishPost = await this._setThreeLastUser(mappedPostWithStatusLike)
+        return getPaginatedType(mappedFinishPost, +pageSize, +pageNumber, countAllDocuments)
     }
     async getPostsById(id: string, query: QueryPosts, userId?: string): Promise<PaginatedType<PostsTypeOutput> | null> {
         const foundBlogs = await BlogsModel.findById(new ObjectId(id))
@@ -42,7 +42,8 @@ export class PostsQueryRepository {
 
         const mappedPost = res.map(this._getOutputPost)
         const mappedPostWithStatusLike = await this._setStatusLike(mappedPost, userId!)
-        return getPaginatedType(mappedPostWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
+        const mappedFinishPost = await this._setThreeLastUser(mappedPostWithStatusLike)
+        return getPaginatedType(mappedFinishPost, +pageSize, +pageNumber, countAllDocuments)
     }
     private _getOutputPost(post: any): PostsTypeOutput {
         return {
@@ -67,6 +68,15 @@ export class PostsQueryRepository {
             const like = await this.postsLikesRepository.getLike(userId, posts[i].id)
             if (like) {
                 posts[i].extendedLikesInfo.myStatus = like.myStatus
+            }
+        }
+        return posts
+    }
+    private async _setThreeLastUser(posts: Array<PostsTypeOutput>) {
+        for (let i = 0; i < posts.length; i++) {
+            const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(posts[i].id)
+            if(lastThreeLikes) {
+                posts[i].extendedLikesInfo.newestLikes = lastThreeLikes
             }
         }
         return posts

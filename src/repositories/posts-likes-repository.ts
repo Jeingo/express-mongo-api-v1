@@ -1,10 +1,25 @@
 import { injectable } from 'inversify'
-import { PostsLikesTypeOutput, PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import {
+    PostsExtendedLikesTypeOutput,
+    PostsLikesTypeOutput,
+    PostsLikesTypeToDB,
+    StatusLikeType
+} from '../models/likes-models'
 import { PostsLikesModel } from './db'
 import { ObjectId } from 'mongodb'
 
 @injectable()
 export class PostsLikesRepository {
+    async getLastThreeLikes(postId: string): Promise<PostsExtendedLikesTypeOutput[] | null> {
+        const desc = -1
+        const threeLastUser = 3
+        const result = await PostsLikesModel.find({postId: postId })
+            .sort({'addedAt': desc})
+            .limit(threeLastUser)
+
+        if (!result) return null
+        return result.map(this._getOutputExtendedLike)
+    }
     async getLike(userId: string, postId: string): Promise<PostsLikesTypeOutput | null> {
         const result = await PostsLikesModel.findOne({ userId: userId, postId: postId })
         if (!result) return null
@@ -26,6 +41,13 @@ export class PostsLikesRepository {
             myStatus: like.myStatus,
             login: like.login,
             addedAt: like.addedAt
+        }
+    }
+    private _getOutputExtendedLike(like: any): PostsExtendedLikesTypeOutput {
+        return {
+            addedAt: like.addedAt,
+            userId: like.userId,
+            login: like.login
         }
     }
 }

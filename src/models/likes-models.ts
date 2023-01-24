@@ -25,6 +25,12 @@ export type PostsLikesTypeOutput = {
     addedAt: string
 }
 
+export type PostsExtendedLikesTypeOutput = {
+    addedAt: string
+    userId: string
+    login: string
+}
+
 export class CommentsLikesTypeToDB {
     constructor(public userId: string, public commentId: string, public myStatus: StatusLikeType) {}
 }

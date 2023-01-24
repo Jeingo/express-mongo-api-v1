@@ -13,6 +13,7 @@ import { PostsQueryRepository } from '../query-reositories/posts-query-repositor
 import { HTTP_STATUSES } from '../constats/status'
 import { PostsService } from '../domain/posts-service'
 import { inject, injectable } from 'inversify'
+import {LikesType} from "../models/likes-models";
 
 @injectable()
 export class PostsController {
@@ -99,5 +100,8 @@ export class PostsController {
         }
 
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
+    }
+    async updateStatusLike(req: RequestWithParamsAndBody<PostsIdParams, LikesType>, res: Response) {
+
     }
 }

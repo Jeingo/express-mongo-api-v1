@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { idValidation, inputValidation, queryValidation } from '../middleware/input-validation'
+import { getUserIdByAccessToken, idValidation, inputValidation, queryValidation } from '../middleware/input-validation'
 import { descriptionValidation, nameValidation, websiteUrlValidation } from '../middleware/input-blogs-vallidation'
 import { auth } from '../authorization/basic-auth'
 import { contentValidation, shortDescriptionValidation, titleValidation } from '../middleware/input-posts-validation'
@@ -11,7 +11,13 @@ blogsRouter.get('/', queryValidation, blogsController.getAllBlogs.bind(blogsCont
 
 blogsRouter.get('/:id', idValidation, blogsController.getBlogById.bind(blogsController))
 
-blogsRouter.get('/:id/posts', idValidation, queryValidation, postsController.getPostsByBlogId.bind(postsController))
+blogsRouter.get(
+    '/:id/posts',
+    getUserIdByAccessToken,
+    idValidation,
+    queryValidation,
+    postsController.getPostsByBlogId.bind(postsController)
+)
 
 blogsRouter.post(
     '/',

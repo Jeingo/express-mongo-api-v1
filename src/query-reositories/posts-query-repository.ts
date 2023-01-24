@@ -4,11 +4,14 @@ import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
-import { injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
+import { PostsLikesRepository } from '../repositories/posts-likes-repository'
 
 @injectable()
 export class PostsQueryRepository {
-    async getAllPost(query: QueryPosts): Promise<PaginatedType<PostsTypeOutput>> {
+    constructor(@inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository) {}
+
+    async getAllPost(query: QueryPosts, userId?: string): Promise<PaginatedType<PostsTypeOutput>> {
         const countAllDocuments = await PostsModel.countDocuments()
         const { sortBy = 'createdAt', sortDirection = 'desc', pageNumber = 1, pageSize = 10 } = query
         const sortDirectionNumber = makeDirectionToNumber(sortDirection)
@@ -17,9 +20,12 @@ export class PostsQueryRepository {
             .sort({ [sortBy]: sortDirectionNumber })
             .skip(skipNumber)
             .limit(+pageSize)
-        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+
+        const mappedPost = res.map(this._getOutputPost)
+        const mappedPostWithStatusLike = await this._setStatusLike(mappedPost, userId!)
+        return getPaginatedType(mappedPostWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
     }
-    async getPostsById(id: string, query: QueryPosts): Promise<PaginatedType<PostsTypeOutput> | null> {
+    async getPostsById(id: string, query: QueryPosts, userId?: string): Promise<PaginatedType<PostsTypeOutput> | null> {
         const foundBlogs = await BlogsModel.findById(new ObjectId(id))
         if (!foundBlogs) return null
         const countAllDocuments = await PostsModel.countDocuments({
@@ -33,7 +39,9 @@ export class PostsQueryRepository {
             .skip(skipNumber)
             .limit(+pageSize)
 
-        return getPaginatedType(res.map(this._getOutputPost), +pageSize, +pageNumber, countAllDocuments)
+        const mappedPost = res.map(this._getOutputPost)
+        const mappedPostWithStatusLike = await this._setStatusLike(mappedPost, userId!)
+        return getPaginatedType(mappedPostWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
     }
     private _getOutputPost(post: any): PostsTypeOutput {
         return {
@@ -43,7 +51,22 @@ export class PostsQueryRepository {
             content: post.content,
             blogId: post.blogId,
             blogName: post.blogName,
-            createdAt: post.createdAt
+            createdAt: post.createdAt,
+            likesInfo: {
+                likesCount: post.likesInfo.likesCount,
+                dislikesCount: post.likesInfo.dislikesCount,
+                myStatus: 'None'
+            }
         }
+    }
+    private async _setStatusLike(posts: Array<PostsTypeOutput>, userId: string) {
+        if (!userId) return posts
+        for (let i = 0; i < posts.length; i++) {
+            const like = await this.postsLikesRepository.getLike(userId, posts[i].id)
+            if (like) {
+                posts[i].likesInfo.myStatus = like.myStatus
+            }
+        }
+        return posts
     }
 }

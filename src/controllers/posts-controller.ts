@@ -23,11 +23,11 @@ export class PostsController {
     ) {}
 
     async getAllPosts(req: RequestWithQuery<QueryPosts>, res: Response<PaginatedType<PostsTypeOutput>>) {
-        const allPosts = await this.postsQueryRepository.getAllPost(req.query)
+        const allPosts = await this.postsQueryRepository.getAllPost(req.query, req.user?.userId)
         res.status(HTTP_STATUSES.OK_200).json(allPosts)
     }
     async getPostById(req: RequestWithParams<PostsIdParams>, res: Response<PostsTypeOutput>) {
-        const foundPost = await this.postsService.getPostById(req.params.id)
+        const foundPost = await this.postsService.getPostById(req.params.id, req.user?.userId)
 
         if (!foundPost) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -39,7 +39,7 @@ export class PostsController {
         req: RequestWithParamsAndQuery<PostsIdParams, QueryBlogs>,
         res: Response<PaginatedType<PostsTypeOutput> | null>
     ) {
-        const foundPosts = await this.postsQueryRepository.getPostsById(req.params.id, req.query)
+        const foundPosts = await this.postsQueryRepository.getPostsById(req.params.id, req.query, req.user?.userId)
 
         if (!foundPosts) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

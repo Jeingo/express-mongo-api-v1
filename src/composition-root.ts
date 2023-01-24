@@ -27,8 +27,9 @@ import { PostsController } from './controllers/posts-controller'
 import { SecurityController } from './controllers/security-controller'
 import { TestController } from './controllers/test-controller'
 import { UsersController } from './controllers/users-controller'
-import { LikesRepository } from './repositories/likes-repository'
+import { CommentsLikesRepository } from './repositories/comments-likes-repository'
 import { Container } from 'inversify'
+import { PostsLikesRepository } from './repositories/posts-likes-repository'
 
 export const container = new Container()
 container.bind(BlogsRepository).to(BlogsRepository)
@@ -37,7 +38,8 @@ container.bind(PostsRepository).to(PostsRepository)
 container.bind(SessionsRepository).to(SessionsRepository)
 container.bind(TestRepository).to(TestRepository)
 container.bind(UsersRepository).to(UsersRepository)
-container.bind(LikesRepository).to(LikesRepository)
+container.bind(CommentsLikesRepository).to(CommentsLikesRepository)
+container.bind(PostsLikesRepository).to(PostsLikesRepository)
 container.bind(RateLimiterRepository).to(RateLimiterRepository)
 container.bind(BlogsQueryRepository).to(BlogsQueryRepository)
 container.bind(CommentsQueryRepository).to(CommentsQueryRepository)

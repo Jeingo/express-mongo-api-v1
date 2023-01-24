@@ -159,7 +159,12 @@ describe('/posts', () => {
             id: expect.any(String),
             ...correctPost,
             blogName: createdBlog.name,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it(`GET /posts/id: should return post by id`, async () => {
@@ -170,7 +175,12 @@ describe('/posts', () => {
             id: expect.any(String),
             ...createdPost,
             blogName: createdBlog.name,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it(`PUT /posts/id: shouldn't update post without authorization`, async () => {
@@ -200,7 +210,12 @@ describe('/posts', () => {
             id: expect.any(String),
             ...correctNewPost,
             blogName: createdBlog.name,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it('PUT /posts/bad-id: should return 404 for not existing post', async () => {

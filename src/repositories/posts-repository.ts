@@ -2,6 +2,7 @@ import { PostsModel } from './db'
 import { ObjectId } from 'mongodb'
 import { PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
 import { injectable } from 'inversify'
+import { LikesInfoType, StatusLikeType } from '../models/likes-models'
 
 @injectable()
 export class PostsRepository {
@@ -18,6 +19,22 @@ export class PostsRepository {
         const result = await PostsModel.findByIdAndUpdate(new ObjectId(id), updatedPost)
         return !!result
     }
+    async updateLikeInPost(
+        post: PostsTypeOutput,
+        lastStatus: StatusLikeType,
+        newStatus: StatusLikeType
+    ): Promise<boolean> {
+        const newLikesInfo = this._getUpdatedPostLike(
+            {
+                likesCount: post.likesInfo.likesCount,
+                dislikesCount: post.likesInfo.dislikesCount
+            },
+            lastStatus,
+            newStatus
+        )
+        const result = await PostsModel.findByIdAndUpdate(new ObjectId(post.id), { likesInfo: newLikesInfo })
+        return !!result
+    }
     async deletePost(id: string): Promise<boolean> {
         const result = await PostsModel.findByIdAndDelete(new ObjectId(id))
         return !!result
@@ -30,7 +47,41 @@ export class PostsRepository {
             content: post.content,
             blogId: post.blogId,
             blogName: post.blogName,
-            createdAt: post.createdAt
+            createdAt: post.createdAt,
+            likesInfo: {
+                likesCount: post.likesInfo.likesCount,
+                dislikesCount: post.likesInfo.dislikesCount,
+                myStatus: 'None'
+            }
         }
+    }
+    private _getUpdatedPostLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
+        if (newStatus === 'None' && lastStatus === 'Like') {
+            return { ...likesInfo, likesCount: --likesInfo.likesCount }
+        }
+        if (newStatus === 'None' && lastStatus === 'Dislike') {
+            return { ...likesInfo, dislikesCount: --likesInfo.dislikesCount }
+        }
+        if (newStatus === 'Like' && lastStatus === 'None') {
+            return { ...likesInfo, likesCount: ++likesInfo.likesCount }
+        }
+        if (newStatus === 'Like' && lastStatus === 'Dislike') {
+            return {
+                ...likesInfo,
+                likesCount: ++likesInfo.likesCount,
+                dislikesCount: --likesInfo.dislikesCount
+            }
+        }
+        if (newStatus === 'Dislike' && lastStatus === 'None') {
+            return { ...likesInfo, dislikesCount: ++likesInfo.dislikesCount }
+        }
+        if (newStatus === 'Dislike' && lastStatus === 'Like') {
+            return {
+                ...likesInfo,
+                likesCount: --likesInfo.likesCount,
+                dislikesCount: ++likesInfo.dislikesCount
+            }
+        }
+        return likesInfo
     }
 }

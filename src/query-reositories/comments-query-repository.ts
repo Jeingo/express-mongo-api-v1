@@ -4,12 +4,12 @@ import { CommentsTypeOutput } from '../models/comments-models'
 import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
-import { LikesRepository } from '../repositories/likes-repository'
+import { CommentsLikesRepository } from '../repositories/comments-likes-repository'
 import { inject, injectable } from 'inversify'
 
 @injectable()
 export class CommentsQueryRepository {
-    constructor(@inject(LikesRepository) protected likesRepository: LikesRepository) {}
+    constructor(@inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository) {}
 
     async getCommentsById(
         id: string,
@@ -50,7 +50,7 @@ export class CommentsQueryRepository {
     private async _setStatusLike(comments: Array<CommentsTypeOutput>, userId: string) {
         if (!userId) return comments
         for (let i = 0; i < comments.length; i++) {
-            const like = await this.likesRepository.getLike(userId, comments[i].id)
+            const like = await this.commentsLikesRepository.getLike(userId, comments[i].id)
             if (like) {
                 comments[i].likesInfo.myStatus = like.myStatus
             }

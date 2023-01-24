@@ -247,7 +247,12 @@ describe('/blogs', () => {
             ...correctPostById,
             blogId: createdBlog2.id,
             blogName: createdBlog2.name,
-            createdAt: expect.any(String)
+            createdAt: expect.any(String),
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
         })
     })
     it(`POST /blogs/bad-id/posts: should return 404 for not existing post by blog's id`, async () => {
@@ -277,7 +282,12 @@ describe('/blogs', () => {
                     ...correctPostById,
                     blogId: createdBlog2.id,
                     blogName: createdBlog2.name,
-                    createdAt: expect.any(String)
+                    createdAt: expect.any(String),
+                    likesInfo: {
+                        likesCount: 0,
+                        dislikesCount: 0,
+                        myStatus: 'None'
+                    }
                 }]
             }
         )

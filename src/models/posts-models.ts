@@ -1,3 +1,5 @@
+import { StatusLikeType } from './likes-models'
+
 export type PostsTypeOutput = {
     id: string
     title: string
@@ -6,6 +8,11 @@ export type PostsTypeOutput = {
     blogId: string
     blogName: string
     createdAt: string
+    likesInfo: {
+        likesCount: number
+        dislikesCount: number
+        myStatus: StatusLikeType
+    }
 }
 
 export type PostsTypeInput = {

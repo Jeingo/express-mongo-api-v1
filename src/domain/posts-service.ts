@@ -2,17 +2,26 @@ import { PostsRepository } from '../repositories/posts-repository'
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
 import { inject, injectable } from 'inversify'
-import { StatusLikeType } from '../models/likes-models'
+import { PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import { PostsLikesRepository } from '../repositories/posts-likes-repository'
 
 @injectable()
 export class PostsService {
     constructor(
         @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
-        @inject(PostsRepository) protected postsRepository: PostsRepository
+        @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository
     ) {}
 
-    async getPostById(id: string): Promise<PostsTypeOutput | null> {
-        return await this.postsRepository.getPostById(id)
+    async getPostById(id: string, userId?: string): Promise<PostsTypeOutput | null> {
+        const post = await this.postsRepository.getPostById(id)
+        if (userId && post) {
+            const like = await this.postsLikesRepository.getLike(userId, post.id)
+            if (like) {
+                post.likesInfo.myStatus = like.myStatus
+            }
+        }
+        return post
     }
     async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostsTypeOutput | null> {
         const foundBlog = await this.blogsRepository.getBlogById(blogId)
@@ -48,6 +57,14 @@ export class PostsService {
         let lastStatus: StatusLikeType = 'None'
         const post = await this.postsRepository.getPostById(userId)
         if (!post) return false
-        return true
+        const likeInfo = await this.postsLikesRepository.getLike(userId, postId)
+        if (!likeInfo) {
+            const newLike = new PostsLikesTypeToDB(userId, postId, newStatus)
+            await this.postsLikesRepository.createLike(newLike)
+        } else {
+            const updatedLike = { myStatus: newStatus }
+            await this.postsLikesRepository.updateLike(likeInfo.id, updatedLike)
+        }
+        return await this.postsRepository.updateLikeInPost(post, lastStatus, newStatus)
     }
 }

@@ -21,6 +21,12 @@ export class PostsService {
                 post.extendedLikesInfo.myStatus = like.myStatus
             }
         }
+        if(post) {
+            const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(post.id)
+            if(lastThreeLikes) {
+                post.extendedLikesInfo.newestLikes = lastThreeLikes
+            }
+        }
         return post
     }
     async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostsTypeOutput | null> {

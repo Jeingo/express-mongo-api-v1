@@ -5,7 +5,7 @@ import { UsersTypeToDB } from '../models/users-models'
 import { CommentsTypeToDB } from '../models/comments-models'
 import { SessionTypeToDB } from '../models/session-models'
 import { RateLimiterTypeToDB } from '../models/auth-models'
-import { LikesTypeToDB } from '../models/likes-models'
+import { CommentsLikesTypeToDB, PostsLikesTypeToDB } from '../models/likes-models'
 
 export const BlogsSchema = new mongoose.Schema<BlogsTypeToDB>({
     name: { type: String, required: true, maxlength: 15 },
@@ -20,7 +20,11 @@ export const PostsSchema = new mongoose.Schema<PostsTypeToDB>({
     content: { type: String, required: true, maxlength: 1000 },
     blogId: { type: String, required: true },
     blogName: { type: String, required: true },
-    createdAt: { type: String, required: true }
+    createdAt: { type: String, required: true },
+    likesInfo: {
+        likesCount: { type: Number, required: true },
+        dislikesCount: { type: Number, required: true }
+    }
 })
 
 export const UsersSchema = new mongoose.Schema<UsersTypeToDB>({
@@ -68,8 +72,14 @@ export const RateLimiterSchema = new mongoose.Schema<RateLimiterTypeToDB>({
     count: { type: Number, required: true }
 })
 
-export const LikesSchema = new mongoose.Schema<LikesTypeToDB>({
+export const CommentsLikesSchema = new mongoose.Schema<CommentsLikesTypeToDB>({
     userId: { type: String, required: true },
     commentId: { type: String, required: true },
+    myStatus: { type: String, required: true }
+})
+
+export const PostsLikesSchema = new mongoose.Schema<PostsLikesTypeToDB>({
+    userId: { type: String, required: true },
+    postId: { type: String, required: true },
     myStatus: { type: String, required: true }
 })

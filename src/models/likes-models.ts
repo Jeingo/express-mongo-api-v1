@@ -16,6 +16,10 @@ export type LikesInfoType = {
     dislikesCount: number
 }
 
-export class LikesTypeToDB {
+export class CommentsLikesTypeToDB {
     constructor(public userId: string, public commentId: string, public myStatus: StatusLikeType) {}
+}
+
+export class PostsLikesTypeToDB {
+    constructor(public userId: string, public postId: string, public myStatus: StatusLikeType) {}
 }

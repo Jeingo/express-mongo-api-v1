@@ -4,7 +4,7 @@ import { LoginTypeForAuth } from '../models/auth-models'
 import { HTTP_STATUSES } from '../constats/status'
 import { CommentsRepository } from '../repositories/comments-repository'
 import { LikesRepository } from '../repositories/likes-repository'
-import { LikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import { CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { inject, injectable } from 'inversify'
 
 @injectable()
@@ -75,7 +75,7 @@ export class CommentsService {
         if (!comment) return false
         const likeInfo = await this.likesRepository.getLike(userId, commentId)
         if (!likeInfo) {
-            const newLike = new LikesTypeToDB(userId, commentId, newStatus)
+            const newLike = new CommentsLikesTypeToDB(userId, commentId, newStatus)
             await this.likesRepository.createLike(newLike)
         } else {
             const updatedLike = { myStatus: newStatus }

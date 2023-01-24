@@ -3,11 +3,12 @@ import { settings } from '../settings/settings'
 import {
     BlogsSchema,
     CommentsSchema,
-    LikesSchema,
+    CommentsLikesSchema,
     PostsSchema,
     RateLimiterSchema,
     SessionsSchema,
-    UsersSchema
+    UsersSchema,
+    PostsLikesSchema
 } from './schemas'
 
 const mongoUrl = settings.MONGO_URL
@@ -30,4 +31,5 @@ export const UsersModel = mongoose.model('users', UsersSchema)
 export const CommentsModel = mongoose.model('comments', CommentsSchema)
 export const SessionsModel = mongoose.model('sessions', SessionsSchema)
 export const RateLimiterModel = mongoose.model('limiters', RateLimiterSchema)
-export const LikesModel = mongoose.model('likes', LikesSchema)
+export const CommentsLikesModel = mongoose.model('comments-likes', CommentsLikesSchema)
+export const PostsLikesModel = mongoose.model('posts-likes', PostsLikesSchema)

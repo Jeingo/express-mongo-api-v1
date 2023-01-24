@@ -1,21 +1,21 @@
-import { LikesModel } from './db'
-import { LikesTypeOutput, LikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import { CommentsLikesModel } from './db'
+import { LikesTypeOutput, CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'
 
 @injectable()
 export class LikesRepository {
     async getLike(userId: string, commentId: string): Promise<LikesTypeOutput | null> {
-        const result = await LikesModel.findOne({ userId: userId, commentId: commentId })
+        const result = await CommentsLikesModel.findOne({ userId: userId, commentId: commentId })
         if (!result) return null
         return this._getOutputLike(result)
     }
-    async createLike(newLike: LikesTypeToDB): Promise<LikesTypeOutput> {
-        const result = await LikesModel.create(newLike)
+    async createLike(newLike: CommentsLikesTypeToDB): Promise<LikesTypeOutput> {
+        const result = await CommentsLikesModel.create(newLike)
         return this._getOutputLike(result)
     }
     async updateLike(likeId: string, status: { myStatus: StatusLikeType }): Promise<boolean> {
-        const result = await LikesModel.findByIdAndUpdate(new ObjectId(likeId), status)
+        const result = await CommentsLikesModel.findByIdAndUpdate(new ObjectId(likeId), status)
         return !!result
     }
     private _getOutputLike(like: any): LikesTypeOutput {

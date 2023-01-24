@@ -36,8 +36,15 @@ export class PostsTypeToDB {
         public content: string,
         public blogId: string,
         public blogName: string,
-        public createdAt: string
-    ) {}
+        public createdAt: string,
+        public likesInfo: {
+            likesCount: number
+            dislikesCount: number
+        }
+    ) {
+        this.likesInfo.likesCount = likesInfo.likesCount
+        this.likesInfo.dislikesCount = likesInfo.dislikesCount
+    }
 }
 
 export type PostsIdParams = {

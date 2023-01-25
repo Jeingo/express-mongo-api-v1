@@ -1,5 +1,5 @@
 import {inject, injectable} from "inversify";
-import {EmailManager} from "../managers/email-manager";
+import {EmailManager} from "../infrastructure/email-manager";
 import {UsersRepository} from "../repositories/users-repository";
 import {UsersHashType, UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
 import bcrypt from "bcrypt";

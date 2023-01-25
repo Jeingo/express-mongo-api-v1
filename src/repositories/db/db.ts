@@ -9,7 +9,7 @@ import {
     SessionsSchema,
     UsersSchema,
     PostsLikesSchema
-} from '../schemas'
+} from '../../domain/schemas'
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME

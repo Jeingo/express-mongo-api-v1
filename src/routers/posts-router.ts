@@ -6,8 +6,8 @@ import {
     shortDescriptionValidation,
     titleValidation
 } from '../middleware/input-posts-validation'
-import { auth } from '../authorization/basic-auth'
-import { bearerAuth } from '../authorization/bearer-auth'
+import { auth } from '../middleware/authorization/basic-auth'
+import { bearerAuth } from '../middleware/authorization/bearer-auth'
 import { contentInCommentValidation } from '../middleware/input-comments-validation'
 import { commentsController, postsController } from '../composition-root'
 import { likesValidation } from '../middleware/input-likes-validation'

@@ -13,7 +13,7 @@ import {
 } from '../middleware/input-auth-validation'
 import { inputValidation } from '../middleware/input-validation'
 
-import { bearerAuth } from '../authorization/bearer-auth'
+import { bearerAuth } from '../middleware/authorization/bearer-auth'
 import { rateLimiterMiddleware } from '../middleware/rate-limiter'
 import { authController } from '../composition-root'
 

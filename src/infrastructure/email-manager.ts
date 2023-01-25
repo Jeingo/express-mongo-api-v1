@@ -1,5 +1,5 @@
 import { UsersTypeToDB } from '../models/users-models'
-import { EmailAdapter } from '../adapters/email-adapter'
+import { EmailAdapter } from './email-adapter'
 import { inject, injectable } from 'inversify'
 
 @injectable()

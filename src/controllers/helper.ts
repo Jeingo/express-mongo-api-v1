@@ -1,4 +1,4 @@
-import { JwtService } from '../application/jwt-service'
+import { JwtService } from '../infrastructure/jwt-service'
 import { sessionsService } from '../composition-root'
 
 export const checkAuthorizationAndGetPayload = async (token: string) => {

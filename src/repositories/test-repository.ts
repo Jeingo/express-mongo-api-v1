@@ -1,7 +1,8 @@
 import {
     BlogsModel,
     CommentsLikesModel,
-    CommentsModel, PostsLikesModel,
+    CommentsModel,
+    PostsLikesModel,
     PostsModel,
     RateLimiterModel,
     SessionsModel,

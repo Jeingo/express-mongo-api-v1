@@ -75,7 +75,7 @@ export class PostsQueryRepository {
     private async _setThreeLastUser(posts: Array<PostsTypeOutput>) {
         for (let i = 0; i < posts.length; i++) {
             const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(posts[i].id)
-            if(lastThreeLikes) {
+            if (lastThreeLikes) {
                 posts[i].extendedLikesInfo.newestLikes = lastThreeLikes
             }
         }

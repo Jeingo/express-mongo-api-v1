@@ -248,10 +248,11 @@ describe('/blogs', () => {
             blogId: createdBlog2.id,
             blogName: createdBlog2.name,
             createdAt: expect.any(String),
-            likesInfo: {
+            extendedLikesInfo: {
                 likesCount: 0,
                 dislikesCount: 0,
-                myStatus: 'None'
+                myStatus: 'None',
+                newestLikes:[]
             }
         })
     })
@@ -283,10 +284,11 @@ describe('/blogs', () => {
                     blogId: createdBlog2.id,
                     blogName: createdBlog2.name,
                     createdAt: expect.any(String),
-                    likesInfo: {
+                    extendedLikesInfo: {
                         likesCount: 0,
                         dislikesCount: 0,
-                        myStatus: 'None'
+                        myStatus: 'None',
+                        newestLikes:[]
                     }
                 }]
             }

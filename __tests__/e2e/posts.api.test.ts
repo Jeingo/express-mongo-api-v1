@@ -160,10 +160,11 @@ describe('/posts', () => {
             ...correctPost,
             blogName: createdBlog.name,
             createdAt: expect.any(String),
-            likesInfo: {
+            extendedLikesInfo: {
                 likesCount: 0,
                 dislikesCount: 0,
-                myStatus: 'None'
+                myStatus: 'None',
+                newestLikes:[]
             }
         })
     })
@@ -176,10 +177,11 @@ describe('/posts', () => {
             ...createdPost,
             blogName: createdBlog.name,
             createdAt: expect.any(String),
-            likesInfo: {
+            extendedLikesInfo: {
                 likesCount: 0,
                 dislikesCount: 0,
-                myStatus: 'None'
+                myStatus: 'None',
+                newestLikes:[]
             }
         })
     })
@@ -211,10 +213,11 @@ describe('/posts', () => {
             ...correctNewPost,
             blogName: createdBlog.name,
             createdAt: expect.any(String),
-            likesInfo: {
+            extendedLikesInfo: {
                 likesCount: 0,
                 dislikesCount: 0,
-                myStatus: 'None'
+                myStatus: 'None',
+                newestLikes:[]
             }
         })
     })

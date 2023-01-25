@@ -21,9 +21,9 @@ export class PostsService {
                 post.extendedLikesInfo.myStatus = like.myStatus
             }
         }
-        if(post) {
+        if (post) {
             const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(post.id)
-            if(lastThreeLikes) {
+            if (lastThreeLikes) {
                 post.extendedLikesInfo.newestLikes = lastThreeLikes
             }
         }

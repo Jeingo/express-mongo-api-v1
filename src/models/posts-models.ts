@@ -1,8 +1,8 @@
 import { StatusLikeType } from './likes-models'
 
 type NewestLikesType = {
-    addedAt: string,
-    userId: string,
+    addedAt: string
+    userId: string
     login: string
 }
 
@@ -15,9 +15,9 @@ export type PostsTypeOutput = {
     blogName: string
     createdAt: string
     extendedLikesInfo: {
-        likesCount: number,
-        dislikesCount: number,
-        myStatus: StatusLikeType,
+        likesCount: number
+        dislikesCount: number
+        myStatus: StatusLikeType
         newestLikes: Array<NewestLikesType>
     }
 }

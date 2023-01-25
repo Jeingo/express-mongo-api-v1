@@ -14,8 +14,8 @@ export class PostsLikesRepository {
         const desc = -1
         const threeLastUser = 3
         const like = 'Like'
-        const result = await PostsLikesModel.find({postId: postId , myStatus: like})
-            .sort({'addedAt': desc})
+        const result = await PostsLikesModel.find({ postId: postId, myStatus: like })
+            .sort({ addedAt: desc })
             .limit(threeLastUser)
 
         if (!result) return null

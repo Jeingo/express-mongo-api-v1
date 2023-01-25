@@ -4,6 +4,7 @@ import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { injectable } from 'inversify'
+import {ObjectId} from "mongodb";
 
 @injectable()
 export class BlogsQueryRepository {
@@ -27,6 +28,11 @@ export class BlogsQueryRepository {
             .skip(skipNumber)
             .limit(+pageSize)
         return getPaginatedType(res.map(this._getOutputBlog), +pageSize, +pageNumber, countAllDocuments)
+    }
+    async getBlogById(id: string): Promise<BlogsTypeOutput | null> {
+        const result = await BlogsModel.findById(new ObjectId(id))
+        if (!result) return null
+        return this._getOutputBlog(result)
     }
     private _getOutputBlog(blog: any): BlogsTypeOutput {
         return {

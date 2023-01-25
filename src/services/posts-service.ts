@@ -4,11 +4,13 @@ import {PostsRepository} from "../repositories/posts-repository";
 import {PostsLikesRepository} from "../repositories/posts-likes-repository";
 import {PostsTypeOutput, PostsTypeToDB} from "../models/posts-models";
 import {PostsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
+import {BlogsQueryRepository} from "../query-reositories/blogs-query-repository";
 
 @injectable()
 export class PostsService {
     constructor(
         @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
+        @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
         @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository
     ) {
@@ -32,7 +34,7 @@ export class PostsService {
     }
 
     async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostsTypeOutput | null> {
-        const foundBlog = await this.blogsRepository.getBlogById(blogId)
+        const foundBlog = await this.blogsQueryRepository.getBlogById(blogId)
         if (!foundBlog) return null
         const createdPost = new PostsTypeToDB(title, desc, content, blogId, foundBlog.name, new Date().toISOString(), {
             likesCount: 0,
@@ -48,7 +50,7 @@ export class PostsService {
         content: string,
         blogId: string
     ): Promise<boolean | null> {
-        const foundBlog = await this.blogsRepository.getBlogById(blogId)
+        const foundBlog = await this.blogsQueryRepository.getBlogById(blogId)
         if (!foundBlog) return null
         const updatedPost = {
             title: title,

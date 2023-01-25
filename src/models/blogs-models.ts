@@ -19,3 +19,5 @@ export class BlogsTypeToDB {
 export type BlogsIdParams = {
     id: string
 }
+
+export type BlogId = string

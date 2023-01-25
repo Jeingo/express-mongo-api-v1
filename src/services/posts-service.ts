@@ -1,9 +1,9 @@
-import { PostsRepository } from '../repositories/posts-repository'
-import { BlogsRepository } from '../repositories/blogs-repository'
-import { PostsTypeOutput, PostsTypeToDB } from '../models/posts-models'
-import { inject, injectable } from 'inversify'
-import { PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
-import { PostsLikesRepository } from '../repositories/posts-likes-repository'
+import {inject, injectable} from "inversify";
+import {BlogsRepository} from "../repositories/blogs-repository";
+import {PostsRepository} from "../repositories/posts-repository";
+import {PostsLikesRepository} from "../repositories/posts-likes-repository";
+import {PostsTypeOutput, PostsTypeToDB} from "../models/posts-models";
+import {PostsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
 
 @injectable()
 export class PostsService {
@@ -11,7 +11,8 @@ export class PostsService {
         @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
         @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository
-    ) {}
+    ) {
+    }
 
     async getPostById(id: string, userId?: string): Promise<PostsTypeOutput | null> {
         const post = await this.postsRepository.getPostById(id)
@@ -29,6 +30,7 @@ export class PostsService {
         }
         return post
     }
+
     async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostsTypeOutput | null> {
         const foundBlog = await this.blogsRepository.getBlogById(blogId)
         if (!foundBlog) return null
@@ -38,6 +40,7 @@ export class PostsService {
         })
         return await this.postsRepository.createPost(createdPost)
     }
+
     async updatePost(
         id: string,
         title: string,
@@ -56,9 +59,11 @@ export class PostsService {
         }
         return await this.postsRepository.updatePost(id, updatedPost)
     }
+
     async deletePost(id: string): Promise<boolean> {
         return await this.postsRepository.deletePost(id)
     }
+
     async updateStatusLike(userId: string, login: string, postId: string, newStatus: StatusLikeType): Promise<boolean> {
         let lastStatus: StatusLikeType = 'None'
         const post = await this.postsRepository.getPostById(postId)
@@ -68,7 +73,7 @@ export class PostsService {
             const newLike = new PostsLikesTypeToDB(userId, postId, newStatus, login, new Date().toISOString())
             await this.postsLikesRepository.createLike(newLike)
         } else {
-            const updatedLike = { myStatus: newStatus }
+            const updatedLike = {myStatus: newStatus}
             await this.postsLikesRepository.updateLike(likeInfo.id, updatedLike)
             lastStatus = likeInfo.myStatus
         }

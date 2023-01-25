@@ -1,4 +1,4 @@
-import { BlogsModel } from './db'
+import { BlogsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { BlogsTypeInput, BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
 import { injectable } from 'inversify'

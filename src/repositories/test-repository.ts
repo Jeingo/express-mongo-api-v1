@@ -7,7 +7,7 @@ import {
     RateLimiterModel,
     SessionsModel,
     UsersModel
-} from './db'
+} from './db/db'
 import { injectable } from 'inversify'
 
 @injectable()

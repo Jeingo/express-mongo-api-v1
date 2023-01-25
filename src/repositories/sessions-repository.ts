@@ -1,4 +1,4 @@
-import { SessionsModel } from './db'
+import { SessionsModel } from './db/db'
 import { SessionInputType, SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { injectable } from 'inversify'
 

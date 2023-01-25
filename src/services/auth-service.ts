@@ -1,17 +1,18 @@
-import bcrypt from 'bcrypt'
-import { UsersRepository } from '../repositories/users-repository'
-import { v4 } from 'uuid'
-import add from 'date-fns/add'
-import { EmailManager } from '../managers/email-manager'
-import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
-import { inject, injectable } from 'inversify'
+import {inject, injectable} from "inversify";
+import {EmailManager} from "../managers/email-manager";
+import {UsersRepository} from "../repositories/users-repository";
+import {UsersHashType, UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
+import bcrypt from "bcrypt";
+import {v4} from "uuid";
+import add from "date-fns/add";
 
 @injectable()
 export class AuthService {
     constructor(
         @inject(EmailManager) protected emailManager: EmailManager,
         @inject(UsersRepository) protected usersRepository: UsersRepository
-    ) {}
+    ) {
+    }
 
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
         const user = await this.usersRepository.findUserHashByLoginOrEmail(loginOrEmail)
@@ -22,6 +23,7 @@ export class AuthService {
         }
         return user
     }
+
     async registerUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password, passwordSalt)
@@ -49,9 +51,11 @@ export class AuthService {
         await this.emailManager.sendRegistrationEmailConfirmation(createdUser)
         return result
     }
+
     async confirmEmail(code: string): Promise<void> {
         await this.usersRepository.updateConfirmationStatus(code)
     }
+
     async resendEmail(email: string): Promise<null | void> {
         const user = await this.usersRepository.findUserByEmail(email)
         if (!user) {
@@ -62,6 +66,7 @@ export class AuthService {
         user.emailConfirmation.confirmationCode = newConfirmationCode
         await this.emailManager.sendRegistrationEmailConfirmation(user)
     }
+
     async recoveryPassword(email: string): Promise<null | void> {
         const user = await this.usersRepository.findUserByEmail(email)
         if (!user) {
@@ -72,6 +77,7 @@ export class AuthService {
         user.passwordRecoveryConfirmation.passwordRecoveryCode = newPasswordRecoveryConfirmationCode
         await this.emailManager.sendPasswordRecoveryEmailConfirmation(user)
     }
+
     async setNewPassword(recoveryCode: string, newPassword: string): Promise<void> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(newPassword, passwordSalt)

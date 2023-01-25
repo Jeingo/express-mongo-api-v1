@@ -1,7 +1,7 @@
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsTypeOutput } from '../models/comments-models'
-import { CommentsModel, PostsModel } from '../repositories/db'
+import { CommentsModel, PostsModel } from '../repositories/db/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 import { CommentsLikesRepository } from '../repositories/comments-likes-repository'

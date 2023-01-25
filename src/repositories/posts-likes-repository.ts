@@ -5,7 +5,7 @@ import {
     PostsLikesTypeToDB,
     StatusLikeType
 } from '../models/likes-models'
-import { PostsLikesModel } from './db'
+import { PostsLikesModel } from './db/db'
 import { ObjectId } from 'mongodb'
 
 @injectable()

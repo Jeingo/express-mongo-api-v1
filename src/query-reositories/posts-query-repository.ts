@@ -1,5 +1,5 @@
 import { PostsTypeOutput } from '../models/posts-models'
-import { BlogsModel, PostsModel } from '../repositories/db'
+import { BlogsModel, PostsModel } from '../repositories/db/db'
 import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'

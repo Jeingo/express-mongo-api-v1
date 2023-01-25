@@ -1,4 +1,4 @@
-import { CommentsLikesModel } from './db'
+import { CommentsLikesModel } from './db/db'
 import { CommentsLikesTypeOutput, CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'

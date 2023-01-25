@@ -1,4 +1,4 @@
-import { PostsModel } from './db'
+import { PostsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
 import { injectable } from 'inversify'

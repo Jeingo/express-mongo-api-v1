@@ -1,19 +1,21 @@
-import { UsersRepository } from '../repositories/users-repository'
-import { UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
-import bcrypt from 'bcrypt'
-import { ObjectId } from 'mongodb'
-import { LoginTypeForAuth } from '../models/auth-models'
-import { v4 } from 'uuid'
-import add from 'date-fns/add'
-import { inject, injectable } from 'inversify'
+import {inject, injectable} from "inversify";
+import {UsersRepository} from "../repositories/users-repository";
+import {ObjectId} from "mongodb";
+import {LoginTypeForAuth} from "../models/auth-models";
+import {UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
+import bcrypt from "bcrypt";
+import {v4} from "uuid";
+import add from "date-fns/add";
 
 @injectable()
 export class UsersService {
-    constructor(@inject(UsersRepository) protected usersRepository: UsersRepository) {}
+    constructor(@inject(UsersRepository) protected usersRepository: UsersRepository) {
+    }
 
     async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
         return await this.usersRepository.findUserById(_id)
     }
+
     async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password, passwordSalt)
@@ -39,6 +41,7 @@ export class UsersService {
         )
         return await this.usersRepository.createUser(createdUser)
     }
+
     async deleteUser(id: string): Promise<boolean> {
         return await this.usersRepository.deleteUser(id)
     }

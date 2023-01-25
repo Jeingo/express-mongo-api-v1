@@ -11,9 +11,9 @@ import { PaginatedType } from '../models/main-models'
 import { PostsIdParams, PostsTypeInput, PostsTypeInputInBlog, PostsTypeOutput } from '../models/posts-models'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { PostsService } from '../domain/posts-service'
 import { inject, injectable } from 'inversify'
 import { LikesType } from '../models/likes-models'
+import {PostsService} from "../services/posts-service";
 
 @injectable()
 export class PostsController {

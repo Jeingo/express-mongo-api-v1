@@ -1,11 +1,11 @@
-import { CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
-import { PostsRepository } from '../repositories/posts-repository'
-import { LoginTypeForAuth } from '../models/auth-models'
-import { HTTP_STATUSES } from '../constats/status'
-import { CommentsRepository } from '../repositories/comments-repository'
-import { CommentsLikesRepository } from '../repositories/comments-likes-repository'
-import { CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
-import { inject, injectable } from 'inversify'
+import {inject, injectable} from "inversify";
+import {CommentsRepository} from "../repositories/comments-repository";
+import {PostsRepository} from "../repositories/posts-repository";
+import {CommentsLikesRepository} from "../repositories/comments-likes-repository";
+import {LoginTypeForAuth} from "../models/auth-models";
+import {CommentsTypeOutput, CommentsTypeToDB} from "../models/comments-models";
+import {HTTP_STATUSES} from "../constats/status";
+import {CommentsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
 
 @injectable()
 export class CommentsService {
@@ -13,7 +13,8 @@ export class CommentsService {
         @inject(CommentsRepository) protected commentsRepository: CommentsRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
         @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository
-    ) {}
+    ) {
+    }
 
     async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentsTypeOutput | null> {
         const foundPost = await this.postsRepository.getPostById(postId)
@@ -33,6 +34,7 @@ export class CommentsService {
         )
         return await this.commentsRepository.createComment(createdComment)
     }
+
     async getCommentById(id: string, userId?: string): Promise<CommentsTypeOutput | null> {
         const comment = await this.commentsRepository.getCommentById(id)
         if (userId && comment) {
@@ -43,6 +45,7 @@ export class CommentsService {
         }
         return comment
     }
+
     async updateComment(id: string, content: string, user: LoginTypeForAuth): Promise<boolean | number> {
         const comment = await this.commentsRepository.getCommentById(id)
 
@@ -53,9 +56,10 @@ export class CommentsService {
         if (comment.userId !== user.userId) {
             return HTTP_STATUSES.FORBIDDEN_403
         }
-        const updatedComment = { content: content }
+        const updatedComment = {content: content}
         return await this.commentsRepository.updateComment(id, updatedComment)
     }
+
     async deleteComment(id: string, user: LoginTypeForAuth): Promise<boolean | number> {
         const comment = await this.commentsRepository.getCommentById(id)
 
@@ -69,6 +73,7 @@ export class CommentsService {
 
         return await this.commentsRepository.deleteComment(id)
     }
+
     async updateStatusLike(userId: string, commentId: string, newStatus: StatusLikeType): Promise<boolean> {
         let lastStatus: StatusLikeType = 'None'
         const comment = await this.commentsRepository.getCommentById(commentId)
@@ -78,7 +83,7 @@ export class CommentsService {
             const newLike = new CommentsLikesTypeToDB(userId, commentId, newStatus)
             await this.commentsLikesRepository.createLike(newLike)
         } else {
-            const updatedLike = { myStatus: newStatus }
+            const updatedLike = {myStatus: newStatus}
             await this.commentsLikesRepository.updateLike(likeInfo.id, updatedLike)
             lastStatus = likeInfo.myStatus
         }

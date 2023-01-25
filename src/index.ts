@@ -1,4 +1,4 @@
-import { runDb } from './repositories/db'
+import { runDb } from './repositories/db/db'
 import { app } from './app'
 import { settings } from './settings/settings'
 

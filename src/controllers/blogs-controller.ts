@@ -5,8 +5,8 @@ import { PaginatedType } from '../models/main-models'
 import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { BlogsService } from '../domain/blogs-service'
 import { inject, injectable } from 'inversify'
+import {BlogsService} from "../services/blogs-service";
 
 @injectable()
 export class BlogsController {

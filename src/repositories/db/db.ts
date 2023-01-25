@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { settings } from '../settings/settings'
+import { settings } from '../../settings/settings'
 import {
     BlogsSchema,
     CommentsSchema,
@@ -9,7 +9,7 @@ import {
     SessionsSchema,
     UsersSchema,
     PostsLikesSchema
-} from './schemas'
+} from '../schemas'
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME

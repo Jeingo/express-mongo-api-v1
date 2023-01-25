@@ -5,8 +5,8 @@ import { PaginatedType } from '../models/main-models'
 import { UsersIdParams, UsersTypeInput, UsersTypeOutput } from '../models/users-models'
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { UsersService } from '../domain/users-service'
 import { inject, injectable } from 'inversify'
+import {UsersService} from "../services/users-service";
 
 @injectable()
 export class UsersController {

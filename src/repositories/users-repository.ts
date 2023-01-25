@@ -5,7 +5,7 @@ import {
     UsersTypeOutput,
     UsersTypeToDB
 } from '../models/users-models'
-import { UsersModel } from './db'
+import { UsersModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'
 import { LoginTypeForAuth } from '../models/auth-models'

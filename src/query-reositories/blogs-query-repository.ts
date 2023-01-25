@@ -1,5 +1,5 @@
 import { BlogsTypeOutput } from '../models/blogs-models'
-import { BlogsModel } from '../repositories/db'
+import { BlogsModel } from '../repositories/db/db'
 import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'

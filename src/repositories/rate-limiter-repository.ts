@@ -1,4 +1,4 @@
-import { RateLimiterModel } from './db'
+import { RateLimiterModel } from './db/db'
 import { RateLimiterType } from '../models/auth-models'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'

@@ -1,18 +1,21 @@
-import { BlogsRepository } from '../repositories/blogs-repository'
-import { BlogsTypeOutput, BlogsTypeToDB } from '../models/blogs-models'
-import { inject, injectable } from 'inversify'
+import {inject, injectable} from "inversify";
+import {BlogsRepository} from "../repositories/blogs-repository";
+import {BlogsTypeOutput, BlogsTypeToDB} from "../models/blogs-models";
 
 @injectable()
 export class BlogsService {
-    constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository) {}
+    constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository) {
+    }
 
     async getBlogById(id: string): Promise<BlogsTypeOutput | null> {
         return await this.blogsRepository.getBlogById(id)
     }
+
     async createBlog(name: string, desc: string, url: string): Promise<BlogsTypeOutput> {
         const createdBlog = new BlogsTypeToDB(name, desc, url, new Date().toISOString())
         return await this.blogsRepository.createBlog(createdBlog)
     }
+
     async updateBlog(id: string, name: string, desc: string, url: string): Promise<boolean> {
         const updatedBlog = {
             name: name,
@@ -21,6 +24,7 @@ export class BlogsService {
         }
         return await this.blogsRepository.updateBlog(id, updatedBlog)
     }
+
     async deleteBlog(id: string): Promise<boolean> {
         return await this.blogsRepository.deleteBlog(id)
     }

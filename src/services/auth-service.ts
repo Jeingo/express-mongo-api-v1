@@ -15,7 +15,7 @@ export class AuthService {
     }
 
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
-        const user = await this.usersRepository.getUserByLoginOrEmail(loginOrEmail)
+        const user = await this.usersRepository.getUser(loginOrEmail)
         if (!user) return false
         const res = await bcrypt.compare(password, user.hash)
         if (!res) {
@@ -57,7 +57,7 @@ export class AuthService {
     }
 
     async resendEmail(email: string): Promise<null | void> {
-        const user = await this.usersRepository.findUserByEmail(email)
+        const user = await this.usersRepository.getUser(email)
         if (!user) {
             return null
         }
@@ -68,7 +68,7 @@ export class AuthService {
     }
 
     async recoveryPassword(email: string): Promise<null | void> {
-        const user = await this.usersRepository.findUserByEmail(email)
+        const user = await this.usersRepository.getUser(email)
         if (!user) {
             return null
         }

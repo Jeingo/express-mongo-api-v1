@@ -7,7 +7,7 @@ const patternEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
 const usersRepository = new UsersRepository()
 
 const checkEmail = async (email: string) => {
-    const foundUser = await usersRepository.findUserByEmail(email)
+    const foundUser = await usersRepository.getUser(email)
     if (foundUser) {
         throw new Error('Email is already exist')
     }
@@ -15,7 +15,7 @@ const checkEmail = async (email: string) => {
 }
 
 const checkLogin = async (login: string) => {
-    const foundUser = await usersRepository.findUserByLogin(login)
+    const foundUser = await usersRepository.getUser(login)
     if (foundUser) {
         throw new Error('Email is already exist')
     }
@@ -23,7 +23,7 @@ const checkLogin = async (login: string) => {
 }
 
 const checkCode = async (code: string) => {
-    const foundUser = await usersRepository.getUserByConfirmationCode(code)
+    const foundUser = await usersRepository.getUser(code)
     if (!foundUser) {
         throw new Error('This code is wrong')
     }
@@ -40,7 +40,7 @@ const checkCode = async (code: string) => {
 }
 
 const checkPasswordRecoveryCode = async (code: string) => {
-    const foundUser = await usersRepository.getUserByConfirmationCodeRecoveryPassword(code)
+    const foundUser = await usersRepository.getUser(code)
     if (!foundUser) {
         throw new Error('This code is wrong')
     }
@@ -57,7 +57,7 @@ const checkPasswordRecoveryCode = async (code: string) => {
 }
 
 const checkEmailResending = async (email: string) => {
-    const foundUser = await usersRepository.findUserByEmail(email)
+    const foundUser = await usersRepository.getUser(email)
     if (!foundUser) {
         throw new Error('This email is wrong')
     }

@@ -12,6 +12,17 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class UsersRepository {
+    async getUser(uniqueField: string): Promise<FullUsersTypeOutput | null> {
+        const result = await UsersModel.findOne().or([
+            { email: uniqueField },
+            { login: uniqueField },
+            { 'emailConfirmation.confirmationCode': uniqueField },
+            { 'passwordRecoveryConfirmation.passwordRecoveryCode': uniqueField },
+
+        ])
+        if (!result) return null
+        return this._getOutputUser(result)
+    }
     async getAuthUserById(id: UserId): Promise<LoginTypeForAuth | null> {
         const result = await UsersModel.findById(new ObjectId(id))
         if (!result) return null
@@ -25,43 +36,12 @@ export class UsersRepository {
         const result = await UsersModel.findByIdAndDelete(new ObjectId(id))
         return !!result
     }
-    async getUserByLoginOrEmail(loginOrEmail: string): Promise<FullUsersTypeOutput | null> {
-        const result = await UsersModel.findOne().or([{ email: loginOrEmail }, { login: loginOrEmail }])
-        if (!result) return null
-        return this._getOutputUser(result)
-    }
-    async getUserByConfirmationCode(code: string): Promise<FullUsersTypeOutput | null> {
-        const result = await UsersModel.findOne({
-            'emailConfirmation.confirmationCode': code
-        })
-        if (!result) return null
-        return this._getOutputUser(result)
-    }
-    async getUserByConfirmationCodeRecoveryPassword(
-        code: string
-    ): Promise<FullUsersTypeOutput | null> {
-        const result = await UsersModel.findOne({
-            'passwordRecoveryConfirmation.passwordRecoveryCode': code
-        })
-        if (!result) return null
-        return this._getOutputUser(result)
-    }
     async updateConfirmationStatus(code: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
             { 'emailConfirmation.confirmationCode': code },
             { 'emailConfirmation.isConfirmed': true }
         )
         return !!result
-    }
-    async findUserByEmail(email: string): Promise<FullUsersTypeOutput | null> {
-        const result = await UsersModel.findOne({ email: email })
-        if (!result) return null
-        return this._getOutputUser(result)
-    }
-    async findUserByLogin(login: string): Promise<FullUsersTypeOutput | null> {
-        const result = await UsersModel.findOne({ login: login })
-        if (!result) return null
-        return this._getOutputUser(result)
     }
     async updateConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(

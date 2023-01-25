@@ -1,7 +1,6 @@
 import {
-    UsersConfirmationCodePasswordRecoveryType,
-    UsersConfirmationCodeType,
-    UsersHashType,
+    FullUsersTypeOutput,
+    UserId,
     UsersTypeOutput,
     UsersTypeToDB
 } from '../models/users-models'
@@ -13,10 +12,10 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class UsersRepository {
-    async findUserById(id: ObjectId): Promise<LoginTypeForAuth | null> {
-        const result = await UsersModel.findById(id)
+    async getAuthUserById(id: UserId): Promise<LoginTypeForAuth | null> {
+        const result = await UsersModel.findById(new ObjectId(id))
         if (!result) return null
-        return this._getOutputUserForAuth(result)
+        return this._getOutputAuthUser(result)
     }
     async createUser(createdUser: UsersTypeToDB): Promise<UsersTypeOutput> {
         const result = await UsersModel.create(createdUser)
@@ -26,26 +25,26 @@ export class UsersRepository {
         const result = await UsersModel.findByIdAndDelete(new ObjectId(id))
         return !!result
     }
-    async findUserHashByLoginOrEmail(loginOrEmail: string): Promise<UsersHashType | null> {
+    async getUserByLoginOrEmail(loginOrEmail: string): Promise<FullUsersTypeOutput | null> {
         const result = await UsersModel.findOne().or([{ email: loginOrEmail }, { login: loginOrEmail }])
         if (!result) return null
-        return this._getOutputUserHash(result)
+        return this._getOutputUser(result)
     }
-    async findUserByConfirmationCode(code: string): Promise<UsersConfirmationCodeType | null> {
+    async getUserByConfirmationCode(code: string): Promise<FullUsersTypeOutput | null> {
         const result = await UsersModel.findOne({
             'emailConfirmation.confirmationCode': code
         })
         if (!result) return null
-        return this._getOutputUserForConfirmationCode(result)
+        return this._getOutputUser(result)
     }
-    async findUserByConfirmationCodeRecoveryPassword(
+    async getUserByConfirmationCodeRecoveryPassword(
         code: string
-    ): Promise<UsersConfirmationCodePasswordRecoveryType | null> {
+    ): Promise<FullUsersTypeOutput | null> {
         const result = await UsersModel.findOne({
             'passwordRecoveryConfirmation.passwordRecoveryCode': code
         })
         if (!result) return null
-        return this._getOutputUserForPasswordRecoveryConfirmationCode(result)
+        return this._getOutputUser(result)
     }
     async updateConfirmationStatus(code: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
@@ -54,12 +53,12 @@ export class UsersRepository {
         )
         return !!result
     }
-    async findUserByEmail(email: string): Promise<UsersTypeToDB | null> {
+    async findUserByEmail(email: string): Promise<FullUsersTypeOutput | null> {
         const result = await UsersModel.findOne({ email: email })
         if (!result) return null
         return this._getOutputUser(result)
     }
-    async findUserByLogin(login: string): Promise<UsersTypeToDB | null> {
+    async findUserByLogin(login: string): Promise<FullUsersTypeOutput | null> {
         const result = await UsersModel.findOne({ login: login })
         if (!result) return null
         return this._getOutputUser(result)
@@ -89,42 +88,17 @@ export class UsersRepository {
         )
         return !!result
     }
-    private _getOutputUserForAuth(user: any): LoginTypeForAuth {
+    private _getOutputAuthUser(user: any): LoginTypeForAuth {
         return {
             email: user.email,
             login: user.login,
             userId: user._id.toString()
         }
     }
-    private _getOutputUserHash(user: any): UsersHashType {
-        return {
-            id: user._id.toString(),
-            hash: user.hash
-        }
-    }
-    private _getOutputUserForConfirmationCode(user: any): UsersConfirmationCodeType {
-        return {
-            id: user._id.toString(),
-            emailConfirmation: {
-                confirmationCode: user.emailConfirmation.confirmationCode,
-                expirationDate: user.emailConfirmation.expirationDate,
-                isConfirmed: user.emailConfirmation.isConfirmed
-            }
-        }
-    }
-    private _getOutputUserForPasswordRecoveryConfirmationCode(user: any): UsersConfirmationCodePasswordRecoveryType {
-        return {
-            id: user._id.toString(),
-            passwordRecoveryConfirmation: {
-                passwordRecoveryCode: user.passwordRecoveryConfirmation.passwordRecoveryCode,
-                expirationDate: user.passwordRecoveryConfirmation.expirationDate,
-                isConfirmed: user.passwordRecoveryConfirmation.isConfirmed
-            }
-        }
-    }
 
-    private _getOutputUser(user: any): UsersTypeToDB {
+    private _getOutputUser(user: any): FullUsersTypeOutput {
         return {
+            id: user._id.toString(),
             login: user.login,
             hash: user.hash,
             email: user.email,

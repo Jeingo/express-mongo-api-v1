@@ -52,6 +52,6 @@ export const getUserIdByAccessToken = async (req: Request, res: Response, next: 
         next()
         return
     }
-    req.user = await usersService.getUserById(userId)
+    req.user = await usersService.getAuthUserById(userId)
     next()
 }

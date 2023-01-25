@@ -23,7 +23,7 @@ const checkLogin = async (login: string) => {
 }
 
 const checkCode = async (code: string) => {
-    const foundUser = await usersRepository.findUserByConfirmationCode(code)
+    const foundUser = await usersRepository.getUserByConfirmationCode(code)
     if (!foundUser) {
         throw new Error('This code is wrong')
     }
@@ -40,7 +40,7 @@ const checkCode = async (code: string) => {
 }
 
 const checkPasswordRecoveryCode = async (code: string) => {
-    const foundUser = await usersRepository.findUserByConfirmationCodeRecoveryPassword(code)
+    const foundUser = await usersRepository.getUserByConfirmationCodeRecoveryPassword(code)
     if (!foundUser) {
         throw new Error('This code is wrong')
     }

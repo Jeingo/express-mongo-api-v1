@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
-import { ObjectId } from 'mongodb'
 import { Token, TokenPayloadType } from '../models/token-models'
 import { injectable } from 'inversify'
+import {UserId} from "../models/users-models";
 
 @injectable()
 export class JwtService {
@@ -23,10 +23,10 @@ export class JwtService {
             return null
         }
     }
-    getUserIdByToken(token: string): ObjectId | null {
+    getUserIdByToken(token: string): UserId | null {
         try {
             const result: any = jwt.verify(token, settings.JWT_SECRET)
-            return new ObjectId(result.userId)
+            return result.userId
         } catch (err) {
             return null
         }

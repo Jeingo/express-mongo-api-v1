@@ -15,7 +15,7 @@ export class AuthService {
     }
 
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
-        const user = await this.usersRepository.findUserHashByLoginOrEmail(loginOrEmail)
+        const user = await this.usersRepository.getUserByLoginOrEmail(loginOrEmail)
         if (!user) return false
         const res = await bcrypt.compare(password, user.hash)
         if (!res) {

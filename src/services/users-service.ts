@@ -1,8 +1,7 @@
 import {inject, injectable} from "inversify";
 import {UsersRepository} from "../repositories/users-repository";
-import {ObjectId} from "mongodb";
 import {LoginTypeForAuth} from "../models/auth-models";
-import {UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
+import {UserId, UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
 import bcrypt from "bcrypt";
 import {v4} from "uuid";
 import add from "date-fns/add";
@@ -12,8 +11,8 @@ export class UsersService {
     constructor(@inject(UsersRepository) protected usersRepository: UsersRepository) {
     }
 
-    async getUserById(_id: ObjectId): Promise<LoginTypeForAuth | null> {
-        return await this.usersRepository.findUserById(_id)
+    async getAuthUserById(id: UserId): Promise<LoginTypeForAuth | null> {
+        return await this.usersRepository.getAuthUserById(id)
     }
 
     async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {

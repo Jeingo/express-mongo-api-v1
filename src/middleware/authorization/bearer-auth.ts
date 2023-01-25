@@ -15,6 +15,6 @@ export const bearerAuth = async (req: Request, res: Response, next: NextFunction
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
-    req.user = await usersService.getUserById(userId)
+    req.user = await usersService.getAuthUserById(userId)
     next()
 }

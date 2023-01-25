@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { settings } from '../settings/settings'
 import { Token, TokenPayloadType } from '../models/token-models'
 import { injectable } from 'inversify'
-import {UserId} from "../models/users-models";
+import { UserId } from '../models/users-models'
 
 @injectable()
 export class JwtService {

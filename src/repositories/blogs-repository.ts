@@ -1,6 +1,6 @@
 import { BlogsModel } from './db/db'
 import { ObjectId } from 'mongodb'
-import {BlogId, BlogsTypeInput, BlogsTypeToDB} from '../models/blogs-models'
+import { BlogId, BlogsTypeInput, BlogsTypeToDB } from '../models/blogs-models'
 import { injectable } from 'inversify'
 
 @injectable()

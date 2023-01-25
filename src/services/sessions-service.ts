@@ -1,16 +1,15 @@
-import {inject, injectable} from "inversify";
-import {SessionsRepository} from "../repositories/sessions-repository";
-import {SessionOutputType, SessionTypeToDB} from "../models/session-models";
-import jwt from "jsonwebtoken";
-import {settings} from "../settings/settings";
-import {TokenPayloadType} from "../models/token-models";
-import {HttpTypes} from "../models/status-models";
-import {HTTP_STATUSES} from "../constats/status";
+import { inject, injectable } from 'inversify'
+import { SessionsRepository } from '../repositories/sessions-repository'
+import { SessionOutputType, SessionTypeToDB } from '../models/session-models'
+import jwt from 'jsonwebtoken'
+import { settings } from '../settings/settings'
+import { TokenPayloadType } from '../models/token-models'
+import { HttpTypes } from '../models/status-models'
+import { HTTP_STATUSES } from '../constats/status'
 
 @injectable()
 export class SessionsService {
-    constructor(@inject(SessionsRepository) protected sessionsRepository: SessionsRepository) {
-    }
+    constructor(@inject(SessionsRepository) protected sessionsRepository: SessionsRepository) {}
 
     async findAllActiveSession(userId: string): Promise<SessionOutputType[] | null> {
         return await this.sessionsRepository.findAllActiveSession(userId)

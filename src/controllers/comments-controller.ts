@@ -12,7 +12,7 @@ import { PaginatedType } from '../models/main-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
 import { LikesType } from '../models/likes-models'
 import { inject, injectable } from 'inversify'
-import {CommentsService} from "../services/comments-service";
+import { CommentsService } from '../services/comments-service'
 
 @injectable()
 export class CommentsController {

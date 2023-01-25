@@ -14,8 +14,8 @@ import { settings } from '../settings/settings'
 import { checkAuthorizationAndGetPayload } from './helper'
 import { UsersTypeInput } from '../models/users-models'
 import { inject, injectable } from 'inversify'
-import {AuthService} from "../services/auth-service";
-import {SessionsService} from "../services/sessions-service";
+import { AuthService } from '../services/auth-service'
+import { SessionsService } from '../services/sessions-service'
 
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { HTTP_STATUSES } from '../constats/status'
 import { inject, injectable } from 'inversify'
-import {TestService} from "../services/test-service";
+import { TestService } from '../services/test-service'
 
 @injectable()
 export class TestController {

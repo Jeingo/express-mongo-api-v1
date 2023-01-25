@@ -1,11 +1,11 @@
-import {inject, injectable} from "inversify";
-import {BlogsRepository} from "../repositories/blogs-repository";
-import {PostsRepository} from "../repositories/posts-repository";
-import {PostsLikesRepository} from "../repositories/posts-likes-repository";
-import {PostId, PostsTypeToDB} from "../models/posts-models";
-import {PostsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
-import {BlogsQueryRepository} from "../query-reositories/blogs-query-repository";
-import {PostsQueryRepository} from "../query-reositories/posts-query-repository";
+import { inject, injectable } from 'inversify'
+import { BlogsRepository } from '../repositories/blogs-repository'
+import { PostsRepository } from '../repositories/posts-repository'
+import { PostsLikesRepository } from '../repositories/posts-likes-repository'
+import { PostId, PostsTypeToDB } from '../models/posts-models'
+import { PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
+import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
+import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 
 @injectable()
 export class PostsService {
@@ -15,8 +15,7 @@ export class PostsService {
         @inject(PostsRepository) protected postsRepository: PostsRepository,
         @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
         @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository
-    ) {
-    }
+    ) {}
     async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostId | null> {
         const foundBlog = await this.blogsQueryRepository.getBlogById(blogId)
         if (!foundBlog) return null
@@ -59,7 +58,7 @@ export class PostsService {
             const newLike = new PostsLikesTypeToDB(userId, postId, newStatus, login, new Date().toISOString())
             await this.postsLikesRepository.createLike(newLike)
         } else {
-            const updatedLike = {myStatus: newStatus}
+            const updatedLike = { myStatus: newStatus }
             await this.postsLikesRepository.updateLike(likeInfo.id, updatedLike)
             lastStatus = likeInfo.myStatus
         }

@@ -1,6 +1,6 @@
 import { body } from 'express-validator'
 import { ObjectId } from 'mongodb'
-import {BlogsQueryRepository} from "../query-reositories/blogs-query-repository";
+import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 
 const checkId = async (id: string): Promise<true> => {
     const blogsQueryRepository = new BlogsQueryRepository()

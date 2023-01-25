@@ -1,11 +1,11 @@
-import {inject, injectable} from "inversify";
-import {EmailManager} from "../infrastructure/email-manager";
-import {UsersRepository} from "../repositories/users-repository";
-import {UsersHashType, UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
-import bcrypt from "bcrypt";
-import {v4} from "uuid";
-import add from "date-fns/add";
-import {UsersQueryRepository} from "../query-reositories/users-query-repository";
+import { inject, injectable } from 'inversify'
+import { EmailManager } from '../infrastructure/email-manager'
+import { UsersRepository } from '../repositories/users-repository'
+import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
+import bcrypt from 'bcrypt'
+import { v4 } from 'uuid'
+import add from 'date-fns/add'
+import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 
 @injectable()
 export class AuthService {
@@ -13,8 +13,7 @@ export class AuthService {
         @inject(EmailManager) protected emailManager: EmailManager,
         @inject(UsersRepository) protected usersRepository: UsersRepository,
         @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
-    ) {
-    }
+    ) {}
 
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
         const user = await this.usersQueryRepository.getUser(loginOrEmail)

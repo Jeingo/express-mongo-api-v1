@@ -1,4 +1,4 @@
-import {CommentId, CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB} from '../models/comments-models'
+import { CommentId, CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
 import { CommentsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { LikesInfoType, StatusLikeType } from '../models/likes-models'

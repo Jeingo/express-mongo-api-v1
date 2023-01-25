@@ -1,11 +1,11 @@
 import { QueryUsers } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
-import {FullUsersTypeOutput, UserId, UsersTypeOutput} from '../models/users-models'
+import { FullUsersTypeOutput, UserId, UsersTypeOutput } from '../models/users-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { UsersModel } from '../repositories/db/db'
 import { injectable } from 'inversify'
-import {LoginTypeForAuth} from "../models/auth-models";
-import {ObjectId} from "mongodb";
+import { LoginTypeForAuth } from '../models/auth-models'
+import { ObjectId } from 'mongodb'
 
 @injectable()
 export class UsersQueryRepository {
@@ -38,8 +38,7 @@ export class UsersQueryRepository {
             { email: uniqueField },
             { login: uniqueField },
             { 'emailConfirmation.confirmationCode': uniqueField },
-            { 'passwordRecoveryConfirmation.passwordRecoveryCode': uniqueField },
-
+            { 'passwordRecoveryConfirmation.passwordRecoveryCode': uniqueField }
         ])
         if (!result) return null
         return this._getOutputUser(result)

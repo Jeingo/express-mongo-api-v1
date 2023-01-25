@@ -23,13 +23,13 @@ import { UsersController } from './controllers/users-controller'
 import { CommentsLikesRepository } from './repositories/comments-likes-repository'
 import { Container } from 'inversify'
 import { PostsLikesRepository } from './repositories/posts-likes-repository'
-import {AuthService} from "./services/auth-service";
-import {BlogsService} from "./services/blogs-service";
-import {CommentsService} from "./services/comments-service";
-import {PostsService} from "./services/posts-service";
-import {SessionsService} from "./services/sessions-service";
-import {TestService} from "./services/test-service";
-import {UsersService} from "./services/users-service";
+import { AuthService } from './services/auth-service'
+import { BlogsService } from './services/blogs-service'
+import { CommentsService } from './services/comments-service'
+import { PostsService } from './services/posts-service'
+import { SessionsService } from './services/sessions-service'
+import { TestService } from './services/test-service'
+import { UsersService } from './services/users-service'
 
 export const container = new Container()
 container.bind(BlogsRepository).to(BlogsRepository)

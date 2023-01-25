@@ -1,6 +1,6 @@
 import { PostsModel } from './db/db'
 import { ObjectId } from 'mongodb'
-import {PostId, PostsTypeOutput, PostsTypeToDB, PostsUpdateType} from '../models/posts-models'
+import { PostId, PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
 import { injectable } from 'inversify'
 import { LikesInfoType, StatusLikeType } from '../models/likes-models'
 
@@ -9,7 +9,6 @@ export class PostsRepository {
     async createPost(createdPost: PostsTypeToDB): Promise<PostId> {
         const result = await PostsModel.create(createdPost)
         return result._id.toString()
-
     }
     async updatePost(id: string, updatedPost: PostsUpdateType): Promise<boolean> {
         const result = await PostsModel.findByIdAndUpdate(new ObjectId(id), updatedPost)

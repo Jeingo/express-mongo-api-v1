@@ -6,7 +6,7 @@ import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { inject, injectable } from 'inversify'
-import {BlogsService} from "../services/blogs-service";
+import { BlogsService } from '../services/blogs-service'
 
 @injectable()
 export class BlogsController {
@@ -29,7 +29,11 @@ export class BlogsController {
         res.json(foundBlog)
     }
     async createBlog(req: RequestWithBody<BlogsTypeInput>, res: Response<BlogsTypeOutput>) {
-        const createdBlogId = await this.blogsService.createBlog(req.body.name, req.body.description, req.body.websiteUrl)
+        const createdBlogId = await this.blogsService.createBlog(
+            req.body.name,
+            req.body.description,
+            req.body.websiteUrl
+        )
         const createdBlog = await this.blogsQueryRepository.getBlogById(createdBlogId)
         res.status(HTTP_STATUSES.CREATED_201).json(createdBlog!)
     }

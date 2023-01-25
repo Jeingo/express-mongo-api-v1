@@ -1,7 +1,4 @@
-import {
-    UsersTypeOutput,
-    UsersTypeToDB
-} from '../models/users-models'
+import { UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
 import { UsersModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import add from 'date-fns/add'

@@ -14,14 +14,14 @@ export type UsersTypeInput = {
 export type FullUsersTypeOutput = {
     id: string
     login: string
-    hash: string,
+    hash: string
     email: string
-    createdAt: string,
+    createdAt: string
     passwordRecoveryConfirmation: {
         passwordRecoveryCode: string
         expirationDate: Date
         isConfirmed: boolean
-    },
+    }
     emailConfirmation: {
         confirmationCode: string
         expirationDate: Date

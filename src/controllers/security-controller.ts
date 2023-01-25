@@ -4,7 +4,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { RequestWithParams } from '../models/types'
 import { DeviceIdParams } from '../models/auth-models'
 import { inject, injectable } from 'inversify'
-import {SessionsService} from "../services/sessions-service";
+import { SessionsService } from '../services/sessions-service'
 
 @injectable()
 export class SecurityController {

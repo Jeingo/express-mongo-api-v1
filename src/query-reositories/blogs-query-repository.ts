@@ -4,7 +4,7 @@ import { QueryBlogs } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { injectable } from 'inversify'
-import {ObjectId} from "mongodb";
+import { ObjectId } from 'mongodb'
 
 @injectable()
 export class BlogsQueryRepository {

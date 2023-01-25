@@ -6,7 +6,7 @@ import { UsersIdParams, UsersTypeInput, UsersTypeOutput } from '../models/users-
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
 import { inject, injectable } from 'inversify'
-import {UsersService} from "../services/users-service";
+import { UsersService } from '../services/users-service'
 
 @injectable()
 export class UsersController {

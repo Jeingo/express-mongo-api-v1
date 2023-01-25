@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from 'express'
 import { HTTP_STATUSES } from '../../constats/status'
-import {jwtService, usersQueryRepository} from '../../composition-root'
+import { jwtService, usersQueryRepository } from '../../composition-root'
 
 export const bearerAuth = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization) {

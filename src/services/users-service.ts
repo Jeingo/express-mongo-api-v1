@@ -1,16 +1,17 @@
-import {inject, injectable} from "inversify";
-import {UsersRepository} from "../repositories/users-repository";
-import { UsersTypeOutput, UsersTypeToDB} from "../models/users-models";
-import bcrypt from "bcrypt";
-import {v4} from "uuid";
-import add from "date-fns/add";
-import {UsersQueryRepository} from "../query-reositories/users-query-repository";
+import { inject, injectable } from 'inversify'
+import { UsersRepository } from '../repositories/users-repository'
+import { UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
+import bcrypt from 'bcrypt'
+import { v4 } from 'uuid'
+import add from 'date-fns/add'
+import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 
 @injectable()
 export class UsersService {
-    constructor(@inject(UsersRepository) protected usersRepository: UsersRepository,
-                @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository) {
-    }
+    constructor(
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
+    ) {}
 
     async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
         const passwordSalt = await bcrypt.genSalt(10)

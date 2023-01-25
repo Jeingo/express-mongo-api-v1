@@ -13,7 +13,7 @@ import { PostsQueryRepository } from '../query-reositories/posts-query-repositor
 import { HTTP_STATUSES } from '../constats/status'
 import { inject, injectable } from 'inversify'
 import { LikesType } from '../models/likes-models'
-import {PostsService} from "../services/posts-service";
+import { PostsService } from '../services/posts-service'
 
 @injectable()
 export class PostsController {

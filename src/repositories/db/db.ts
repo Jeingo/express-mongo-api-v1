@@ -1,13 +1,13 @@
 import mongoose from 'mongoose'
 import { settings } from '../../settings/settings'
-import {BlogsSchema} from "../../domain/blogs-entity";
-import {PostsSchema} from "../../domain/posts-entity";
-import {UsersSchema} from "../../domain/users-entity";
-import {CommentsSchema} from "../../domain/comments-entity";
-import {SessionsSchema} from "../../domain/sessions-entity";
-import {RateLimiterSchema} from "../../domain/rateLimiter-entity";
-import {CommentsLikesSchema} from "../../domain/commentsLikes-entity";
-import {PostsLikesSchema} from "../../domain/postsLikes-entity";
+import { BlogsSchema } from '../../domain/blogs-entity'
+import { PostsSchema } from '../../domain/posts-entity'
+import { UsersSchema } from '../../domain/users-entity'
+import { CommentsSchema } from '../../domain/comments-entity'
+import { SessionsSchema } from '../../domain/sessions-entity'
+import { RateLimiterSchema } from '../../domain/rateLimiter-entity'
+import { CommentsLikesSchema } from '../../domain/commentsLikes-entity'
+import { PostsLikesSchema } from '../../domain/postsLikes-entity'
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME

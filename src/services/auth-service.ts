@@ -5,17 +5,19 @@ import {UsersHashType, UsersTypeOutput, UsersTypeToDB} from "../models/users-mod
 import bcrypt from "bcrypt";
 import {v4} from "uuid";
 import add from "date-fns/add";
+import {UsersQueryRepository} from "../query-reositories/users-query-repository";
 
 @injectable()
 export class AuthService {
     constructor(
         @inject(EmailManager) protected emailManager: EmailManager,
-        @inject(UsersRepository) protected usersRepository: UsersRepository
+        @inject(UsersRepository) protected usersRepository: UsersRepository,
+        @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {
     }
 
     async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
-        const user = await this.usersRepository.getUser(loginOrEmail)
+        const user = await this.usersQueryRepository.getUser(loginOrEmail)
         if (!user) return false
         const res = await bcrypt.compare(password, user.hash)
         if (!res) {
@@ -57,7 +59,7 @@ export class AuthService {
     }
 
     async resendEmail(email: string): Promise<null | void> {
-        const user = await this.usersRepository.getUser(email)
+        const user = await this.usersQueryRepository.getUser(email)
         if (!user) {
             return null
         }
@@ -68,7 +70,7 @@ export class AuthService {
     }
 
     async recoveryPassword(email: string): Promise<null | void> {
-        const user = await this.usersRepository.getUser(email)
+        const user = await this.usersQueryRepository.getUser(email)
         if (!user) {
             return null
         }

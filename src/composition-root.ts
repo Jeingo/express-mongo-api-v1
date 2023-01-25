@@ -67,7 +67,7 @@ export const rateLimiterRepository = container.resolve(RateLimiterRepository)
 
 export const jwtService = container.resolve(JwtService)
 export const sessionsService = container.resolve(SessionsService)
-export const usersService = container.resolve(UsersService)
+export const usersQueryRepository = container.resolve(UsersQueryRepository)
 
 export const authController = container.resolve(AuthController)
 export const blogsController = container.resolve(BlogsController)

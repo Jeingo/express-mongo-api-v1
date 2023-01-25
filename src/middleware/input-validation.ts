@@ -2,7 +2,7 @@ import { validationResult } from 'express-validator'
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
 import { HTTP_STATUSES } from '../constats/status'
-import { jwtService, usersService } from '../composition-root'
+import {jwtService, usersQueryRepository} from '../composition-root'
 
 const baseValidationResult = validationResult.withDefaults({
     formatter: (error) => {
@@ -52,6 +52,6 @@ export const getUserIdByAccessToken = async (req: Request, res: Response, next: 
         next()
         return
     }
-    req.user = await usersService.getAuthUserById(userId)
+    req.user = await usersQueryRepository.getAuthUserById(userId)
     next()
 }

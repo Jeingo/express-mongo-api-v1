@@ -22,7 +22,7 @@ export class CommentsController {
     ) {}
 
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
-        const foundComment = await this.commentsService.getCommentById(req.params.id, req.user?.userId)
+        const foundComment = await this.commentsQueryRepository.getCommentById(req.params.id, req.user?.userId)
 
         if (!foundComment) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)

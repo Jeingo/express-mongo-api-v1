@@ -6,11 +6,13 @@ import {LoginTypeForAuth} from "../models/auth-models";
 import {CommentsTypeOutput, CommentsTypeToDB} from "../models/comments-models";
 import {HTTP_STATUSES} from "../constats/status";
 import {CommentsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
+import {CommentsQueryRepository} from "../query-reositories/comments-query-repository";
 
 @injectable()
 export class CommentsService {
     constructor(
         @inject(CommentsRepository) protected commentsRepository: CommentsRepository,
+        @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
         @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository
     ) {
@@ -35,19 +37,8 @@ export class CommentsService {
         return await this.commentsRepository.createComment(createdComment)
     }
 
-    async getCommentById(id: string, userId?: string): Promise<CommentsTypeOutput | null> {
-        const comment = await this.commentsRepository.getCommentById(id)
-        if (userId && comment) {
-            const like = await this.commentsLikesRepository.getLike(userId, comment.id)
-            if (like) {
-                comment.likesInfo.myStatus = like.myStatus
-            }
-        }
-        return comment
-    }
-
     async updateComment(id: string, content: string, user: LoginTypeForAuth): Promise<boolean | number> {
-        const comment = await this.commentsRepository.getCommentById(id)
+        const comment = await this.commentsQueryRepository.getCommentById(id)
 
         if (!comment) {
             return HTTP_STATUSES.NOT_FOUND_404
@@ -61,7 +52,7 @@ export class CommentsService {
     }
 
     async deleteComment(id: string, user: LoginTypeForAuth): Promise<boolean | number> {
-        const comment = await this.commentsRepository.getCommentById(id)
+        const comment = await this.commentsQueryRepository.getCommentById(id)
 
         if (!comment) {
             return HTTP_STATUSES.NOT_FOUND_404
@@ -76,7 +67,7 @@ export class CommentsService {
 
     async updateStatusLike(userId: string, commentId: string, newStatus: StatusLikeType): Promise<boolean> {
         let lastStatus: StatusLikeType = 'None'
-        const comment = await this.commentsRepository.getCommentById(commentId)
+        const comment = await this.commentsQueryRepository.getCommentById(commentId)
         if (!comment) return false
         const likeInfo = await this.commentsLikesRepository.getLike(userId, commentId)
         if (!likeInfo) {

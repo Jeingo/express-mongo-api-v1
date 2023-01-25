@@ -6,14 +6,25 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class CommentsRepository {
-    async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
-        const result = await CommentsModel.findById(new ObjectId(id))
-        if (!result) return null
-        return this._getOutputComment(result)
-    }
+    // async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
+    //     const result = await CommentsModel.findById(new ObjectId(id))
+    //     if (!result) return null
+    //     return this._getOutputComment(result)
+    // }
     async createComment(createdComment: CommentsTypeToDB): Promise<CommentsTypeOutput> {
         const result = await CommentsModel.create(createdComment)
-        return this._getOutputComment(result)
+        return {
+            id: result._id.toString(),
+            content: result.content,
+            userId: result.userId,
+            userLogin: result.userLogin,
+            createdAt: result.createdAt,
+            likesInfo: {
+                likesCount: result.likesInfo.likesCount,
+                dislikesCount: result.likesInfo.dislikesCount,
+                myStatus: 'None'
+            }
+        }
     }
     async updateComment(id: string, updatedComment: CommentsTypeInput): Promise<boolean> {
         const result = await CommentsModel.findByIdAndUpdate(new ObjectId(id), updatedComment)
@@ -39,20 +50,20 @@ export class CommentsRepository {
         const result = await CommentsModel.findByIdAndDelete(new ObjectId(id))
         return !!result
     }
-    private _getOutputComment(comment: any): CommentsTypeOutput {
-        return {
-            id: comment._id.toString(),
-            content: comment.content,
-            userId: comment.userId,
-            userLogin: comment.userLogin,
-            createdAt: comment.createdAt,
-            likesInfo: {
-                likesCount: comment.likesInfo.likesCount,
-                dislikesCount: comment.likesInfo.dislikesCount,
-                myStatus: 'None'
-            }
-        }
-    }
+    // private _getOutputComment(comment: any): CommentsTypeOutput {
+    //     return {
+    //         id: comment._id.toString(),
+    //         content: comment.content,
+    //         userId: comment.userId,
+    //         userLogin: comment.userLogin,
+    //         createdAt: comment.createdAt,
+    //         likesInfo: {
+    //             likesCount: comment.likesInfo.likesCount,
+    //             dislikesCount: comment.likesInfo.dislikesCount,
+    //             myStatus: 'None'
+    //         }
+    //     }
+    // }
     private _getUpdatedLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
         if (newStatus === 'None' && lastStatus === 'Like') {
             return { ...likesInfo, likesCount: --likesInfo.likesCount }

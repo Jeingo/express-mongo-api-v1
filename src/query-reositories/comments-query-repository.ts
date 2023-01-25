@@ -33,6 +33,18 @@ export class CommentsQueryRepository {
         const mappedCommentsWithStatusLike = await this._setStatusLike(mappedComments, userId!)
         return getPaginatedType(mappedCommentsWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
     }
+    async getCommentById(id: string, userId?: string): Promise<CommentsTypeOutput | null> {
+        const result = await CommentsModel.findById(new ObjectId(id))
+        if (!result) return null
+        const mappedResult = this._getOutputComment(result)
+        if (userId && mappedResult) {
+            const like = await this.commentsLikesRepository.getLike(userId, mappedResult.id)
+            if (like) {
+                mappedResult.likesInfo.myStatus = like.myStatus
+            }
+        }
+        return mappedResult
+    }
     private _getOutputComment(comment: any): CommentsTypeOutput {
         return {
             id: comment._id.toString(),

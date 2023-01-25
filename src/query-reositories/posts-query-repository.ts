@@ -45,6 +45,25 @@ export class PostsQueryRepository {
         const mappedFinishPost = await this._setThreeLastUser(mappedPostWithStatusLike)
         return getPaginatedType(mappedFinishPost, +pageSize, +pageNumber, countAllDocuments)
     }
+    async getPostById(id: string, userId?: string): Promise<PostsTypeOutput | null> {
+        const result = await PostsModel.findById(new ObjectId(id))
+        if (!result) return null
+        const mappedResult = this._getOutputPost(result)
+
+        if (userId && mappedResult) {
+            const like = await this.postsLikesRepository.getLike(userId, mappedResult.id)
+            if (like) {
+                mappedResult.extendedLikesInfo.myStatus = like.myStatus
+            }
+        }
+        if (mappedResult) {
+            const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(mappedResult.id)
+            if (lastThreeLikes) {
+                mappedResult.extendedLikesInfo.newestLikes = lastThreeLikes
+            }
+        }
+        return mappedResult
+    }
     private _getOutputPost(post: any): PostsTypeOutput {
         return {
             id: post._id.toString(),

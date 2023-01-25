@@ -2,9 +2,10 @@ import {inject, injectable} from "inversify";
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {PostsRepository} from "../repositories/posts-repository";
 import {PostsLikesRepository} from "../repositories/posts-likes-repository";
-import {PostsTypeOutput, PostsTypeToDB} from "../models/posts-models";
+import {PostId, PostsTypeToDB} from "../models/posts-models";
 import {PostsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
 import {BlogsQueryRepository} from "../query-reositories/blogs-query-repository";
+import {PostsQueryRepository} from "../query-reositories/posts-query-repository";
 
 @injectable()
 export class PostsService {
@@ -12,28 +13,11 @@ export class PostsService {
         @inject(BlogsRepository) protected blogsRepository: BlogsRepository,
         @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
         @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository
     ) {
     }
-
-    async getPostById(id: string, userId?: string): Promise<PostsTypeOutput | null> {
-        const post = await this.postsRepository.getPostById(id)
-        if (userId && post) {
-            const like = await this.postsLikesRepository.getLike(userId, post.id)
-            if (like) {
-                post.extendedLikesInfo.myStatus = like.myStatus
-            }
-        }
-        if (post) {
-            const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(post.id)
-            if (lastThreeLikes) {
-                post.extendedLikesInfo.newestLikes = lastThreeLikes
-            }
-        }
-        return post
-    }
-
-    async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostsTypeOutput | null> {
+    async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostId | null> {
         const foundBlog = await this.blogsQueryRepository.getBlogById(blogId)
         if (!foundBlog) return null
         const createdPost = new PostsTypeToDB(title, desc, content, blogId, foundBlog.name, new Date().toISOString(), {
@@ -68,7 +52,7 @@ export class PostsService {
 
     async updateStatusLike(userId: string, login: string, postId: string, newStatus: StatusLikeType): Promise<boolean> {
         let lastStatus: StatusLikeType = 'None'
-        const post = await this.postsRepository.getPostById(postId)
+        const post = await this.postsQueryRepository.getPostById(postId)
         if (!post) return false
         const likeInfo = await this.postsLikesRepository.getLike(userId, postId)
         if (!likeInfo) {

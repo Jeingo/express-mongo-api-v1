@@ -3,10 +3,11 @@ import {CommentsRepository} from "../repositories/comments-repository";
 import {PostsRepository} from "../repositories/posts-repository";
 import {CommentsLikesRepository} from "../repositories/comments-likes-repository";
 import {LoginTypeForAuth} from "../models/auth-models";
-import {CommentsTypeOutput, CommentsTypeToDB} from "../models/comments-models";
+import {CommentId, CommentsTypeOutput, CommentsTypeToDB} from "../models/comments-models";
 import {HTTP_STATUSES} from "../constats/status";
 import {CommentsLikesTypeToDB, StatusLikeType} from "../models/likes-models";
 import {CommentsQueryRepository} from "../query-reositories/comments-query-repository";
+import {PostsQueryRepository} from "../query-reositories/posts-query-repository";
 
 @injectable()
 export class CommentsService {
@@ -14,12 +15,13 @@ export class CommentsService {
         @inject(CommentsRepository) protected commentsRepository: CommentsRepository,
         @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
+        @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
         @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository
     ) {
     }
 
-    async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentsTypeOutput | null> {
-        const foundPost = await this.postsRepository.getPostById(postId)
+    async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentId | null> {
+        const foundPost = await this.postsQueryRepository.getPostById(postId)
         if (!foundPost) {
             return null
         }

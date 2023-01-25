@@ -51,8 +51,8 @@ export class CommentsController {
         req: RequestWithParamsAndBody<CommentsIdParams, CommentsTypeInputInPost>,
         res: Response<CommentsTypeOutput>
     ) {
-        const createdComment = await this.commentsService.createComment(req.body.content, req.params.id, req.user!)
-
+        const createdCommentId = await this.commentsService.createComment(req.body.content, req.params.id, req.user!)
+        const createdComment = await this.commentsQueryRepository.getCommentById(createdCommentId!)
         if (!createdComment) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return

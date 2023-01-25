@@ -1,4 +1,4 @@
-import { CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
+import {CommentId, CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB} from '../models/comments-models'
 import { CommentsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { LikesInfoType, StatusLikeType } from '../models/likes-models'
@@ -6,25 +6,9 @@ import { injectable } from 'inversify'
 
 @injectable()
 export class CommentsRepository {
-    // async getCommentById(id: string): Promise<CommentsTypeOutput | null> {
-    //     const result = await CommentsModel.findById(new ObjectId(id))
-    //     if (!result) return null
-    //     return this._getOutputComment(result)
-    // }
-    async createComment(createdComment: CommentsTypeToDB): Promise<CommentsTypeOutput> {
+    async createComment(createdComment: CommentsTypeToDB): Promise<CommentId> {
         const result = await CommentsModel.create(createdComment)
-        return {
-            id: result._id.toString(),
-            content: result.content,
-            userId: result.userId,
-            userLogin: result.userLogin,
-            createdAt: result.createdAt,
-            likesInfo: {
-                likesCount: result.likesInfo.likesCount,
-                dislikesCount: result.likesInfo.dislikesCount,
-                myStatus: 'None'
-            }
-        }
+        return result._id.toString()
     }
     async updateComment(id: string, updatedComment: CommentsTypeInput): Promise<boolean> {
         const result = await CommentsModel.findByIdAndUpdate(new ObjectId(id), updatedComment)
@@ -50,20 +34,6 @@ export class CommentsRepository {
         const result = await CommentsModel.findByIdAndDelete(new ObjectId(id))
         return !!result
     }
-    // private _getOutputComment(comment: any): CommentsTypeOutput {
-    //     return {
-    //         id: comment._id.toString(),
-    //         content: comment.content,
-    //         userId: comment.userId,
-    //         userLogin: comment.userLogin,
-    //         createdAt: comment.createdAt,
-    //         likesInfo: {
-    //             likesCount: comment.likesInfo.likesCount,
-    //             dislikesCount: comment.likesInfo.dislikesCount,
-    //             myStatus: 'None'
-    //         }
-    //     }
-    // }
     private _getUpdatedLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
         if (newStatus === 'None' && lastStatus === 'Like') {
             return { ...likesInfo, likesCount: --likesInfo.likesCount }

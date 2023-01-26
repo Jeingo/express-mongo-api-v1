@@ -2,7 +2,8 @@ import { PostsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { PostId, PostsTypeOutput, PostsTypeToDB, PostsUpdateType } from '../models/posts-models'
 import { injectable } from 'inversify'
-import { LikesInfoType, StatusLikeType } from '../models/likes-models'
+import { StatusLikeType } from '../models/likes-models'
+import {getUpdatedLike} from "./helper";
 
 @injectable()
 export class PostsRepository {
@@ -19,7 +20,7 @@ export class PostsRepository {
         lastStatus: StatusLikeType,
         newStatus: StatusLikeType
     ): Promise<boolean> {
-        const newLikesInfo = this._getUpdatedPostLike(
+        const newLikesInfo = getUpdatedLike(
             {
                 likesCount: post.extendedLikesInfo.likesCount,
                 dislikesCount: post.extendedLikesInfo.dislikesCount
@@ -33,34 +34,5 @@ export class PostsRepository {
     async deletePost(id: string): Promise<boolean> {
         const result = await PostsModel.findByIdAndDelete(new ObjectId(id))
         return !!result
-    }
-    private _getUpdatedPostLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
-        if (newStatus === 'None' && lastStatus === 'Like') {
-            return { ...likesInfo, likesCount: --likesInfo.likesCount }
-        }
-        if (newStatus === 'None' && lastStatus === 'Dislike') {
-            return { ...likesInfo, dislikesCount: --likesInfo.dislikesCount }
-        }
-        if (newStatus === 'Like' && lastStatus === 'None') {
-            return { ...likesInfo, likesCount: ++likesInfo.likesCount }
-        }
-        if (newStatus === 'Like' && lastStatus === 'Dislike') {
-            return {
-                ...likesInfo,
-                likesCount: ++likesInfo.likesCount,
-                dislikesCount: --likesInfo.dislikesCount
-            }
-        }
-        if (newStatus === 'Dislike' && lastStatus === 'None') {
-            return { ...likesInfo, dislikesCount: ++likesInfo.dislikesCount }
-        }
-        if (newStatus === 'Dislike' && lastStatus === 'Like') {
-            return {
-                ...likesInfo,
-                likesCount: --likesInfo.likesCount,
-                dislikesCount: ++likesInfo.dislikesCount
-            }
-        }
-        return likesInfo
     }
 }

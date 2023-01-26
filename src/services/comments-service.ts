@@ -8,6 +8,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
+import {CommentsLikesQueryRepository} from "../query-reositories/comments-likes-query-repository";
 
 @injectable()
 export class CommentsService {
@@ -16,7 +17,8 @@ export class CommentsService {
         @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
         @inject(PostsRepository) protected postsRepository: PostsRepository,
         @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
-        @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository
+        @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository,
+        @inject(CommentsLikesQueryRepository) protected commentsLikesQueryRepository: CommentsLikesQueryRepository
     ) {}
 
     async createComment(content: string, postId: string, user: LoginTypeForAuth): Promise<CommentId | null> {
@@ -70,7 +72,7 @@ export class CommentsService {
         let lastStatus: StatusLikeType = 'None'
         const comment = await this.commentsQueryRepository.getCommentById(commentId)
         if (!comment) return false
-        const likeInfo = await this.commentsLikesRepository.getLike(userId, commentId)
+        const likeInfo = await this.commentsLikesQueryRepository.getLike(userId, commentId)
         if (!likeInfo) {
             const newLike = new CommentsLikesTypeToDB(userId, commentId, newStatus)
             await this.commentsLikesRepository.createLike(newLike)

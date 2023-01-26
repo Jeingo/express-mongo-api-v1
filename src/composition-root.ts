@@ -31,6 +31,7 @@ import { SessionsService } from './services/sessions-service'
 import { TestService } from './services/test-service'
 import { UsersService } from './services/users-service'
 import {CommentsLikesQueryRepository} from "./query-reositories/comments-likes-query-repository";
+import {PostsLikesQueryRepository} from "./query-reositories/posts-likes-query-repository";
 
 export const container = new Container()
 container.bind(BlogsRepository).to(BlogsRepository)
@@ -47,6 +48,7 @@ container.bind(CommentsQueryRepository).to(CommentsQueryRepository)
 container.bind(PostsQueryRepository).to(PostsQueryRepository)
 container.bind(UsersQueryRepository).to(UsersQueryRepository)
 container.bind(CommentsLikesQueryRepository).to(CommentsLikesQueryRepository)
+container.bind(PostsLikesQueryRepository).to(PostsLikesQueryRepository)
 container.bind(EmailAdapter).to(EmailAdapter)
 container.bind(JwtService).to(JwtService)
 container.bind(EmailManager).to(EmailManager)

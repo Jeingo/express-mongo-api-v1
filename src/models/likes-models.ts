@@ -26,6 +26,7 @@ export type PostsLikesTypeOutput = {
 }
 
 export type CommentsLikesId = string
+export type PostsLikesId = string
 
 export type PostsExtendedLikesTypeOutput = {
     addedAt: string

@@ -1,10 +1,9 @@
 import { inject, injectable } from 'inversify'
 import { EmailManager } from '../infrastructure/email-manager'
 import { UsersRepository } from '../repositories/users-repository'
-import { UsersHashType, UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
+import {FullUsersTypeOutput} from '../models/users-models'
 import bcrypt from 'bcrypt'
 import { v4 } from 'uuid'
-import add from 'date-fns/add'
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 
 @injectable()
@@ -15,7 +14,7 @@ export class AuthService {
         @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {}
 
-    async checkCredentials(loginOrEmail: string, password: string): Promise<UsersHashType | false> {
+    async checkCredentials(loginOrEmail: string, password: string): Promise<FullUsersTypeOutput | false> {
         const user = await this.usersQueryRepository.getUser(loginOrEmail)
         if (!user) return false
         const res = await bcrypt.compare(password, user.hash)
@@ -23,34 +22,6 @@ export class AuthService {
             return false
         }
         return user
-    }
-
-    async registerUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
-        const passwordSalt = await bcrypt.genSalt(10)
-        const passwordHash = await bcrypt.hash(password, passwordSalt)
-        const createdUser = new UsersTypeToDB(
-            login,
-            passwordHash,
-            email,
-            new Date().toISOString(),
-            {
-                passwordRecoveryCode: v4(),
-                expirationDate: add(new Date(), {
-                    hours: 1
-                }),
-                isConfirmed: true
-            },
-            {
-                confirmationCode: v4(),
-                expirationDate: add(new Date(), {
-                    hours: 1
-                }),
-                isConfirmed: false
-            }
-        )
-        const result = await this.usersRepository.createUser(createdUser)
-        await this.emailManager.sendRegistrationEmailConfirmation(createdUser)
-        return result
     }
 
     async confirmEmail(code: string): Promise<void> {

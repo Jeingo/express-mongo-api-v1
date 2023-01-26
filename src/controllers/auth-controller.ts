@@ -16,6 +16,7 @@ import { UsersTypeInput } from '../models/users-models'
 import { inject, injectable } from 'inversify'
 import { AuthService } from '../services/auth-service'
 import { SessionsService } from '../services/sessions-service'
+import {UsersService} from "../services/users-service";
 
 const SECURE_COOKIE_MODE = settings.SECURE_COOKIE_MODE == 'true'
 
@@ -24,6 +25,7 @@ export class AuthController {
     constructor(
         @inject(JwtService) protected jwtService: JwtService,
         @inject(AuthService) protected authService: AuthService,
+        @inject(UsersService) protected usersService: UsersService,
         @inject(SessionsService) protected sessionsService: SessionsService
     ) {}
 
@@ -86,7 +88,7 @@ export class AuthController {
         res.status(HTTP_STATUSES.OK_200).json(req.user)
     }
     async registration(req: RequestWithBody<UsersTypeInput>, res: Response) {
-        await this.authService.registerUser(req.body.login, req.body.password, req.body.email)
+        await this.usersService.createUser(req.body.login, req.body.password, req.body.email, false)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
     async registrationConfirmation(req: RequestWithBody<RegistrationConfirmationType>, res: Response) {

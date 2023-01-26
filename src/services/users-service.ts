@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 import { UsersRepository } from '../repositories/users-repository'
-import { UsersTypeOutput, UsersTypeToDB } from '../models/users-models'
+import {UserId, UsersTypeToDB} from '../models/users-models'
 import bcrypt from 'bcrypt'
 import { v4 } from 'uuid'
 import add from 'date-fns/add'
@@ -13,7 +13,7 @@ export class UsersService {
         @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {}
 
-    async createUser(login: string, password: string, email: string): Promise<UsersTypeOutput> {
+    async createUser(login: string, password: string, email: string, isConfirmed: boolean): Promise<UserId> {
         const passwordSalt = await bcrypt.genSalt(10)
         const passwordHash = await bcrypt.hash(password, passwordSalt)
         const createdUser = new UsersTypeToDB(
@@ -33,7 +33,7 @@ export class UsersService {
                 expirationDate: add(new Date(), {
                     hours: 1
                 }),
-                isConfirmed: true
+                isConfirmed: isConfirmed
             }
         )
         return await this.usersRepository.createUser(createdUser)

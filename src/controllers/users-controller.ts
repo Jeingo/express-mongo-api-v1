@@ -20,8 +20,9 @@ export class UsersController {
         res.status(HTTP_STATUSES.OK_200).json(allUsers)
     }
     async createUser(req: RequestWithBody<UsersTypeInput>, res: Response<UsersTypeOutput>) {
-        const createdUser = await this.usersService.createUser(req.body.login, req.body.password, req.body.email)
-        res.status(HTTP_STATUSES.CREATED_201).json(createdUser)
+        const createdUserId = await this.usersService.createUser(req.body.login, req.body.password, req.body.email, true)
+        const createdUser = await this.usersQueryRepository.getShortUserById(createdUserId)
+        res.status(HTTP_STATUSES.CREATED_201).json(createdUser!)
     }
     async deleteUser(req: RequestWithParams<UsersIdParams>, res: Response) {
         const deletedUser = await this.usersService.deleteUser(req.params.id)

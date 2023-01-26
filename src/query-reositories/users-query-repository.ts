@@ -43,6 +43,10 @@ export class UsersQueryRepository {
         if (!result) return null
         return this._getOutputUser(result)
     }
+    async getShortUserById(id: string): Promise<UsersTypeOutput | null> {
+        const result = await UsersModel.findById(new ObjectId(id))
+        return this._getShortOutputUser(result)
+    }
     async getAuthUserById(id: UserId): Promise<LoginTypeForAuth | null> {
         const result = await UsersModel.findById(new ObjectId(id))
         if (!result) return null

@@ -1,7 +1,8 @@
 import { inject, injectable } from 'inversify'
 import { BlogsRepository } from '../repositories/blogs-repository'
-import { BlogId, BlogsTypeToDB } from '../models/blogs-models'
+import { BlogId } from '../models/blogs-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
+import {BlogsModel} from "../repositories/db/db";
 
 @injectable()
 export class BlogsService {
@@ -10,18 +11,17 @@ export class BlogsService {
         @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository
     ) {}
 
-    async createBlog(name: string, desc: string, url: string): Promise<BlogId> {
-        const createdBlog = new BlogsTypeToDB(name, desc, url, new Date().toISOString())
-        return await this.blogsRepository.createBlog(createdBlog)
+    async createBlog(name: string, description: string, url: string): Promise<BlogId> {
+        const createdBlog = BlogsModel.make(name, description, url)
+        await this.blogsRepository.saveBlog(createdBlog)
+        return createdBlog._id.toString()
     }
-
-    async updateBlog(id: string, name: string, desc: string, url: string): Promise<boolean> {
-        const updatedBlog = {
-            name: name,
-            description: desc,
-            websiteUrl: url
-        }
-        return await this.blogsRepository.updateBlog(id, updatedBlog)
+    async updateBlog(id: string, name: string, description: string, url: string): Promise<boolean> {
+        const blog = await this.blogsRepository.getBlogById(id)
+        if(!blog) return false
+        blog.update(name, description, url)
+        await this.blogsRepository.saveBlog(blog)
+        return true
     }
 
     async deleteBlog(id: string): Promise<boolean> {

@@ -5,8 +5,7 @@ import { injectable } from 'inversify'
 @injectable()
 export class BlogsRepository {
     async getBlogById(id: string) {
-        const result = await BlogsModel.findById(new ObjectId(id))
-        return result
+        return BlogsModel.findById(new ObjectId(id))
     }
     async saveBlog(blog: any) {
         return await blog.save()

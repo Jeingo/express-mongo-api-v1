@@ -24,17 +24,6 @@ export class UsersRepository {
         const result = await UsersModel.findByIdAndDelete(new ObjectId(id))
         return !!result
     }
-    async updatePasswordRecoveryConfirmationCode(user: UsersTypeToDB, code: string): Promise<boolean> {
-        const result = await UsersModel.findOneAndUpdate(
-            { login: user.login },
-            {
-                'passwordRecoveryConfirmation.passwordRecoveryCode': code,
-                'passwordRecoveryConfirmation.isConfirmed': false,
-                'passwordRecoveryConfirmation.expirationDate': add(new Date(), { hours: 1 })
-            }
-        )
-        return !!result
-    }
     async updatePassword(recoveryCode: string, newHash: string): Promise<boolean> {
         const result = await UsersModel.findOneAndUpdate(
             { 'passwordRecoveryConfirmation.passwordRecoveryCode': recoveryCode },

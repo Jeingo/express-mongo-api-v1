@@ -59,4 +59,10 @@ UsersSchema.methods.updateConfirmationCode = function () {
     return this
 }
 
+UsersSchema.methods.updatePasswordRecoveryConfirmationCode = function () {
+    this.passwordRecoveryConfirmation.passwordRecoveryCode = v4()
+    this.passwordRecoveryConfirmation.isConfirmed = false
+    this.passwordRecoveryConfirmation.expirationDate = add(new Date(), { hours: 1 })
+    return this
+}
 

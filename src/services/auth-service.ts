@@ -42,15 +42,13 @@ export class AuthService {
     }
 
 
-    async recoveryPassword(email: string): Promise<null | void> {
-        const user = await this.usersQueryRepository.getUser(email)
-        if (!user) {
-            return null
-        }
-        const newPasswordRecoveryConfirmationCode = v4()
-        await this.usersRepository.updatePasswordRecoveryConfirmationCode(user, newPasswordRecoveryConfirmationCode)
-        user.passwordRecoveryConfirmation.passwordRecoveryCode = newPasswordRecoveryConfirmationCode
+    async recoveryPassword(email: string): Promise<boolean> {
+        const user = await this.usersRepository.getUserByUniqueField(email)
+        if(!user) return false
+        user.updatePasswordRecoveryConfirmationCode()
+        await this.usersRepository.saveUser(user)
         await this.emailManager.sendPasswordRecoveryEmailConfirmation(user)
+        return true
     }
 
     async setNewPassword(recoveryCode: string, newPassword: string): Promise<void> {

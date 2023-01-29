@@ -20,6 +20,7 @@ type Users = {
 export type UsersMethods = {
     updateEmailConfirmationStatus: (code: string) => UsersModelFullType
     updateConfirmationCode: () => UsersModelFullType
+    updatePasswordRecoveryConfirmationCode: () => UsersModelFullType
 }
 
 type UsersStatics = {

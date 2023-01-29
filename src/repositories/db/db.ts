@@ -10,6 +10,7 @@ import { CommentsLikesSchema } from '../../domain/commentsLikes-entity'
 import { PostsLikesSchema } from '../../domain/postsLikes-entity'
 import { BlogsModelFullType, BlogsModelType} from "../../domain/types/blogs-entity-types";
 import {UsersModelFullType, UsersModelType} from "../../domain/types/users-entity-types";
+import {PostsModelFullType, PostsModelType} from "../../domain/types/posts-enity-types";
 
 const mongoUrl = settings.MONGO_URL
 const dbName = settings.DB_NAME
@@ -26,7 +27,7 @@ export const runDb = async () => {
 }
 
 export const BlogsModel = mongoose.model<BlogsModelType, BlogsModelFullType>('blogs', BlogsSchema)
-export const PostsModel = mongoose.model('posts', PostsSchema)
+export const PostsModel = mongoose.model<PostsModelType, PostsModelFullType>('posts', PostsSchema)
 export const UsersModel = mongoose.model<UsersModelType, UsersModelFullType>('users', UsersSchema)
 export const CommentsModel = mongoose.model('comments', CommentsSchema)
 export const SessionsModel = mongoose.model('sessions', SessionsSchema)

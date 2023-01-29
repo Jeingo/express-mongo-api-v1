@@ -2,11 +2,12 @@ import { inject, injectable } from 'inversify'
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { PostsRepository } from '../repositories/posts-repository'
 import { PostsLikesRepository } from '../repositories/posts-likes-repository'
-import { PostId, PostsTypeToDB } from '../models/posts-models'
+import { PostId } from '../models/posts-models'
 import { PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 import {PostsLikesQueryRepository} from "../query-reositories/posts-likes-query-repository";
+import {PostsModel} from "../repositories/db/db";
 
 @injectable()
 export class PostsService {
@@ -19,13 +20,11 @@ export class PostsService {
         @inject(PostsLikesQueryRepository) protected postsLikesQueryRepository: PostsLikesQueryRepository
     ) {}
     async createPost(title: string, desc: string, content: string, blogId: string): Promise<PostId | null> {
-        const foundBlog = await this.blogsQueryRepository.getBlogById(blogId)
+        const foundBlog = await this.blogsRepository.getBlogById(blogId)
         if (!foundBlog) return null
-        const createdPost = new PostsTypeToDB(title, desc, content, blogId, foundBlog.name, new Date().toISOString(), {
-            likesCount: 0,
-            dislikesCount: 0
-        })
-        return await this.postsRepository.createPost(createdPost)
+        const createdPost = PostsModel.make(title, desc, content, blogId, foundBlog.name)
+        await this.postsRepository.savePost(createdPost)
+        return createdPost._id.toString()
     }
 
     async updatePost(
@@ -35,16 +34,13 @@ export class PostsService {
         content: string,
         blogId: string
     ): Promise<boolean | null> {
-        const foundBlog = await this.blogsQueryRepository.getBlogById(blogId)
+        const foundBlog = await this.blogsRepository.getBlogById(blogId)
         if (!foundBlog) return null
-        const updatedPost = {
-            title: title,
-            shortDescription: desc,
-            content: content,
-            blogId: blogId,
-            blogName: foundBlog.name
-        }
-        return await this.postsRepository.updatePost(id, updatedPost)
+        const post = await this.postsRepository.getPostById(id)
+        if(!post) return false
+        post.update(title, desc, content, blogId, foundBlog.name)
+        await this.postsRepository.savePost(post)
+        return true
     }
 
     async deletePost(id: string): Promise<boolean> {

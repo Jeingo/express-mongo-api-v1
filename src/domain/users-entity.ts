@@ -4,7 +4,6 @@ import {v4} from "uuid";
 import add from 'date-fns/add'
 import bcrypt from "bcrypt";
 import {UsersModelType} from "./types/users-entity-types";
-import {BlogsSchema} from "./blogs-entity";
 
 
 export const UsersSchema = new mongoose.Schema<UsersModelType>({
@@ -49,7 +48,9 @@ UsersSchema.statics.make = async function (login: string, password: string, emai
     })
 }
 
-BlogsSchema.methods.updateEmailConfirmationStatus = function (code: string) {
+UsersSchema.methods.updateEmailConfirmationStatus = function (code: string) {
     this.emailConfirmation.confirmationCode = code
     this.emailConfirmation.isConfirmed = true
 }
+
+

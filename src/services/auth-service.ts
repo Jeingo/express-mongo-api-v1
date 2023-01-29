@@ -3,7 +3,6 @@ import { EmailManager } from '../infrastructure/email-manager'
 import { UsersRepository } from '../repositories/users-repository'
 import {FullUsersTypeOutput} from '../models/users-models'
 import bcrypt from 'bcrypt'
-import { v4 } from 'uuid'
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 
 @injectable()
@@ -51,9 +50,11 @@ export class AuthService {
         return true
     }
 
-    async setNewPassword(recoveryCode: string, newPassword: string): Promise<void> {
-        const passwordSalt = await bcrypt.genSalt(10)
-        const passwordHash = await bcrypt.hash(newPassword, passwordSalt)
-        await this.usersRepository.updatePassword(recoveryCode, passwordHash)
+    async setNewPassword(recoveryCode: string, newPassword: string): Promise<boolean> {
+        const user = await this.usersRepository.getUserByUniqueField(recoveryCode)
+        if(!user) return false
+        user.updatePassword(newPassword)
+        await this.usersRepository.saveUser(user)
+        return true
     }
 }

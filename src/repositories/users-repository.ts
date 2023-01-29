@@ -1,7 +1,5 @@
-import { UsersTypeToDB} from '../models/users-models'
 import { UsersModel} from './db/db'
 import { ObjectId } from 'mongodb'
-import add from 'date-fns/add'
 import { injectable } from 'inversify'
 
 @injectable()
@@ -22,13 +20,6 @@ export class UsersRepository {
     }
     async deleteUser(id: string): Promise<boolean> {
         const result = await UsersModel.findByIdAndDelete(new ObjectId(id))
-        return !!result
-    }
-    async updatePassword(recoveryCode: string, newHash: string): Promise<boolean> {
-        const result = await UsersModel.findOneAndUpdate(
-            { 'passwordRecoveryConfirmation.passwordRecoveryCode': recoveryCode },
-            { hash: newHash, 'passwordRecoveryConfirmation.isConfirmed': true }
-        )
         return !!result
     }
 }

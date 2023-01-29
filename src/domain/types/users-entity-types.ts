@@ -21,6 +21,7 @@ export type UsersMethods = {
     updateEmailConfirmationStatus: (code: string) => UsersModelFullType
     updateConfirmationCode: () => UsersModelFullType
     updatePasswordRecoveryConfirmationCode: () => UsersModelFullType
+    updatePassword: (newPassword: string) => UsersModelFullType
 }
 
 type UsersStatics = {

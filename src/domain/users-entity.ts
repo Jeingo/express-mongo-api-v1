@@ -66,3 +66,10 @@ UsersSchema.methods.updatePasswordRecoveryConfirmationCode = function () {
     return this
 }
 
+UsersSchema.methods.updatePassword = async function (newPassword: string) {
+    const passwordSalt = await bcrypt.genSalt(10)
+    this.hash = await bcrypt.hash(newPassword, passwordSalt)
+    this.passwordRecoveryConfirmation.isConfirmed = true
+    return this
+}
+

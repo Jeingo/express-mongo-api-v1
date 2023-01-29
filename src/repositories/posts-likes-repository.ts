@@ -1,9 +1,5 @@
 import { injectable } from 'inversify'
-import {
-    PostsLikesId,
-    PostsLikesTypeToDB,
-    StatusLikeType
-} from '../models/likes-models'
+import { PostsLikesId, PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { PostsLikesModel } from './db/db'
 import { ObjectId } from 'mongodb'
 

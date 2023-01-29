@@ -3,7 +3,7 @@ import { CommentsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { StatusLikeType } from '../models/likes-models'
 import { injectable } from 'inversify'
-import {getUpdatedLike} from "./helper";
+import { getUpdatedLike } from './helper'
 
 @injectable()
 export class CommentsRepository {

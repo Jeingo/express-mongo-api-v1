@@ -8,7 +8,7 @@ import { HTTP_STATUSES } from '../constats/status'
 import { CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
-import {CommentsLikesQueryRepository} from "../query-reositories/comments-likes-query-repository";
+import { CommentsLikesQueryRepository } from '../query-reositories/comments-likes-query-repository'
 
 @injectable()
 export class CommentsService {

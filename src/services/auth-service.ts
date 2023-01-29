@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { EmailManager } from '../infrastructure/email-manager'
 import { UsersRepository } from '../repositories/users-repository'
-import {FullUsersTypeOutput} from '../models/users-models'
+import { FullUsersTypeOutput } from '../models/users-models'
 import bcrypt from 'bcrypt'
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 
@@ -25,7 +25,7 @@ export class AuthService {
 
     async confirmEmail(code: string): Promise<boolean> {
         const user = await this.usersRepository.getUserByUniqueField(code)
-        if(!user) return false
+        if (!user) return false
         user.updateEmailConfirmationStatus(code)
         await this.usersRepository.saveUser(user)
         return true
@@ -33,17 +33,16 @@ export class AuthService {
 
     async resendEmail(email: string): Promise<boolean> {
         const user = await this.usersRepository.getUserByUniqueField(email)
-        if(!user) return false
+        if (!user) return false
         user.updateConfirmationCode()
         await this.usersRepository.saveUser(user)
         await this.emailManager.sendRegistrationEmailConfirmation(user)
         return true
     }
 
-
     async recoveryPassword(email: string): Promise<boolean> {
         const user = await this.usersRepository.getUserByUniqueField(email)
-        if(!user) return false
+        if (!user) return false
         user.updatePasswordRecoveryConfirmationCode()
         await this.usersRepository.saveUser(user)
         await this.emailManager.sendPasswordRecoveryEmailConfirmation(user)
@@ -52,7 +51,7 @@ export class AuthService {
 
     async setNewPassword(recoveryCode: string, newPassword: string): Promise<boolean> {
         const user = await this.usersRepository.getUserByUniqueField(recoveryCode)
-        if(!user) return false
+        if (!user) return false
         user.updatePassword(newPassword)
         await this.usersRepository.saveUser(user)
         return true

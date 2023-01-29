@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import {PostsModelType} from "./types/posts-enity-types";
-import { PostsModel} from "../repositories/db/db";
+import { PostsModelType } from './types/posts-enity-types'
+import { PostsModel } from '../repositories/db/db'
 
 export const PostsSchema = new mongoose.Schema<PostsModelType>({
     title: { type: String, required: true, maxlength: 30 },
@@ -15,7 +15,13 @@ export const PostsSchema = new mongoose.Schema<PostsModelType>({
     }
 })
 
-PostsSchema.statics.make = function (title: string, description: string, content: string, blogId: string, blogName: string) {
+PostsSchema.statics.make = function (
+    title: string,
+    description: string,
+    content: string,
+    blogId: string,
+    blogName: string
+) {
     return new PostsModel({
         title: title,
         shortDescription: description,
@@ -30,7 +36,13 @@ PostsSchema.statics.make = function (title: string, description: string, content
     })
 }
 
-PostsSchema.methods.update = function (title: string, description: string, content: string, blogId: string, blogName: string) {
+PostsSchema.methods.update = function (
+    title: string,
+    description: string,
+    content: string,
+    blogId: string,
+    blogName: string
+) {
     this.title = title
     this.shortDescription = description
     this.content = content

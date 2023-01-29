@@ -1,6 +1,6 @@
-import {PostsExtendedLikesTypeOutput, PostsLikesTypeOutput} from "../models/likes-models";
-import {PostsLikesModel} from "../repositories/db/db";
-import {injectable} from "inversify";
+import { PostsExtendedLikesTypeOutput, PostsLikesTypeOutput } from '../models/likes-models'
+import { PostsLikesModel } from '../repositories/db/db'
+import { injectable } from 'inversify'
 
 @injectable()
 export class PostsLikesQueryRepository {
@@ -8,8 +8,8 @@ export class PostsLikesQueryRepository {
         const desc = -1
         const threeLastUser = 3
         const like = 'Like'
-        const result = await PostsLikesModel.find({postId: postId, myStatus: like})
-            .sort({addedAt: desc})
+        const result = await PostsLikesModel.find({ postId: postId, myStatus: like })
+            .sort({ addedAt: desc })
             .limit(threeLastUser)
 
         if (!result) return null
@@ -17,7 +17,7 @@ export class PostsLikesQueryRepository {
     }
 
     async getLike(userId: string, postId: string): Promise<PostsLikesTypeOutput | null> {
-        const result = await PostsLikesModel.findOne({userId: userId, postId: postId})
+        const result = await PostsLikesModel.findOne({ userId: userId, postId: postId })
         if (!result) return null
         return this._getOutputLike(result)
     }

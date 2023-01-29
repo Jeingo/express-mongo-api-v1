@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify'
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { BlogId } from '../models/blogs-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
-import {BlogsModel} from "../repositories/db/db";
+import { BlogsModel } from '../repositories/db/db'
 
 @injectable()
 export class BlogsService {
@@ -18,7 +18,7 @@ export class BlogsService {
     }
     async updateBlog(id: string, name: string, description: string, url: string): Promise<boolean> {
         const blog = await this.blogsRepository.getBlogById(id)
-        if(!blog) return false
+        if (!blog) return false
         blog.update(name, description, url)
         await this.blogsRepository.saveBlog(blog)
         return true

@@ -1,4 +1,4 @@
-import {LikesInfoType, StatusLikeType} from "../models/likes-models";
+import { LikesInfoType, StatusLikeType } from '../models/likes-models'
 
 export function getUpdatedLike(likesInfo: LikesInfoType, lastStatus: StatusLikeType, newStatus: StatusLikeType) {
     if (newStatus === 'None' && lastStatus === 'Like') {

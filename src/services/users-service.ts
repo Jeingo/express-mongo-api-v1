@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify'
 import { UsersRepository } from '../repositories/users-repository'
-import {UserId} from '../models/users-models'
+import { UserId } from '../models/users-models'
 import { UsersQueryRepository } from '../query-reositories/users-query-repository'
-import {UsersModel} from "../repositories/db/db";
+import { UsersModel } from '../repositories/db/db'
 
 @injectable()
 export class UsersService {

@@ -6,12 +6,13 @@ import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 import { CommentsLikesRepository } from '../repositories/comments-likes-repository'
 import { inject, injectable } from 'inversify'
-import {CommentsLikesQueryRepository} from "./comments-likes-query-repository";
+import { CommentsLikesQueryRepository } from './comments-likes-query-repository'
 
 @injectable()
 export class CommentsQueryRepository {
-    constructor(@inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository,
-                @inject(CommentsLikesQueryRepository) protected commentsLikesQueryRepository: CommentsLikesQueryRepository
+    constructor(
+        @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository,
+        @inject(CommentsLikesQueryRepository) protected commentsLikesQueryRepository: CommentsLikesQueryRepository
     ) {}
 
     async getCommentsById(

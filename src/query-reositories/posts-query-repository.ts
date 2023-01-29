@@ -6,12 +6,13 @@ import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { inject, injectable } from 'inversify'
 import { PostsLikesRepository } from '../repositories/posts-likes-repository'
-import {PostsLikesQueryRepository} from "./posts-likes-query-repository";
+import { PostsLikesQueryRepository } from './posts-likes-query-repository'
 
 @injectable()
 export class PostsQueryRepository {
-    constructor(@inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository,
-                @inject(PostsLikesQueryRepository) protected postsLikesQueryRepository: PostsLikesQueryRepository
+    constructor(
+        @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository,
+        @inject(PostsLikesQueryRepository) protected postsLikesQueryRepository: PostsLikesQueryRepository
     ) {}
 
     async getAllPost(query: QueryPosts, userId?: string): Promise<PaginatedType<PostsTypeOutput>> {

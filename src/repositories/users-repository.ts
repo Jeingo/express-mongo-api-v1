@@ -1,4 +1,4 @@
-import { UsersModel} from './db/db'
+import { UsersModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'
 

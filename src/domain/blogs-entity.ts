@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
-import { BlogsModelType} from "./types/blogs-entity-types";
-import {BlogsModel} from "../repositories/db/db";
-
+import { BlogsModelType } from './types/blogs-entity-types'
+import { BlogsModel } from '../repositories/db/db'
 
 export const BlogsSchema = new mongoose.Schema<BlogsModelType>({
     name: { type: String, required: true, maxlength: 15 },
@@ -10,7 +9,7 @@ export const BlogsSchema = new mongoose.Schema<BlogsModelType>({
     createdAt: { type: String, required: true }
 })
 
-BlogsSchema.statics.make = function (name: string, description: string, websiteUrl: string ) {
+BlogsSchema.statics.make = function (name: string, description: string, websiteUrl: string) {
     return new BlogsModel({
         name: name,
         description: description,

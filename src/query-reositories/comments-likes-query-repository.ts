@@ -1,11 +1,11 @@
-import {injectable} from "inversify";
-import {CommentsLikesTypeOutput} from "../models/likes-models";
-import {CommentsLikesModel} from "../repositories/db/db";
+import { injectable } from 'inversify'
+import { CommentsLikesTypeOutput } from '../models/likes-models'
+import { CommentsLikesModel } from '../repositories/db/db'
 
 @injectable()
 export class CommentsLikesQueryRepository {
     async getLike(userId: string, commentId: string): Promise<CommentsLikesTypeOutput | null> {
-        const result = await CommentsLikesModel.findOne({userId: userId, commentId: commentId})
+        const result = await CommentsLikesModel.findOne({ userId: userId, commentId: commentId })
         if (!result) return null
         return this._getOutputLike(result)
     }

@@ -6,8 +6,8 @@ import { PostId } from '../models/posts-models'
 import { PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
-import {PostsLikesQueryRepository} from "../query-reositories/posts-likes-query-repository";
-import {PostsModel} from "../repositories/db/db";
+import { PostsLikesQueryRepository } from '../query-reositories/posts-likes-query-repository'
+import { PostsModel } from '../repositories/db/db'
 
 @injectable()
 export class PostsService {
@@ -37,7 +37,7 @@ export class PostsService {
         const foundBlog = await this.blogsRepository.getBlogById(blogId)
         if (!foundBlog) return null
         const post = await this.postsRepository.getPostById(id)
-        if(!post) return false
+        if (!post) return false
         post.update(title, desc, content, blogId, foundBlog.name)
         await this.postsRepository.savePost(post)
         return true

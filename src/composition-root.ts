@@ -30,8 +30,8 @@ import { PostsService } from './services/posts-service'
 import { SessionsService } from './services/sessions-service'
 import { TestService } from './services/test-service'
 import { UsersService } from './services/users-service'
-import {CommentsLikesQueryRepository} from "./query-reositories/comments-likes-query-repository";
-import {PostsLikesQueryRepository} from "./query-reositories/posts-likes-query-repository";
+import { CommentsLikesQueryRepository } from './query-reositories/comments-likes-query-repository'
+import { PostsLikesQueryRepository } from './query-reositories/posts-likes-query-repository'
 
 export const container = new Container()
 container.bind(BlogsRepository).to(BlogsRepository)

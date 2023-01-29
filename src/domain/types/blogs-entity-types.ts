@@ -1,9 +1,9 @@
-import {Model, Document, Types} from "mongoose";
+import { Model, Document, Types } from 'mongoose'
 
 type Blogs = {
-    name: string,
-    description: string,
-    websiteUrl: string,
+    name: string
+    description: string
+    websiteUrl: string
     createdAt: string
 }
 
@@ -17,4 +17,4 @@ export type BlogsMethods = {
 
 export type BlogsModelType = Blogs & Document & BlogsMethods
 
-export type BlogsModelFullType = Model<BlogsModelType> & BlogsStatics & {_id: Types.ObjectId}
+export type BlogsModelFullType = Model<BlogsModelType> & BlogsStatics & { _id: Types.ObjectId }

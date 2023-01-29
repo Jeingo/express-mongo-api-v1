@@ -1,18 +1,18 @@
-import {Model, Document, Types} from "mongoose";
+import { Model, Document, Types } from 'mongoose'
 
 type Users = {
-    login: string,
-    hash: string,
-    email: string,
-    createdAt: string,
+    login: string
+    hash: string
+    email: string
+    createdAt: string
     passwordRecoveryConfirmation: {
-        passwordRecoveryCode: string,
-        expirationDate: Date,
+        passwordRecoveryCode: string
+        expirationDate: Date
         isConfirmed: boolean
-    },
+    }
     emailConfirmation: {
-        confirmationCode: string,
-        expirationDate: Date,
+        confirmationCode: string
+        expirationDate: Date
         isConfirmed: boolean
     }
 }
@@ -30,4 +30,4 @@ type UsersStatics = {
 
 export type UsersModelType = Users & Document & UsersMethods
 
-export type UsersModelFullType = Model<UsersModelType> & UsersStatics & {_id: Types.ObjectId}
+export type UsersModelFullType = Model<UsersModelType> & UsersStatics & { _id: Types.ObjectId }

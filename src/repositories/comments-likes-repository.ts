@@ -1,5 +1,5 @@
 import { CommentsLikesModel } from './db/db'
-import {CommentsLikesId, CommentsLikesTypeToDB, StatusLikeType} from '../models/likes-models'
+import { CommentsLikesId, CommentsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'
 

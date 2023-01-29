@@ -24,8 +24,12 @@ export class AuthService {
         return user
     }
 
-    async confirmEmail(code: string): Promise<void> {
-        await this.usersRepository.updateConfirmationStatus(code)
+    async confirmEmail(code: string): Promise<boolean> {
+        const user = await this.usersRepository.getUserByUniqueField(code)
+        if(!user) return false
+        user.updateEmailConfirmationStatus(code)
+        await this.usersRepository.saveUser(user)
+        return true
     }
 
     async resendEmail(email: string): Promise<null | void> {

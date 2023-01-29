@@ -1,7 +1,13 @@
 import mongoose from 'mongoose'
-import { UsersTypeToDB } from '../models/users-models'
+import { UsersModel} from "../repositories/db/db";
+import {v4} from "uuid";
+import add from 'date-fns/add'
+import bcrypt from "bcrypt";
+import {UsersModelType} from "./types/users-entity-types";
+import {BlogsSchema} from "./blogs-entity";
 
-export const UsersSchema = new mongoose.Schema<UsersTypeToDB>({
+
+export const UsersSchema = new mongoose.Schema<UsersModelType>({
     login: { type: String, required: true, maxlength: 10, minlength: 3 },
     hash: { type: String, required: true },
     email: { type: String, required: true },
@@ -17,3 +23,33 @@ export const UsersSchema = new mongoose.Schema<UsersTypeToDB>({
         isConfirmed: { type: Boolean, required: true }
     }
 })
+
+UsersSchema.statics.make = async function (login: string, password: string, email: string, isConfirmed: boolean) {
+    const passwordSalt = await bcrypt.genSalt(10)
+    const passwordHash = await bcrypt.hash(password, passwordSalt)
+    return new UsersModel({
+        login: login,
+        hash: passwordHash,
+        email: email,
+        createdAt: new Date().toISOString(),
+        passwordRecoveryConfirmation: {
+            passwordRecoveryCode: v4(),
+            expirationDate: add(new Date(), {
+                hours: 1
+            }),
+            isConfirmed: true
+        },
+        emailConfirmation: {
+            confirmationCode: v4(),
+            expirationDate: add(new Date(), {
+                hours: 1
+            }),
+            isConfirmed: isConfirmed
+        }
+    })
+}
+
+BlogsSchema.methods.updateEmailConfirmationStatus = function (code: string) {
+    this.emailConfirmation.confirmationCode = code
+    this.emailConfirmation.isConfirmed = true
+}

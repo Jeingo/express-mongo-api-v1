@@ -10,13 +10,6 @@ export const BlogsSchema = new mongoose.Schema<BlogsModelType>({
     createdAt: { type: String, required: true }
 })
 
-BlogsSchema.methods.update = function (name: string, description: string, url: string) {
-    this.name = name
-    this.description = description
-    this.websiteUrl = url
-    return this
-}
-
 BlogsSchema.statics.make = function (name: string, description: string, websiteUrl: string ) {
     return new BlogsModel({
         name: name,
@@ -24,4 +17,11 @@ BlogsSchema.statics.make = function (name: string, description: string, websiteU
         websiteUrl: websiteUrl,
         createdAt: new Date().toISOString()
     })
+}
+
+BlogsSchema.methods.update = function (name: string, description: string, url: string) {
+    this.name = name
+    this.description = description
+    this.websiteUrl = url
+    return this
 }

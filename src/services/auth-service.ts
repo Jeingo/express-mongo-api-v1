@@ -32,16 +32,15 @@ export class AuthService {
         return true
     }
 
-    async resendEmail(email: string): Promise<null | void> {
-        const user = await this.usersQueryRepository.getUser(email)
-        if (!user) {
-            return null
-        }
-        const newConfirmationCode = v4()
-        await this.usersRepository.updateConfirmationCode(user, newConfirmationCode)
-        user.emailConfirmation.confirmationCode = newConfirmationCode
+    async resendEmail(email: string): Promise<boolean> {
+        const user = await this.usersRepository.getUserByUniqueField(email)
+        if(!user) return false
+        user.updateConfirmationCode()
+        await this.usersRepository.saveUser(user)
         await this.emailManager.sendRegistrationEmailConfirmation(user)
+        return true
     }
+
 
     async recoveryPassword(email: string): Promise<null | void> {
         const user = await this.usersQueryRepository.getUser(email)

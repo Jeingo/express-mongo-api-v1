@@ -51,6 +51,12 @@ UsersSchema.statics.make = async function (login: string, password: string, emai
 UsersSchema.methods.updateEmailConfirmationStatus = function (code: string) {
     this.emailConfirmation.confirmationCode = code
     this.emailConfirmation.isConfirmed = true
+    return this
+}
+
+UsersSchema.methods.updateConfirmationCode = function () {
+    this.emailConfirmation.confirmationCode = v4()
+    return this
 }
 
 

@@ -7,7 +7,7 @@ import { PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 import { PostsLikesQueryRepository } from '../query-reositories/posts-likes-query-repository'
-import { PostsModel } from '../repositories/db/db'
+import {PostsModel} from "../domain/posts-entity";
 
 @injectable()
 export class PostsService {

@@ -1,9 +1,8 @@
 import mongoose from 'mongoose'
-import { UsersModel } from '../repositories/db/db'
-import { v4 } from 'uuid'
+import {v4} from 'uuid'
 import add from 'date-fns/add'
 import bcrypt from 'bcrypt'
-import { UsersModelType } from './types/users-entity-types'
+import {UsersModelFullType, UsersModelType} from './types/users-entity-types'
 
 export const UsersSchema = new mongoose.Schema<UsersModelType>({
     login: { type: String, required: true, maxlength: 10, minlength: 3 },
@@ -71,3 +70,5 @@ UsersSchema.methods.updatePassword = async function (newPassword: string) {
     this.passwordRecoveryConfirmation.isConfirmed = true
     return this
 }
+
+export const UsersModel = mongoose.model<UsersModelType, UsersModelFullType>('users', UsersSchema)

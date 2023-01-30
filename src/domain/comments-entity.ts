@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { CommentsTypeToDB } from '../models/comments-models'
+import {CommentsTypeToDB} from '../models/comments-models'
 
 export const CommentsSchema = new mongoose.Schema<CommentsTypeToDB>({
     content: { type: String, required: true, maxlength: 300, minlength: 20 },
@@ -12,3 +12,5 @@ export const CommentsSchema = new mongoose.Schema<CommentsTypeToDB>({
         dislikesCount: { type: Number, required: true }
     }
 })
+
+export const CommentsModel = mongoose.model('comments', CommentsSchema)

@@ -1,9 +1,9 @@
 import { CommentId, CommentsTypeInput, CommentsTypeOutput, CommentsTypeToDB } from '../models/comments-models'
-import { CommentsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { StatusLikeType } from '../models/likes-models'
 import { injectable } from 'inversify'
 import { getUpdatedLike } from './helper'
+import {CommentsModel} from "../domain/comments-entity";
 
 @injectable()
 export class CommentsRepository {

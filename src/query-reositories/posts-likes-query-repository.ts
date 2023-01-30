@@ -1,6 +1,6 @@
 import { PostsExtendedLikesTypeOutput, PostsLikesTypeOutput } from '../models/likes-models'
-import { PostsLikesModel } from '../repositories/db/db'
 import { injectable } from 'inversify'
+import {PostsLikesModel} from "../domain/postsLikes-entity";
 
 @injectable()
 export class PostsLikesQueryRepository {

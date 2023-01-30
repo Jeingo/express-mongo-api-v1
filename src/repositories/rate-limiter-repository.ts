@@ -1,7 +1,7 @@
-import { RateLimiterModel } from './db/db'
 import { RateLimiterType } from '../models/auth-models'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'
+import {RateLimiterModel} from "../domain/rateLimiter-entity";
 
 @injectable()
 export class RateLimiterRepository {

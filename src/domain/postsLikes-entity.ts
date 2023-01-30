@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { PostsLikesTypeToDB } from '../models/likes-models'
+import {PostsLikesTypeToDB} from '../models/likes-models'
 
 export const PostsLikesSchema = new mongoose.Schema<PostsLikesTypeToDB>({
     userId: { type: String, required: true },
@@ -8,3 +8,5 @@ export const PostsLikesSchema = new mongoose.Schema<PostsLikesTypeToDB>({
     login: { type: String, required: true },
     addedAt: { type: String, required: true }
 })
+
+export const PostsLikesModel = mongoose.model('posts-likes', PostsLikesSchema)

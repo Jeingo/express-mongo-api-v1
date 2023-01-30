@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
-import { PostsModelType } from './types/posts-enity-types'
-import { PostsModel } from '../repositories/db/db'
+import {PostsModelFullType, PostsModelType} from './types/posts-enity-types'
 
 export const PostsSchema = new mongoose.Schema<PostsModelType>({
     title: { type: String, required: true, maxlength: 30 },
@@ -50,3 +49,5 @@ PostsSchema.methods.update = function (
     this.blogName = blogName
     return this
 }
+
+export const PostsModel = mongoose.model<PostsModelType, PostsModelFullType>('posts', PostsSchema)

@@ -1,6 +1,6 @@
 import { injectable } from 'inversify'
 import { CommentsLikesTypeOutput } from '../models/likes-models'
-import { CommentsLikesModel } from '../repositories/db/db'
+import {CommentsLikesModel} from "../domain/commentsLikes-entity";
 
 @injectable()
 export class CommentsLikesQueryRepository {

@@ -1,6 +1,6 @@
-import { BlogsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { injectable } from 'inversify'
+import {BlogsModel} from "../domain/blogs-entity";
 
 @injectable()
 export class BlogsRepository {

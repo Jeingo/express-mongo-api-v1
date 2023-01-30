@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify'
 import { BlogsRepository } from '../repositories/blogs-repository'
 import { BlogId } from '../models/blogs-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
-import { BlogsModel } from '../repositories/db/db'
+import {BlogsModel} from "../domain/blogs-entity";
 
 @injectable()
 export class BlogsService {

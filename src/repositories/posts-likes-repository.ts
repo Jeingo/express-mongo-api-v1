@@ -1,7 +1,7 @@
 import { injectable } from 'inversify'
 import { PostsLikesId, PostsLikesTypeToDB, StatusLikeType } from '../models/likes-models'
-import { PostsLikesModel } from './db/db'
 import { ObjectId } from 'mongodb'
+import {PostsLikesModel} from "../domain/postsLikes-entity";
 
 @injectable()
 export class PostsLikesRepository {

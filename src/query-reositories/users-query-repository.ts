@@ -2,10 +2,10 @@ import { QueryUsers } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { FullUsersTypeOutput, UserId, UsersTypeOutput } from '../models/users-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
-import { UsersModel } from '../repositories/db/db'
 import { injectable } from 'inversify'
 import { LoginTypeForAuth } from '../models/auth-models'
 import { ObjectId } from 'mongodb'
+import {UsersModel} from "../domain/users-entity";
 
 @injectable()
 export class UsersQueryRepository {

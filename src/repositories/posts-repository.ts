@@ -1,9 +1,9 @@
-import { PostsModel } from './db/db'
 import { ObjectId } from 'mongodb'
 import { PostsTypeOutput } from '../models/posts-models'
 import { injectable } from 'inversify'
 import { StatusLikeType } from '../models/likes-models'
 import { getUpdatedLike } from './helper'
+import {PostsModel} from "../domain/posts-entity";
 
 @injectable()
 export class PostsRepository {

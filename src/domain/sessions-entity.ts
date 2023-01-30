@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { SessionTypeToDB } from '../models/session-models'
+import {SessionTypeToDB} from '../models/session-models'
 
 export const SessionsSchema = new mongoose.Schema<SessionTypeToDB>({
     issueAt: { type: String, required: true },
@@ -9,3 +9,5 @@ export const SessionsSchema = new mongoose.Schema<SessionTypeToDB>({
     userId: { type: String, required: true },
     expireAt: { type: String, required: true }
 })
+
+export const SessionsModel = mongoose.model('sessions', SessionsSchema)

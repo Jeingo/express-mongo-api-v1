@@ -1,5 +1,4 @@
 import { PostsTypeOutput } from '../models/posts-models'
-import { BlogsModel, PostsModel } from '../repositories/db/db'
 import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
@@ -7,6 +6,8 @@ import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { inject, injectable } from 'inversify'
 import { PostsLikesRepository } from '../repositories/posts-likes-repository'
 import { PostsLikesQueryRepository } from './posts-likes-query-repository'
+import {BlogsModel} from "../domain/blogs-entity";
+import {PostsModel} from "../domain/posts-entity";
 
 @injectable()
 export class PostsQueryRepository {

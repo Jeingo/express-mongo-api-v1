@@ -47,7 +47,6 @@ PostsSchema.methods.update = function (
     this.content = content
     this.blogId = blogId
     this.blogName = blogName
-    return this
 }
 
 export const PostsModel = mongoose.model<PostsModelType, PostsModelFullType>('posts', PostsSchema)

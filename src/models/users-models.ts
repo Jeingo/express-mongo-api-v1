@@ -11,6 +11,24 @@ export type UsersTypeInput = {
     email: string
 }
 
+export type FullUsersTypeOutput = {
+    id: string
+    login: string
+    hash: string
+    email: string
+    createdAt: string
+    passwordRecoveryConfirmation: {
+        passwordRecoveryCode: string
+        expirationDate: Date
+        isConfirmed: boolean
+    }
+    emailConfirmation: {
+        confirmationCode: string
+        expirationDate: Date
+        isConfirmed: boolean
+    }
+}
+
 export class UsersTypeToDB {
     constructor(
         public login: string,
@@ -63,3 +81,5 @@ export type UsersConfirmationCodePasswordRecoveryType = {
 export type UsersIdParams = {
     id: string
 }
+
+export type UserId = string

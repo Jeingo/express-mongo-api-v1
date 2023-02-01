@@ -10,17 +10,10 @@ import { BlogsQueryRepository } from './query-reositories/blogs-query-repository
 import { CommentsQueryRepository } from './query-reositories/comments-query-repository'
 import { PostsQueryRepository } from './query-reositories/posts-query-repository'
 import { UsersQueryRepository } from './query-reositories/users-query-repository'
-import { EmailAdapter } from './adapters/email-adapter'
-import { JwtService } from './application/jwt-service'
-import { AuthService } from './domain/auth-service'
-import { EmailManager } from './managers/email-manager'
-import { SessionsService } from './domain/sessions-service'
+import { EmailAdapter } from './infrastructure/email-adapter'
+import { JwtService } from './infrastructure/jwt-service'
+import { EmailManager } from './infrastructure/email-manager'
 import { AuthController } from './controllers/auth-controller'
-import { BlogsService } from './domain/blogs-service'
-import { CommentsService } from './domain/comments-service'
-import { PostsService } from './domain/posts-service'
-import { TestService } from './domain/test-service'
-import { UsersService } from './domain/users-service'
 import { BlogsController } from './controllers/blogs-controller'
 import { CommentsController } from './controllers/comments-controller'
 import { PostsController } from './controllers/posts-controller'
@@ -30,6 +23,15 @@ import { UsersController } from './controllers/users-controller'
 import { CommentsLikesRepository } from './repositories/comments-likes-repository'
 import { Container } from 'inversify'
 import { PostsLikesRepository } from './repositories/posts-likes-repository'
+import { AuthService } from './services/auth-service'
+import { BlogsService } from './services/blogs-service'
+import { CommentsService } from './services/comments-service'
+import { PostsService } from './services/posts-service'
+import { SessionsService } from './services/sessions-service'
+import { TestService } from './services/test-service'
+import { UsersService } from './services/users-service'
+import { CommentsLikesQueryRepository } from './query-reositories/comments-likes-query-repository'
+import { PostsLikesQueryRepository } from './query-reositories/posts-likes-query-repository'
 
 export const container = new Container()
 container.bind(BlogsRepository).to(BlogsRepository)
@@ -45,6 +47,8 @@ container.bind(BlogsQueryRepository).to(BlogsQueryRepository)
 container.bind(CommentsQueryRepository).to(CommentsQueryRepository)
 container.bind(PostsQueryRepository).to(PostsQueryRepository)
 container.bind(UsersQueryRepository).to(UsersQueryRepository)
+container.bind(CommentsLikesQueryRepository).to(CommentsLikesQueryRepository)
+container.bind(PostsLikesQueryRepository).to(PostsLikesQueryRepository)
 container.bind(EmailAdapter).to(EmailAdapter)
 container.bind(JwtService).to(JwtService)
 container.bind(EmailManager).to(EmailManager)
@@ -67,7 +71,7 @@ export const rateLimiterRepository = container.resolve(RateLimiterRepository)
 
 export const jwtService = container.resolve(JwtService)
 export const sessionsService = container.resolve(SessionsService)
-export const usersService = container.resolve(UsersService)
+export const usersQueryRepository = container.resolve(UsersQueryRepository)
 
 export const authController = container.resolve(AuthController)
 export const blogsController = container.resolve(BlogsController)

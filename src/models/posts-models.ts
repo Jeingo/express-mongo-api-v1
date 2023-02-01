@@ -64,3 +64,5 @@ export class PostsTypeToDB {
 export type PostsIdParams = {
     id: string
 }
+
+export type PostId = string

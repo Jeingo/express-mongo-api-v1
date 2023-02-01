@@ -1,6 +1,6 @@
-import { SessionsModel } from './db'
 import { SessionInputType, SessionOutputType, SessionTypeToDB } from '../models/session-models'
 import { injectable } from 'inversify'
+import {SessionsModel} from "../domain/sessions-entity";
 
 @injectable()
 export class SessionsRepository {

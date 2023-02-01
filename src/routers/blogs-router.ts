@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { getUserIdByAccessToken, idValidation, inputValidation, queryValidation } from '../middleware/input-validation'
 import { descriptionValidation, nameValidation, websiteUrlValidation } from '../middleware/input-blogs-vallidation'
-import { auth } from '../authorization/basic-auth'
+import { auth } from '../middleware/authorization/basic-auth'
 import { contentValidation, shortDescriptionValidation, titleValidation } from '../middleware/input-posts-validation'
 import { blogsController, postsController } from '../composition-root'
 

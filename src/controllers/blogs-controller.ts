@@ -5,8 +5,8 @@ import { PaginatedType } from '../models/main-models'
 import { BlogsIdParams, BlogsTypeInput, BlogsTypeOutput } from '../models/blogs-models'
 import { BlogsQueryRepository } from '../query-reositories/blogs-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { BlogsService } from '../domain/blogs-service'
 import { inject, injectable } from 'inversify'
+import { BlogsService } from '../services/blogs-service'
 
 @injectable()
 export class BlogsController {
@@ -20,7 +20,7 @@ export class BlogsController {
         res.status(HTTP_STATUSES.OK_200).json(allBlogs)
     }
     async getBlogById(req: RequestWithParams<BlogsIdParams>, res: Response<BlogsTypeOutput>) {
-        const foundBlog = await this.blogsService.getBlogById(req.params.id)
+        const foundBlog = await this.blogsQueryRepository.getBlogById(req.params.id)
 
         if (!foundBlog) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -29,8 +29,13 @@ export class BlogsController {
         res.json(foundBlog)
     }
     async createBlog(req: RequestWithBody<BlogsTypeInput>, res: Response<BlogsTypeOutput>) {
-        const createdBlog = await this.blogsService.createBlog(req.body.name, req.body.description, req.body.websiteUrl)
-        res.status(HTTP_STATUSES.CREATED_201).json(createdBlog)
+        const createdBlogId = await this.blogsService.createBlog(
+            req.body.name,
+            req.body.description,
+            req.body.websiteUrl
+        )
+        const createdBlog = await this.blogsQueryRepository.getBlogById(createdBlogId)
+        res.status(HTTP_STATUSES.CREATED_201).json(createdBlog!)
     }
     async updateBlog(req: RequestWithParamsAndBody<BlogsIdParams, BlogsTypeInput>, res: Response) {
         const updatedBlog = await this.blogsService.updateBlog(

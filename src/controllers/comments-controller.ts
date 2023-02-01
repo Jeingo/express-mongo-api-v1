@@ -6,13 +6,13 @@ import {
     CommentsTypeOutput
 } from '../models/comments-models'
 import { Response } from 'express'
-import { CommentsService } from '../domain/comments-service'
 import { HTTP_STATUSES } from '../constats/status'
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsQueryRepository } from '../query-reositories/comments-query-repository'
 import { LikesType } from '../models/likes-models'
 import { inject, injectable } from 'inversify'
+import { CommentsService } from '../services/comments-service'
 
 @injectable()
 export class CommentsController {
@@ -22,7 +22,7 @@ export class CommentsController {
     ) {}
 
     async getCommentById(req: RequestWithParams<CommentsIdParams>, res: Response<CommentsTypeOutput>) {
-        const foundComment = await this.commentsService.getCommentById(req.params.id, req.user?.userId)
+        const foundComment = await this.commentsQueryRepository.getCommentById(req.params.id, req.user?.userId)
 
         if (!foundComment) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -51,8 +51,8 @@ export class CommentsController {
         req: RequestWithParamsAndBody<CommentsIdParams, CommentsTypeInputInPost>,
         res: Response<CommentsTypeOutput>
     ) {
-        const createdComment = await this.commentsService.createComment(req.body.content, req.params.id, req.user!)
-
+        const createdCommentId = await this.commentsService.createComment(req.body.content, req.params.id, req.user!)
+        const createdComment = await this.commentsQueryRepository.getCommentById(createdCommentId!)
         if (!createdComment) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return

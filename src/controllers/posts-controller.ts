@@ -11,9 +11,9 @@ import { PaginatedType } from '../models/main-models'
 import { PostsIdParams, PostsTypeInput, PostsTypeInputInBlog, PostsTypeOutput } from '../models/posts-models'
 import { PostsQueryRepository } from '../query-reositories/posts-query-repository'
 import { HTTP_STATUSES } from '../constats/status'
-import { PostsService } from '../domain/posts-service'
 import { inject, injectable } from 'inversify'
 import { LikesType } from '../models/likes-models'
+import { PostsService } from '../services/posts-service'
 
 @injectable()
 export class PostsController {
@@ -27,7 +27,7 @@ export class PostsController {
         res.status(HTTP_STATUSES.OK_200).json(allPosts)
     }
     async getPostById(req: RequestWithParams<PostsIdParams>, res: Response<PostsTypeOutput>) {
-        const foundPost = await this.postsService.getPostById(req.params.id, req.user?.userId)
+        const foundPost = await this.postsQueryRepository.getPostById(req.params.id, req.user?.userId)
 
         if (!foundPost) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
@@ -49,30 +49,32 @@ export class PostsController {
         res.json(foundPosts)
     }
     async createPost(req: RequestWithBody<PostsTypeInput>, res: Response<PostsTypeOutput | null>) {
-        const createdPost = await this.postsService.createPost(
+        const createdPostId = await this.postsService.createPost(
             req.body.title,
             req.body.shortDescription,
             req.body.content,
             req.body.blogId
         )
+        const createdPost = await this.postsQueryRepository.getPostById(createdPostId!)
         res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
     }
     async createPostByBlogId(
         req: RequestWithParamsAndBody<PostsIdParams, PostsTypeInputInBlog>,
-        res: Response<PostsTypeOutput>
+        res: Response<PostsTypeOutput | null>
     ) {
-        const createdPost = await this.postsService.createPost(
+        const createdPostId = await this.postsService.createPost(
             req.body.title,
             req.body.shortDescription,
             req.body.content,
             req.params.id
         )
 
-        if (!createdPost) {
+        if (!createdPostId) {
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
             return
         }
 
+        const createdPost = await this.postsQueryRepository.getPostById(createdPostId!)
         res.status(HTTP_STATUSES.CREATED_201).json(createdPost)
     }
     async updatePost(req: RequestWithParamsAndBody<PostsIdParams, PostsTypeInput>, res: Response) {

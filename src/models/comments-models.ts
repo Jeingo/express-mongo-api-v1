@@ -41,3 +41,5 @@ export type CommentsTypeInputInPost = {
 export type CommentsIdParams = {
     id: string
 }
+
+export type CommentId = string

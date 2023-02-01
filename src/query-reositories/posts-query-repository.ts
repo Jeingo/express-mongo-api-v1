@@ -1,15 +1,20 @@
 import { PostsTypeOutput } from '../models/posts-models'
-import { BlogsModel, PostsModel } from '../repositories/db'
 import { ObjectId } from 'mongodb'
 import { QueryPosts } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { inject, injectable } from 'inversify'
 import { PostsLikesRepository } from '../repositories/posts-likes-repository'
+import { PostsLikesQueryRepository } from './posts-likes-query-repository'
+import {BlogsModel} from "../domain/blogs-entity";
+import {PostsModel} from "../domain/posts-entity";
 
 @injectable()
 export class PostsQueryRepository {
-    constructor(@inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository) {}
+    constructor(
+        @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository,
+        @inject(PostsLikesQueryRepository) protected postsLikesQueryRepository: PostsLikesQueryRepository
+    ) {}
 
     async getAllPost(query: QueryPosts, userId?: string): Promise<PaginatedType<PostsTypeOutput>> {
         const countAllDocuments = await PostsModel.countDocuments()
@@ -45,6 +50,25 @@ export class PostsQueryRepository {
         const mappedFinishPost = await this._setThreeLastUser(mappedPostWithStatusLike)
         return getPaginatedType(mappedFinishPost, +pageSize, +pageNumber, countAllDocuments)
     }
+    async getPostById(id: string, userId?: string): Promise<PostsTypeOutput | null> {
+        const result = await PostsModel.findById(new ObjectId(id))
+        if (!result) return null
+        const mappedResult = this._getOutputPost(result)
+
+        if (userId && mappedResult) {
+            const like = await this.postsLikesQueryRepository.getLike(userId, mappedResult.id)
+            if (like) {
+                mappedResult.extendedLikesInfo.myStatus = like.myStatus
+            }
+        }
+        if (mappedResult) {
+            const lastThreeLikes = await this.postsLikesQueryRepository.getLastThreeLikes(mappedResult.id)
+            if (lastThreeLikes) {
+                mappedResult.extendedLikesInfo.newestLikes = lastThreeLikes
+            }
+        }
+        return mappedResult
+    }
     private _getOutputPost(post: any): PostsTypeOutput {
         return {
             id: post._id.toString(),
@@ -65,7 +89,7 @@ export class PostsQueryRepository {
     private async _setStatusLike(posts: Array<PostsTypeOutput>, userId: string) {
         if (!userId) return posts
         for (let i = 0; i < posts.length; i++) {
-            const like = await this.postsLikesRepository.getLike(userId, posts[i].id)
+            const like = await this.postsLikesQueryRepository.getLike(userId, posts[i].id)
             if (like) {
                 posts[i].extendedLikesInfo.myStatus = like.myStatus
             }
@@ -74,7 +98,7 @@ export class PostsQueryRepository {
     }
     private async _setThreeLastUser(posts: Array<PostsTypeOutput>) {
         for (let i = 0; i < posts.length; i++) {
-            const lastThreeLikes = await this.postsLikesRepository.getLastThreeLikes(posts[i].id)
+            const lastThreeLikes = await this.postsLikesQueryRepository.getLastThreeLikes(posts[i].id)
             if (lastThreeLikes) {
                 posts[i].extendedLikesInfo.newestLikes = lastThreeLikes
             }

@@ -1,13 +1,13 @@
 import { body } from 'express-validator'
-import { UsersRepository } from '../repositories/users-repository'
+import { UsersQueryRepository } from '../query-reositories/users-query-repository'
 
 const patternLogin = /^[a-zA-Z0-9_-]*$/
 const patternEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-const usersRepository = new UsersRepository()
+const usersQueryRepository = new UsersQueryRepository()
 
 const checkEmail = async (email: string) => {
-    const foundUser = await usersRepository.findUserByEmail(email)
+    const foundUser = await usersQueryRepository.getUser(email)
     if (foundUser) {
         throw new Error('Email is already exist')
     }
@@ -15,7 +15,7 @@ const checkEmail = async (email: string) => {
 }
 
 const checkLogin = async (login: string) => {
-    const foundUser = await usersRepository.findUserByLogin(login)
+    const foundUser = await usersQueryRepository.getUser(login)
     if (foundUser) {
         throw new Error('Email is already exist')
     }
@@ -23,7 +23,7 @@ const checkLogin = async (login: string) => {
 }
 
 const checkCode = async (code: string) => {
-    const foundUser = await usersRepository.findUserByConfirmationCode(code)
+    const foundUser = await usersQueryRepository.getUser(code)
     if (!foundUser) {
         throw new Error('This code is wrong')
     }
@@ -40,7 +40,7 @@ const checkCode = async (code: string) => {
 }
 
 const checkPasswordRecoveryCode = async (code: string) => {
-    const foundUser = await usersRepository.findUserByConfirmationCodeRecoveryPassword(code)
+    const foundUser = await usersQueryRepository.getUser(code)
     if (!foundUser) {
         throw new Error('This code is wrong')
     }
@@ -57,7 +57,7 @@ const checkPasswordRecoveryCode = async (code: string) => {
 }
 
 const checkEmailResending = async (email: string) => {
-    const foundUser = await usersRepository.findUserByEmail(email)
+    const foundUser = await usersQueryRepository.getUser(email)
     if (!foundUser) {
         throw new Error('This email is wrong')
     }

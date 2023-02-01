@@ -1,15 +1,20 @@
 import { QueryComments } from '../models/query-models'
 import { PaginatedType } from '../models/main-models'
 import { CommentsTypeOutput } from '../models/comments-models'
-import { CommentsModel, PostsModel } from '../repositories/db'
 import { getPaginatedType, makeDirectionToNumber } from './helper'
 import { ObjectId } from 'mongodb'
 import { CommentsLikesRepository } from '../repositories/comments-likes-repository'
 import { inject, injectable } from 'inversify'
+import { CommentsLikesQueryRepository } from './comments-likes-query-repository'
+import {PostsModel} from "../domain/posts-entity";
+import {CommentsModel} from "../domain/comments-entity";
 
 @injectable()
 export class CommentsQueryRepository {
-    constructor(@inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository) {}
+    constructor(
+        @inject(CommentsLikesRepository) protected commentsLikesRepository: CommentsLikesRepository,
+        @inject(CommentsLikesQueryRepository) protected commentsLikesQueryRepository: CommentsLikesQueryRepository
+    ) {}
 
     async getCommentsById(
         id: string,
@@ -33,6 +38,18 @@ export class CommentsQueryRepository {
         const mappedCommentsWithStatusLike = await this._setStatusLike(mappedComments, userId!)
         return getPaginatedType(mappedCommentsWithStatusLike, +pageSize, +pageNumber, countAllDocuments)
     }
+    async getCommentById(id: string, userId?: string): Promise<CommentsTypeOutput | null> {
+        const result = await CommentsModel.findById(new ObjectId(id))
+        if (!result) return null
+        const mappedResult = this._getOutputComment(result)
+        if (userId && mappedResult) {
+            const like = await this.commentsLikesQueryRepository.getLike(userId, mappedResult.id)
+            if (like) {
+                mappedResult.likesInfo.myStatus = like.myStatus
+            }
+        }
+        return mappedResult
+    }
     private _getOutputComment(comment: any): CommentsTypeOutput {
         return {
             id: comment._id.toString(),
@@ -50,7 +67,7 @@ export class CommentsQueryRepository {
     private async _setStatusLike(comments: Array<CommentsTypeOutput>, userId: string) {
         if (!userId) return comments
         for (let i = 0; i < comments.length; i++) {
-            const like = await this.commentsLikesRepository.getLike(userId, comments[i].id)
+            const like = await this.commentsLikesQueryRepository.getLike(userId, comments[i].id)
             if (like) {
                 comments[i].likesInfo.myStatus = like.myStatus
             }

@@ -1,5 +1,5 @@
-import { TestRepository } from '../repositories/test-repository'
 import { inject, injectable } from 'inversify'
+import { TestRepository } from '../repositories/test-repository'
 
 @injectable()
 export class TestService {

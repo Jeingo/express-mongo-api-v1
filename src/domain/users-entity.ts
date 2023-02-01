@@ -24,21 +24,22 @@ export const UsersSchema = new mongoose.Schema<UsersModelType>({
 UsersSchema.statics.make = async function (login: string, password: string, email: string, isConfirmed: boolean) {
     const passwordSalt = await bcrypt.genSalt(10)
     const passwordHash = await bcrypt.hash(password, passwordSalt)
+    const newDate = new Date()
     return new UsersModel({
         login: login,
         hash: passwordHash,
         email: email,
-        createdAt: new Date().toISOString(),
+        createdAt: newDate.toISOString(),
         passwordRecoveryConfirmation: {
             passwordRecoveryCode: v4(),
-            expirationDate: add(new Date(), {
+            expirationDate: add(newDate, {
                 hours: 1
             }),
             isConfirmed: true
         },
         emailConfirmation: {
             confirmationCode: v4(),
-            expirationDate: add(new Date(), {
+            expirationDate: add(newDate, {
                 hours: 1
             }),
             isConfirmed: isConfirmed
